@@ -95,9 +95,9 @@ We ensure that all international transfers of personal data are conducted in acc
                   className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300"
                 >
                   <div className="flex items-start space-x-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    {/* <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0">
                       <Icon size={28} className="text-white" />
-                    </div>
+                    </div> */}
                     <div className="flex-1">
                       <h3 className="text-2xl font-bold text-gray-900 mb-4">
                         {section.title}

@@ -94,7 +94,7 @@ const App = () => {
            <Route path="/events" element={<EventsPage />} />
           <Route path="/events/:id" element={<EventDetailPage />} />
         </Route>
-
+{/* q */}
         {}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

@@ -86,10 +86,10 @@ const RotatingStatsSection = () => {
         </div>
 
         {}
-        <div className="mt-16 inline-flex flex-col sm:flex-row items-center gap-4 bg-white/10 backdrop-blur-xl border border-white/20 md:rounded-full px-6 py-5 shadow-2xl">
+        <div className="mt-16 inline-flex flex sm:flex-row items-center gap-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-md md:rounded-full px-6 py-5 shadow-2xl">
           <ShieldCheck className="w-10 h-10 md:w-12 md:h-12 text-cyan-400" />
           <div className="text-left">
-            <div className="text-md md:text-3xl font-black text-white">5 Lakh+</div>
+            <div className="text-xl md:text-3xl font-black text-white">5 Lakh+</div>
             <div className="text-cyan-300 text-sm md:text-base">Happy Users • 18 States • 400+ Colleges</div>
           </div>
         </div>

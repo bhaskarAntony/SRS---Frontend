@@ -93,7 +93,7 @@ const HeroSection = () => {
           </div>
 
           {}
-          <div className="absolute -top-8 -right-4 md:right-10 w-72 md:w-80 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-2xl rotate-6 hover:rotate-0 transition-all duration-500 z-20">
+          <div className="absolute -top-8 -right-4 md:right-10 w-72 md:w-80 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-2xl rotate-6 hover:rotate-0 transition-all duration-500 z-20 none md:block">
                        <img src="https://www.nicepng.com/png/detail/851-8518258_qr-code-png-images-qr-code.png" alt=""  width={150} style={{float:"right"}}/>
 
             <h4 className="text-white font-bold text-lg">Referral Magic</h4>

@@ -57,7 +57,7 @@ const NewsletterSection = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
                   required
-                  className="w-full pl-16 pr-6 py-5 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-blue-200 
+                  className="w-full pl-16 pr-6 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-blue-200 
                            focus:outline-none focus:ring-4 focus:ring-cyan-400/50 focus:border-cyan-400 
                            backdrop-blur-md transition-all duration-300 text-lg"
                 />
@@ -66,7 +66,7 @@ const NewsletterSection = () => {
               <button
                 type="submit"
                 disabled={isSubscribed}
-                className={`relative overflow-hidden px-10 py-5 rounded-2xl font-bold text-lg transition-all duration-500 transform hover:scale-105
+                className={`relative overflow-hidden px-5 py-3 rounded-2xl font-bold text-sm transition-all duration-500 transform hover:scale-105
                   ${isSubscribed 
                     ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white' 
                     : 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-2xl hover:shadow-cyan-500/50'

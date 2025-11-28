@@ -2,7 +2,7 @@ import axios from 'axios';
 import useAuthStore from '../store/authStore';
 import toast from 'react-hot-toast';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://srs-backend-7ch1.onrender.com/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

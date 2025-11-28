@@ -83,7 +83,7 @@ const App = () => {
 
       <Routes>
 
-        {/* PUBLIC ROUTES - No Login Required */}
+        {}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about-us" element={<About />} />
@@ -91,16 +91,17 @@ const App = () => {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/sitemap" element={<Sitemap />} />
           <Route path="/faqs" element={<FAQ />} />
+           <Route path="/events" element={<EventsPage />} />
+          <Route path="/events/:id" element={<EventDetailPage />} />
         </Route>
 
-        {/* AUTH PAGES */}
+        {}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* PROTECTED USER ROUTES */}
+        {}
         <Route element={<ProtectedRoute><ResponsiveLayout><Outlet /></ResponsiveLayout></ProtectedRoute>}>
-          <Route path="/events" element={<EventsPage />} />
-          <Route path="/events/:id" element={<EventDetailPage />} />
+         
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/cart" element={<CartPage />} />
@@ -108,7 +109,7 @@ const App = () => {
           <Route path="/booking-success" element={<BookingSuccessPage />} />
         </Route>
 
-        {/* ADMIN ROUTES - Only for Admins */}
+        {}
         <Route element={<ProtectedRoute adminOnly><AdminLayout><Outlet /></AdminLayout></ProtectedRoute>}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<UsersManagement />} />
@@ -118,7 +119,7 @@ const App = () => {
           <Route path="/admin/profile" element={<AdminProfile />} />
         </Route>
 
-        {/* Catch All - Redirect to Home */}
+        {}
         <Route path="*" element={<Navigate to="/" replace />} />
 
       </Routes>

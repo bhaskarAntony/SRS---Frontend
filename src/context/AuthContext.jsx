@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://srs-backend-7ch1.onrender.com/api';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -22,7 +22,7 @@ useEffect(() => {
       }
 
       try {
-        const response = await fetch('http://localhost:5000/api/auth/me', {
+        const response = await fetch('https://srs-backend-7ch1.onrender.com/api/auth/me', {
           method: 'GET',
           credentials: 'include',
           headers: {
@@ -51,7 +51,7 @@ useEffect(() => {
   }, []);
 
   const login = async (email, password) => {
-    const response = await fetch(`http://localhost:5000/api/auth/login`, {
+    const response = await fetch(`https://srs-backend-7ch1.onrender.com/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),

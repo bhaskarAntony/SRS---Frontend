@@ -58,7 +58,7 @@ const RotatingStatsSection = () => {
                       <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center mb-4 shadow-xl`}>
                         <Icon className="w-9 h-9 md:w-11 md:h-11 text-white" />
                       </div>
-                      <div className="text-2xl md:text-3xl lg:text-4xl font-black text-white">
+                      <div className="text-1xl md:text-3xl lg:text-4xl font-black text-white">
                         {stat.value}
                       </div>
                       <div className="text-sm md:text-base font-bold text-cyan-300 mt-2">
@@ -86,10 +86,10 @@ const RotatingStatsSection = () => {
         </div>
 
         {}
-        <div className="mt-16 inline-flex flex-col sm:flex-row items-center gap-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-6 py-5 shadow-2xl">
+        <div className="mt-16 inline-flex flex-col sm:flex-row items-center gap-4 bg-white/10 backdrop-blur-xl border border-white/20 md:rounded-full px-6 py-5 shadow-2xl">
           <ShieldCheck className="w-10 h-10 md:w-12 md:h-12 text-cyan-400" />
           <div className="text-left">
-            <div className="text-2xl md:text-3xl font-black text-white">5 Lakh+</div>
+            <div className="text-md md:text-3xl font-black text-white">5 Lakh+</div>
             <div className="text-cyan-300 text-sm md:text-base">Happy Users • 18 States • 400+ Colleges</div>
           </div>
         </div>

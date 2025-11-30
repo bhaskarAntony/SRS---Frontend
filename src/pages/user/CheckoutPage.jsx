@@ -1,4 +1,3 @@
-// src/pages/user/CheckoutPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -124,7 +123,7 @@ const CheckoutPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Mobile Header */}
+      {}
       <div className="lg:hidden sticky top-0 bg-white border-b border-gray-200 z-50 px-4 py-3 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
@@ -137,15 +136,15 @@ const CheckoutPage = () => {
 
       <div className="max-w-5xl mx-auto px-4 lg:px-6 py-6 lg:py-8">
         <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
-          {/* Left Side - Content */}
+          {}
           <div className="lg:col-span-2 space-y-4 lg:space-y-5">
-            {/* Desktop Title */}
+            {}
             <div className="hidden lg:block bg-white rounded-3xl border border-gray-200 p-5 shadow-sm">
               <p className="text-[10px] uppercase tracking-[0.25em] text-gray-400 font-semibold">Order</p>
               <h1 className="text-lg font-semibold text-gray-900">Complete Booking</h1>
             </div>
 
-            {/* User Info */}
+            {}
             <div className="bg-white rounded-3xl border border-gray-200 p-5 shadow-sm">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-500 flex items-center justify-center text-white text-lg font-bold">
@@ -160,7 +159,7 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            {/* Event Items */}
+            {}
             <div className="space-y-3 lg:space-y-4">
               {items.map((item, i) => (
                 <div key={i} className="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
@@ -204,7 +203,7 @@ const CheckoutPage = () => {
             </div>
           </div>
 
-          {/* Right Side - Payment Summary */}
+          {}
           <div className="lg:sticky lg:top-8 lg:self-start">
             <div className="bg-white rounded-3xl border border-gray-200 p-5 lg:p-6 shadow-sm lg:min-h-[320px]">
               <div>
@@ -260,7 +259,7 @@ const CheckoutPage = () => {
         </div>
       </div>
 
-      {/* Mobile Fixed Bottom Bar */}
+      {}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-2xl z-50">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center justify-between mb-3">

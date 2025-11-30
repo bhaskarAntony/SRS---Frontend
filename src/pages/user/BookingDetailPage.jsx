@@ -236,7 +236,7 @@ const BookingDetailPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-2 px-2 sm:px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Mobile Header */}
+        {}
         {isMobile && (
           <div className="mb-4 bg-white rounded-2xl shadow-sm p-3 border sticky top-0 z-10">
             <div className="flex items-center justify-between">
@@ -252,7 +252,7 @@ const BookingDetailPage = () => {
           </div>
         )}
 
-        {/* Desktop Header */}
+        {}
         {!isMobile && (
           <div className="mb-4 bg-white rounded-2xl shadow-sm p-4 border">
             <button onClick={() => navigate('/profile')} className="flex items-center gap-1 text-xs text-gray-600 hover:text-black mb-2 px-3 py-1.5 rounded-xl hover:bg-gray-100 inline-flex">
@@ -269,9 +269,9 @@ const BookingDetailPage = () => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 lg:gap-4">
-          {/* Main Content */}
+          {}
           <div className="lg:col-span-3 space-y-3">
-            {/* Event Card */}
+            {}
             <div className="bg-white rounded-2xl shadow-sm border p-4">
               <div className="flex items-center gap-2 mb-3">
                 <TicketIcon className="w-4 h-4 text-blue-500" />
@@ -307,7 +307,7 @@ const BookingDetailPage = () => {
               </div>
             </div>
 
-            {/* Order Summary */}
+            {}
             <div className="bg-white rounded-2xl shadow-sm border p-4">
               <div className="flex items-center gap-2 mb-3">
                 <CurrencyRupeeIcon className="w-4 h-4 text-green-500" />
@@ -333,7 +333,7 @@ const BookingDetailPage = () => {
               </div>
             </div>
 
-            {/* Status */}
+            {}
             <div className="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -357,7 +357,7 @@ const BookingDetailPage = () => {
               </div>
             </div>
 
-            {/* Quick Info */}
+            {}
             <div className="bg-white rounded-2xl shadow-sm border p-4 grid grid-cols-2 gap-2">
               <div className="flex items-center gap-2 p-2.5 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl text-xs border border-blue-100">
                 <PhoneIcon className="w-3.5 h-3.5 text-blue-500" />
@@ -370,10 +370,10 @@ const BookingDetailPage = () => {
             </div>
           </div>
 
-          {/* Right Sidebar - Black Cards */}
+          {}
           <div className="lg:col-span-1 space-y-3">
 
-            {/* Mobile QR Trigger */}
+            {}
             {isMobile && (
               <div className="bg-white p-3 lg:hidden rounded-2xl border shadow-sm">
                 <button
@@ -386,7 +386,7 @@ const BookingDetailPage = () => {
               </div>
             )}
 
-            {/* Desktop QR Card */}
+            {}
             {!isMobile && (
               <div className="bg-gradient-to-b from-black to-gray-900 text-white rounded-2xl p-4 shadow-2xl border border-gray-800 sticky top-4">
                 <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-700">
@@ -437,7 +437,7 @@ const BookingDetailPage = () => {
               </div>
             )}
 
-            {/* Actions */}
+            {}
             <div className="bg-gradient-to-b from-black to-gray-900 text-white rounded-2xl p-4 shadow-2xl border border-gray-800">
               <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-700">
                 <TicketIcon className="w-4 h-4" />
@@ -453,7 +453,7 @@ const BookingDetailPage = () => {
               </div>
             </div>
 
-            {/* Payment Details */}
+            {}
             {booking.paymentDetails && (
               <div className="bg-gradient-to-b from-gray-900 to-black text-white rounded-2xl p-4 shadow-2xl border border-gray-800">
                 <div className="flex items-center gap-2 mb-3">
@@ -493,7 +493,7 @@ const BookingDetailPage = () => {
         </div>
       </div>
 
-      {/* Mobile Bottom Sheet */}
+      {}
       {isMobile && showBottomSheet && (
         <>
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 " onClick={() => setShowBottomSheet(false)} />

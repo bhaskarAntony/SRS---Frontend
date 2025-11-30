@@ -51,7 +51,7 @@ const QrScanPage = () => {
         { facingMode: 'environment' },
         {
           fps: 10,
-          qrbox: { width: 240, height: 240 }, // Reduced for small devices
+          qrbox: { width: 240, height: 240 }, 
           aspectRatio: 1,
         },
         (text) => handleScanSuccess(text),
@@ -125,13 +125,13 @@ const QrScanPage = () => {
     <>
       <div className="min-h-screen bg-black text-white flex flex-col">
         
-        {/* HEADER */}
+        {}
         <header className="bg-black border-b border-zinc-800 px-4 py-3">
           <p className="text-[10px] uppercase text-zinc-500">QR Scanner</p>
           <h1 className="text-base font-bold">Entry Check</h1>
         </header>
 
-        {/* TABS */}
+        {}
         <div className="flex bg-zinc-900 text-[12px]">
           <button
             onClick={() => setActiveTab('real')}
@@ -156,10 +156,10 @@ const QrScanPage = () => {
           </button>
         </div>
 
-        {/* MAIN */}
+        {}
         <main className="flex-1 flex flex-col items-center px-3 pt-4 pb-6 gap-4">
           
-          {/* Scanner Card */}
+          {}
           <div className="w-full max-w-md bg-zinc-900 rounded-2xl p-4 border border-zinc-800">
             {activeTab === 'real' ? (
               <>
@@ -192,7 +192,7 @@ const QrScanPage = () => {
             )}
           </div>
 
-          {/* Location + Notes */}
+          {}
           <div className="w-full max-w-md space-y-3">
             <div>
               <label className="text-[10px] text-zinc-500">Gate / Location</label>
@@ -223,25 +223,25 @@ const QrScanPage = () => {
 
      {showPopup && (scanResult || errorResult) && (
   <div className="fixed inset-0 z-50 flex items-center justify-center">
-    {/* Backdrop */}
+    {}
     <div
       className="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
       onClick={closeAndContinue}
     ></div>
 
-    {/* Centered Modal */}
+    {}
     <div className="
       relative bg-zinc-900 text-white 
       rounded-2xl shadow-2xl border border-zinc-800
       w-[90%] max-w-sm 
       p-6 animate-in fade-in zoom-in duration-300
     ">
-      {/* Close Button */}
+      {}
       <button onClick={closeAndContinue} className="absolute top-3 right-3">
         <XMarkIcon className="w-6 h-6 text-zinc-400 hover:text-white" />
       </button>
 
-      {/* VALID RESULT */}
+      {}
       {scanResult && booking && (
         <div className="text-center">
           <CheckCircleIcon className="w-16 h-16 text-emerald-500 mx-auto mb-3" />
@@ -299,7 +299,7 @@ const QrScanPage = () => {
         </div>
       )}
 
-      {/* INVALID RESULT */}
+      {}
       {errorResult && (
         <div className="text-center">
           <XCircleIcon className="w-16 h-16 text-red-500 mx-auto mb-4" />

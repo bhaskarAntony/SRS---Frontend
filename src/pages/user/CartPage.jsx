@@ -57,11 +57,11 @@ const CartPage = () => {
 
   return (
     <>
-      {/* DESKTOP LAYOUT */}
+      {}
       <div className="hidden lg:grid lg:grid-cols-3 lg:gap-8 lg:max-w-5xl lg:mx-auto lg:px-6 lg:py-8">
-        {/* Left Column - Cart Items */}
+        {}
         <div className="lg:col-span-2 lg:space-y-5">
-          {/* Header */}
+          {}
           <div className="bg-white rounded-3xl border border-gray-200 p-5 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
@@ -72,11 +72,11 @@ const CartPage = () => {
             </div>
           </div>
 
-          {/* Items */}
+          {}
           {items.map((item) => (
             <div key={`${item.eventId}-${item.bookingType}`} className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-all">
               <div className="flex gap-4">
-                {/* Image */}
+                {}
                 <div className="relative flex-shrink-0">
                   <img
                     src={item.event.bannerImage || '/placeholder.jpg'}
@@ -88,7 +88,7 @@ const CartPage = () => {
                   </span>
                 </div>
 
-                {/* Content */}
+                {}
                 <div className="flex-1 min-w-0">
                   <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-2">{item.event.title}</h3>
                   
@@ -103,7 +103,7 @@ const CartPage = () => {
                     </div>
                   </div>
 
-                  {/* Quantity & Price */}
+                  {}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <button
@@ -128,7 +128,7 @@ const CartPage = () => {
                   </div>
                 </div>
 
-                {/* Actions */}
+                {}
                 <div className="flex flex-col items-end gap-2 ml-2">
                   <button
                     onClick={() => toggleFavorite(item.eventId)}
@@ -151,7 +151,7 @@ const CartPage = () => {
           ))}
         </div>
 
-        {/* Right Column - Checkout Summary */}
+        {}
         <div className="lg:sticky lg:top-8 lg:self-start">
           <div className="bg-white rounded-3xl border border-gray-200 p-6 shadow-sm lg:min-h-[300px]">
             <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-[0.18em]">Order Summary</h3>
@@ -185,9 +185,9 @@ const CartPage = () => {
         </div>
       </div>
 
-      {/* MOBILE LAYOUT */}
+      {}
       <div className="lg:hidden space-y-4 pb-24">
-        {/* Header */}
+        {}
         <div className="bg-white rounded-3xl border border-gray-200 p-5 shadow-sm sticky top-0 z-20 backdrop-blur">
           <div className="flex items-center justify-between">
             <div>
@@ -198,12 +198,12 @@ const CartPage = () => {
           </div>
         </div>
 
-        {/* Items */}
+        {}
         <div className="space-y-3 max-h-[calc(100vh-280px)] overflow-y-auto">
           {items.map((item) => (
             <div key={`${item.eventId}-${item.bookingType}`} className="bg-white rounded-3xl border border-gray-200 shadow-sm p-5">
               <div className="flex gap-3">
-                {/* Image */}
+                {}
                 <div className="relative flex-shrink-0">
                   <img
                     src={item.event.bannerImage || '/placeholder.jpg'}
@@ -215,7 +215,7 @@ const CartPage = () => {
                   </span>
                 </div>
 
-                {/* Content */}
+                {}
                 <div className="flex-1 min-w-0">
                   <h3 className="text-[12px] font-semibold text-gray-900 line-clamp-2 mb-2">{item.event.title}</h3>
                   
@@ -230,7 +230,7 @@ const CartPage = () => {
                     </div>
                   </div>
 
-                  {/* Quantity & Price */}
+                  {}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <button
@@ -260,7 +260,7 @@ const CartPage = () => {
                   </div>
                 </div>
 
-                {/* Favorite */}
+                {}
                 <button
                   onClick={() => toggleFavorite(item.eventId)}
                   className="p-1.5 rounded-xl hover:bg-gray-50 self-start flex items-center justify-center ml-1"
@@ -275,7 +275,7 @@ const CartPage = () => {
           ))}
         </div>
 
-        {/* FIXED BOTTOM CHECKOUT BAR */}
+        {}
         <div className="fixed bottom-16 left-0 right-0 lg:hidden bg-white border-t border-gray-200 p-4 shadow-2xl z-50 mb-20">
           <div className="flex items-center justify-between mb-3">
             <div>

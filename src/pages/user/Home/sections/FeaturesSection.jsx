@@ -5,7 +5,7 @@ const HowItWorks = () => {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center">
-        {/* Title */}
+        {}
         <h2 className="font-black text-gray-900 text-3xl sm:text-4xl lg:text-5xl leading-tight mb-4 tracking-tight">
           How It Works
         </h2>
@@ -13,9 +13,9 @@ const HowItWorks = () => {
           5 simple steps to sell out your events
         </p>
 
-        {/* Steps Grid */}
+        {}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-8">
-          {/* Step 1 */}
+          {}
           <div className="group flex flex-col items-center p-8 hover:-translate-y-3 transition-all duration-300 hover:shadow-xl rounded-3xl border border-gray-100 bg-gray-50/50">
             <div className="w-20 h-20 bg-black text-white rounded-3xl flex items-center justify-center mb-6 shadow-lg border border-gray-200 group-hover:bg-white group-hover:text-black transition-all duration-300">
               <Calendar className="w-7 h-7" />
@@ -24,7 +24,7 @@ const HowItWorks = () => {
             <p className="text-gray-600 font-medium text-sm leading-relaxed max-w-xs">Setup in 2 minutes</p>
           </div>
 
-          {/* Step 2 */}
+          {}
           <div className="group flex flex-col items-center p-8 hover:-translate-y-3 transition-all duration-300 hover:shadow-xl rounded-3xl border border-gray-100 bg-gray-50/50">
             <div className="w-20 h-20 bg-black text-white rounded-3xl flex items-center justify-center mb-6 shadow-lg border border-gray-200 group-hover:bg-white group-hover:text-black transition-all duration-300">
               <Share2 className="w-7 h-7" />
@@ -33,7 +33,7 @@ const HowItWorks = () => {
             <p className="text-gray-600 font-medium text-sm leading-relaxed max-w-xs">One tap sharing</p>
           </div>
 
-          {/* Step 3 */}
+          {}
           <div className="group flex flex-col items-center p-8 hover:-translate-y-3 transition-all duration-300 hover:shadow-xl rounded-3xl border border-gray-100 bg-gray-50/50">
             <div className="w-20 h-20 bg-black text-white rounded-3xl flex items-center justify-center mb-6 shadow-lg border border-gray-200 group-hover:bg-white group-hover:text-black transition-all duration-300">
               <Ticket className="w-7 h-7" />
@@ -42,7 +42,7 @@ const HowItWorks = () => {
             <p className="text-gray-600 font-medium text-sm leading-relaxed max-w-xs">Up to 70% off</p>
           </div>
 
-          {/* Step 4 */}
+          {}
           <div className="group flex flex-col items-center p-8 hover:-translate-y-3 transition-all duration-300 hover:shadow-xl rounded-3xl border border-gray-100 bg-gray-50/50">
             <div className="w-20 h-20 bg-black text-white rounded-3xl flex items-center justify-center mb-6 shadow-lg border border-gray-200 group-hover:bg-white group-hover:text-black transition-all duration-300">
               <QrCode className="w-7 h-7" />
@@ -51,7 +51,7 @@ const HowItWorks = () => {
             <p className="text-gray-600 font-medium text-sm leading-relaxed max-w-xs">Instant delivery</p>
           </div>
 
-          {/* Step 5 */}
+          {}
           <div className="group flex flex-col items-center p-8 hover:-translate-y-3 transition-all duration-300 hover:shadow-xl rounded-3xl border border-gray-100 bg-gray-50/50">
             <div className="w-20 h-20 bg-black text-white rounded-3xl flex items-center justify-center mb-6 shadow-lg border border-gray-200 group-hover:bg-white group-hover:text-black transition-all duration-300">
               <Smartphone className="w-7 h-7" />

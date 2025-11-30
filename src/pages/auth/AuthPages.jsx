@@ -1,4 +1,4 @@
-// src/pages/AuthPage.jsx
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
@@ -6,7 +6,8 @@ import {
   EyeSlashIcon, 
   UserIcon, 
   EnvelopeIcon, 
-  PhoneIcon 
+  PhoneIcon,
+  HashtagIcon 
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
@@ -17,7 +18,7 @@ const AuthPage = () => {
   const navigate = useNavigate();
   const { login, register, user } = useAuth();
   const [currentTab, setCurrentTab] = useState('login');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading]= useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -26,6 +27,7 @@ const AuthPage = () => {
     lastName: '',
     email: '',
     phone: '',
+    memberId: '', 
     password: '',
     confirmPassword: '',
     agreeToTerms: false,
@@ -36,16 +38,42 @@ const AuthPage = () => {
     setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
   };
 
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     
     try {
-      await login(formData.email, formData.password);
-      toast.success('Welcome back!');
+      let loginResult;
       
-      const redirectTo = user?.role === 'admin' ? '/admin/dashboard' : '/';
-      navigate(redirectTo);
+      if (currentTab === 'member') {
+        
+        const response = await fetch('/api/members/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            identifier: formData.memberId,
+            password: formData.password
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.message || 'Member login failed');
+        }
+        
+        loginResult = data.data;
+      } else {
+        
+        await login(formData.email, formData.password);
+        return; 
+      }
+      
+      
+      login(loginResult.user, loginResult.token);
+      toast.success('Welcome Member!');
+      
     } catch (err) {
       toast.error(err.message || 'Login failed');
     } finally {
@@ -79,11 +107,12 @@ const AuthPage = () => {
   };
 
   const isLoginTab = currentTab === 'login';
+  const isMemberTab = currentTab === 'member';
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 px-4">
       <div className="w-full max-w-md">
-        {/* Logo & Title */}
+        {}
         <div className="text-center mb-8">
           <div className="w-14 h-14 mx-auto mb-4 bg-black rounded-2xl flex items-center justify-center">
             <img src={logo} alt="SRS" className="w-10 h-10 object-contain" />
@@ -92,7 +121,7 @@ const AuthPage = () => {
           <p className="text-[11px] text-gray-600">Sign in or create your SRS Events account</p>
         </div>
 
-        {/* Tabs */}
+        {}
         <div className="bg-white rounded-3xl border border-gray-200 p-1 mb-6">
           <div className="flex bg-gray-50 rounded-2xl p-1">
             <button
@@ -106,9 +135,19 @@ const AuthPage = () => {
               Sign In
             </button>
             <button
+              onClick={() => setCurrentTab('member')}
+              className={`flex-1 py-3 px-4 rounded-xl font-semibold text-sm transition-all ${
+                isMemberTab
+                  ? 'bg-white text-gray-900 shadow-sm border border-black'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Member ID
+            </button>
+            <button
               onClick={() => setCurrentTab('register')}
               className={`flex-1 py-3 px-4 rounded-xl font-semibold text-sm transition-all ${
-                !isLoginTab
+                !isLoginTab && !isMemberTab
                   ? 'bg-white text-gray-900 shadow-sm border border-black'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
@@ -118,26 +157,32 @@ const AuthPage = () => {
           </div>
         </div>
 
-        {/* Form */}
+        {}
         <div className="bg-white rounded-3xl border border-gray-200 p-6 lg:p-8 space-y-4">
-          <form onSubmit={isLoginTab ? handleLogin : handleRegister}>
-            {/* Login Fields */}
-            {isLoginTab ? (
+          <form onSubmit={isLoginTab || isMemberTab ? handleLogin : handleRegister}>
+            {}
+            {(isLoginTab || isMemberTab) ? (
               <>
                 <div className="space-y-3">
+                  {}
                   <div className="relative">
-                    <EnvelopeIcon className="w-4 h-4 absolute left-3.5 top-3.5 text-gray-400" />
+                    {isLoginTab ? (
+                      <EnvelopeIcon className="w-4 h-4 absolute left-3.5 top-3.5 text-gray-400" />
+                    ) : (
+                      <HashtagIcon className="w-4 h-4 absolute left-3.5 top-3.5 text-gray-400" />
+                    )}
                     <input
-                      type="email"
-                      name="email"
+                      type="text"
+                      name={isLoginTab ? "email" : "memberId"}
                       required
-                      value={formData.email}
+                      value={formData[isLoginTab ? "email" : "memberId"]}
                       onChange={handleChange}
-                      placeholder="Email"
+                      placeholder={isLoginTab ? "Email" : "Member ID (MEM001)"}
                       className="w-full pl-11 pr-12 py-3 text-sm border border-gray-200 rounded-2xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent hover:bg-white transition-all"
                     />
                   </div>
 
+                  {}
                   <div className="relative">
                     <svg className="w-4 h-4 absolute left-3.5 top-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -161,6 +206,16 @@ const AuthPage = () => {
                   </div>
                 </div>
 
+                {}
+                {isMemberTab && (
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-xs text-green-800 mb-4">
+                    <strong>💡 Tip:</strong> Password is <code className="bg-green-100 px-2 py-1 rounded font-mono text-xs">
+                      {formData.memberId ? `${formData.firstName || 'firstname'}@${formData.memberId.toLowerCase()}` : 'firstname@mem001'}
+                    </code>
+                  </div>
+                )}
+
+                {}
                 <div className="flex items-center justify-between text-[12px] mt-5">
                   <label className="flex items-center">
                     <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-black mr-2" />
@@ -172,7 +227,7 @@ const AuthPage = () => {
                 </div>
               </>
             ) : (
-              /* Register Fields */
+              
               <>
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   <div className="relative">
@@ -284,34 +339,34 @@ const AuthPage = () => {
               </>
             )}
 
-            {/* Submit Button */}
+            {}
             <button
               type="submit"
               disabled={loading}
               className="w-full bg-black text-white text-sm font-bold py-4 px-6 rounded-2xl hover:bg-gray-900 active:scale-[0.98] transition-all shadow-lg border border-black disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-5"
             >
-              {loading ? <LoadingSpinner size="small" /> : isLoginTab ? 'Sign In' : 'Create Account'}
+              {loading ? <LoadingSpinner size="small" /> : (isLoginTab || isMemberTab) ? 'Sign In' : 'Create Account'}
             </button>
           </form>
 
-          {/* Switch Tab Link */}
+          {}
           <div className="text-center pt-4 border-t border-gray-100">
             <p className="text-[12px] text-gray-600">
-              {isLoginTab 
+              {(isLoginTab || isMemberTab) 
                 ? "Don't have an account?" 
                 : "Already have an account?"
               }
               <button
-                onClick={() => setCurrentTab(isLoginTab ? 'register' : 'login')}
+                onClick={() => setCurrentTab((isLoginTab || isMemberTab) ? 'register' : 'login')}
                 className="ml-1 text-black font-semibold hover:underline text-sm"
               >
-                {isLoginTab ? 'Register' : 'Sign In'}
+                {(isLoginTab || isMemberTab) ? 'Register' : 'Sign In'}
               </button>
             </p>
           </div>
         </div>
 
-        {/* Footer Links */}
+        {}
         <div className="text-center mt-6 space-y-2">
           <Link to="/forgot-password" className="block text-[12px] text-gray-600 hover:text-black font-semibold">
             Forgot Password?

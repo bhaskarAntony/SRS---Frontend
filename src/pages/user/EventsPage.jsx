@@ -1,4 +1,3 @@
-// src/pages/EventsPage.jsx
 import React, { useState, useEffect } from 'react';
 import { 
   FunnelIcon, XMarkIcon, ChevronLeftIcon, ClockIcon, 
@@ -72,7 +71,7 @@ const EventsPage = () => {
     <div className="min-h-screen bg-gray-50 p-1 md:p-4">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* MOBILE HEADER */}
+        {}
         <div className="lg:hidden bg-white border-b border-gray-200 sticky top-0 z-40 px-4 py-3">
           <div className="flex items-center gap-3">
             <button className="p-2 rounded-xl hover:bg-gray-50 -ml-1">
@@ -85,7 +84,7 @@ const EventsPage = () => {
           </div>
         </div>
 
-        {/* DESKTOP HEADER */}
+        {}
         <div className="hidden lg:block bg-white rounded-3xl border border-gray-200 p-6 mb-8 sticky top-0 z-30 bg-opacity-95 backdrop-blur-sm">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -98,7 +97,7 @@ const EventsPage = () => {
           </div>
         </div>
 
-        {/* SEARCH BAR */}
+        {}
         <div className="mb-6 lg:mb-8">
           <div className="bg-white rounded-3xl border border-gray-200 p-4 lg:p-6">
             <div className="flex items-center gap-3 lg:gap-4">
@@ -117,11 +116,11 @@ const EventsPage = () => {
           </div>
         </div>
 
-        {/* DESKTOP FILTERS - Direct Inline */}
+        {}
         <div className="hidden lg:block mb-8">
           <div className="bg-white rounded-3xl border border-gray-200 p-6">
             <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {/* Category */}
+              {}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                   <TicketIcon className="w-4 h-4 text-gray-500" />
@@ -139,7 +138,7 @@ const EventsPage = () => {
                 </select>
               </div>
 
-              {/* Location */}
+              {}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                   <MapPinIcon className="w-4 h-4 text-gray-500" />
@@ -157,7 +156,7 @@ const EventsPage = () => {
                 </select>
               </div>
 
-              {/* Price */}
+              {}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                   <CurrencyRupeeIcon className="w-4 h-4 text-gray-500" />
@@ -175,7 +174,7 @@ const EventsPage = () => {
                 </select>
               </div>
 
-              {/* Date */}
+              {}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                   <ClockIcon className="w-4 h-4 text-gray-500" />
@@ -207,14 +206,14 @@ const EventsPage = () => {
           </div>
         </div>
 
-        {/* MOBILE FILTER MODAL - Scrollable Bottom Sheet */}
+        {}
         {showFilters && (
           <div className="lg:hidden fixed inset-0 z-[9999] flex items-end justify-center p-4">
             <div 
               className="bg-white rounded-3xl border border-gray-200 w-full max-h-[85vh] flex flex-col shadow-2xl animate-in slide-in-from-bottom-4"
               onClick={e => e.stopPropagation()}
             >
-              {/* Header */}
+              {}
               <div className="p-5 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white z-10 rounded-t-3xl">
                 <h2 className="text-lg font-bold text-gray-900">Filters</h2>
                 <button 
@@ -225,9 +224,9 @@ const EventsPage = () => {
                 </button>
               </div>
 
-              {/* Scrollable Content */}
+              {}
               <div className="flex-1 overflow-y-auto px-5 py-6 -mt-px">
-                {/* Category */}
+                {}
                 <div className="mb-8">
                   <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <TicketIcon className="w-4 h-4" />
@@ -261,7 +260,7 @@ const EventsPage = () => {
                   </div>
                 </div>
 
-                {/* Location */}
+                {}
                 <div className="mb-8">
                   <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <MapPinIcon className="w-4 h-4" />
@@ -295,7 +294,7 @@ const EventsPage = () => {
                   </div>
                 </div>
 
-                {/* Price & Date */}
+                {}
                 <div className="grid grid-cols-2 gap-4 mb-8">
                   <div>
                     <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -336,7 +335,7 @@ const EventsPage = () => {
                 </div>
               </div>
 
-              {/* Apply Button */}
+              {}
               <div className="p-5 border-t border-gray-200 bg-gray-50 rounded-b-3xl mt-auto sticky bottom-0">
                 <button
                   onClick={() => setShowFilters(false)}
@@ -350,7 +349,7 @@ const EventsPage = () => {
           </div>
         )}
 
-        {/* Events Grid */}
+        {}
         <div className={`space-y-4 lg:space-y-6 ${loading || events.length === 0 ? 'min-h-[60vh]' : ''}`}>
           {loading ? (
             <div className="flex items-center justify-center py-20 lg:py-32">

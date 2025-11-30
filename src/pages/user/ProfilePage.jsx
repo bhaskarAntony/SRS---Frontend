@@ -21,7 +21,7 @@ import useCartStore from '../../store/cartStore';
 
 // axios client with token from localStorage
 const apiClient = axios.create({
-  baseURL: 'https://srs-backend-7ch1.onrender.com/api', // change to your backend URL
+  baseURL: 'http://localhost:5000/api', // change to your backend URL
 });
 
 apiClient.interceptors.request.use(
@@ -333,7 +333,7 @@ const ProfilePage = () => {
   return (
     <div className="min-h-screen bg-gray-50 pb-20 md:pb-10">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 md:pt-10">
-        {/* HEADER */}
+        {}
         <div className="flex items-center justify-between mb-5">
           <div>
             <p className="text-[10px] uppercase tracking-[0.25em] text-gray-400 font-semibold">
@@ -351,7 +351,7 @@ const ProfilePage = () => {
           </button>
         </div>
 
-        {/* SUMMARY CARD */}
+        {}
         <div className="bg-white border border-gray-200 rounded-3xl p-4 sm:p-5 md:p-6 shadow-sm mb-5">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-3 sm:gap-4">
@@ -403,7 +403,7 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* MAIN TABS */}
+        {}
         <div className="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
           <div className="border-b border-gray-200 px-3 sm:px-5">
             <nav className="flex gap-3 sm:gap-4 overflow-x-auto py-2">
@@ -434,7 +434,7 @@ const ProfilePage = () => {
           </div>
 
           <div className="p-4 sm:p-6 md:p-7">
-            {/* PROFILE */}
+            {}
             {activeTab === 'profile' && (
               <form
                 onSubmit={handleSaveProfile}
@@ -600,7 +600,7 @@ const ProfilePage = () => {
               </form>
             )}
 
-            {/* SECURITY */}
+            {}
             {activeTab === 'security' && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl">
                 <div className="bg-gray-50 rounded-2xl border border-gray-200 p-4 space-y-3">
@@ -680,7 +680,7 @@ const ProfilePage = () => {
               </div>
             )}
 
-            {/* PREFERENCES */}
+            {}
             {activeTab === 'preferences' && (
               <form
                 onSubmit={handleSavePreferences}
@@ -791,7 +791,7 @@ const ProfilePage = () => {
               </form>
             )}
 
-            {/* BOOKINGS */}
+            {}
             {activeTab === 'bookings' && (
               <div className="space-y-4">
                 {loadingData && (
@@ -886,7 +886,7 @@ const ProfilePage = () => {
               </div>
             )}
 
-            {/* FAVORITES */}
+            {}
             {activeTab === 'favorites' && (
               <div>
                 {loadingData && (
@@ -940,7 +940,7 @@ const ProfilePage = () => {
               </div>
             )}
 
-            {/* CART */}
+            {}
             {activeTab === 'cart' && (
               <div className="text-center py-10">
                 <ShoppingCartIcon className="w-14 h-14 text-gray-300 mx-auto mb-4" />
@@ -964,7 +964,7 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* PROFILE POPUP MENU */}
+      {}
       {showProfileMenu && (
         <div
           className="fixed  mb-16 inset-0 z-40 flex items-end justify-center md:items-center bg-black/30"

@@ -1,4 +1,3 @@
-// src/pages/events/EventDetailPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
@@ -118,7 +117,7 @@ const EventDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Sticky Top Bar */}
+      {}
       <div className="sticky top-0 z-50 bg-black/95 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between text-sm">
           <button onClick={() => navigate(-1)} className="flex items-center gap-2 hover:bg-white/10 rounded-lg px-3 py-2 transition">
@@ -144,10 +143,10 @@ const EventDetailPage = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* MAIN CONTENT */}
+          {}
           <div className="lg:col-span-2 space-y-8">
 
-            {/* HERO SECTION */}
+            {}
             <div className="bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20 rounded-2xl p-6 md:p-8 border border-white/10">
               <div className="flex flex-wrap items-center gap-3 mb-4">
                 {event.featured && <span className="px-3 py-1 bg-gradient-to-r from-purple-600 to-pink-600 text-xs font-bold rounded-full">Bestseller</span>}
@@ -169,7 +168,7 @@ const EventDetailPage = () => {
               </div>
             </div>
 
-            {/* LONG DESCRIPTION */}
+            {}
             {event.longDescription && (
               <div className="bg-zinc-900 rounded-2xl p-6 border border-white/10">
                 <h2 className="text-xl font-bold mb-4">About this Event</h2>
@@ -177,7 +176,7 @@ const EventDetailPage = () => {
               </div>
             )}
 
-            {/* KEY INFO GRID */}
+            {}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="bg-zinc-900 rounded-2xl p-6 border border-white/10">
                 <div className="flex gap-4"><CalendarDaysIcon className="w-6 h-6 text-purple-400" />
@@ -214,7 +213,7 @@ const EventDetailPage = () => {
               </div>
             </div>
 
-            {/* TAGS */}
+            {}
             {event.tags?.length > 0 && (
               <div className="bg-zinc-900 rounded-2xl p-6 border border-white/10">
                 <h3 className="text-lg font-bold mb-4">Tags</h3>
@@ -226,7 +225,7 @@ const EventDetailPage = () => {
               </div>
             )}
 
-            {/* HIGHLIGHTS */}
+            {}
             {event.highlights?.length > 0 && (
               <div className="bg-zinc-900 rounded-2xl p-6 border border-white/10">
                 <h3 className="text-xl font-bold mb-5">What You'll Get</h3>
@@ -241,7 +240,7 @@ const EventDetailPage = () => {
               </div>
             )}
 
-            {/* AMENITIES & RULES */}
+            {}
             <div className="bg-zinc-900 rounded-2xl p-6 border border-white/10">
               <h3 className="text-xl font-bold mb-5">Amenities & Rules</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
@@ -255,7 +254,7 @@ const EventDetailPage = () => {
               </div>
             </div>
 
-            {/* ORGANIZER FULL DETAILS */}
+            {}
             <div className="bg-zinc-900 rounded-2xl p-6 border border-white/10">
               <h3 className="text-xl font-bold mb-5">Organizer</h3>
               <div className="flex items-start gap-6">
@@ -270,7 +269,7 @@ const EventDetailPage = () => {
                     {event.organizer.phone && <div className="flex items-center gap-2"><PhoneIcon className="w-4 h-4" /> {event.organizer.phone}</div>}
                     {event.organizer.website && <a href={event.organizer.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-purple-400"><LinkIcon className="w-4 h-4" /> Website</a>}
                   </div>
-                  {/* Social Media */}
+                  {}
                   {(event.socialMedia?.facebook || event.socialMedia?.instagram || event.socialMedia?.twitter || event.socialMedia?.linkedin) && (
                     <div className="flex gap-3 mt-4">
                       {event.socialMedia.facebook && <a href={event.socialMedia.facebook} className="text-blue-500 hover:text-blue-400">FB</a>}
@@ -283,7 +282,7 @@ const EventDetailPage = () => {
               </div>
             </div>
 
-            {/* GALLERY */}
+            {}
             {event.gallery?.length > 0 && (
               <div className="bg-zinc-900 rounded-2xl p-6 border border-white/10">
                 <h3 className="text-xl font-bold mb-5">Gallery</h3>
@@ -295,7 +294,7 @@ const EventDetailPage = () => {
               </div>
             )}
 
-            {/* POLICIES & NOTES */}
+            {}
             <div className="bg-zinc-900 rounded-2xl p-6 border border-white/10 space-y-6">
               <h3 className="text-xl font-bold">Important Information</h3>
               {event.specialNotes && (
@@ -310,7 +309,7 @@ const EventDetailPage = () => {
               </div>
             </div>
 
-            {/* FAQS */}
+            {}
             {event.faqs?.length > 0 && (
               <div className="bg-zinc-900 rounded-2xl p-6 border border-white/10">
                 <h3 className="text-xl font-bold mb-5">Frequently Asked Questions</h3>
@@ -327,7 +326,7 @@ const EventDetailPage = () => {
             )}
           </div>
 
-          {/* BOOKING CARD */}
+          {}
           <div className="lg:col-span-1">
             <div className="sticky top-20 bg-zinc-900 rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
               <div className="relative h-48">

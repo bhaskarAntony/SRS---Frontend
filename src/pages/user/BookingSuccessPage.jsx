@@ -60,7 +60,7 @@ const BookingSuccessPage = () => {
 
   const downloadTicket = async (bookingId) => {
     try {
-      const response = await fetch(`https://srs-backend-7ch1.onrender.com/api/bookings/${bookingId}/download-ticket`, {
+      const response = await fetch(`http://localhost:5000/api/bookings/${bookingId}/download-ticket`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -86,7 +86,7 @@ const BookingSuccessPage = () => {
 
   return (
     <>
-      {/* MOBILE LAYOUT */}
+      {}
       <div className="lg:hidden min-h-screen bg-gray-50">
         <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-20">
           <div className="flex items-center justify-between">
@@ -102,7 +102,7 @@ const BookingSuccessPage = () => {
           {bookings.map((b) => (
             <div key={b._id} className="bg-white rounded-3xl border border-gray-200 w-full">
               <div className="p-5 space-y-4">
-                {/* Event & Booking ID */}
+                {}
                 <div>
                   <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
                     {b.event?.title || 'Event Name'}
@@ -110,7 +110,7 @@ const BookingSuccessPage = () => {
                   <p className="text-[11px] text-gray-500 font-mono">#{b.bookingId}</p>
                 </div>
 
-                {/* Details Grid */}
+                {}
                 <div className="grid grid-cols-2 gap-3 text-[11px] text-gray-600">
                   <div className="flex items-center gap-1.5">
                     <CalendarDaysIcon className="w-3.5 h-3.5" />
@@ -130,7 +130,7 @@ const BookingSuccessPage = () => {
                   </div>
                 </div>
 
-                {/* Status & Scans */}
+                {}
                 <div className="grid grid-cols-2 gap-2 text-[11px]">
                   <div className={`p-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 ${getStatusColor(b.status)}`}>
                     {b.status.toUpperCase()}
@@ -140,7 +140,7 @@ const BookingSuccessPage = () => {
                   </div>
                 </div>
 
-                {/* QR Preview */}
+                {}
                 <div 
                   className="bg-gray-50 rounded-2xl p-3 mx-1 cursor-pointer"
                   onClick={() => setSelectedQR(b)}
@@ -151,7 +151,7 @@ const BookingSuccessPage = () => {
                   </p>
                 </div>
 
-                {/* Price & Actions */}
+                {}
                 <div className="flex justify-between items-center pt-3 border-t border-gray-100">
                   <div>
                     <p className="text-sm font-bold text-gray-900">
@@ -175,7 +175,7 @@ const BookingSuccessPage = () => {
                   </div>
                 </div>
 
-                {/* Additional Info */}
+                {}
                 <div className="pt-2 border-t border-gray-100 text-[10px] text-gray-500 space-y-1">
                   <div className="flex items-center gap-1.5">
                     <ClockIcon className="w-3 h-3" />
@@ -189,7 +189,7 @@ const BookingSuccessPage = () => {
             </div>
           ))}
 
-          {/* Total Card */}
+          {}
           <div className="bg-white rounded-3xl border border-gray-200 p-5">
             <div className="flex justify-between items-center">
               <span className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Total Paid</span>
@@ -200,7 +200,7 @@ const BookingSuccessPage = () => {
           </div>
         </div>
 
-        {/* Mobile Bottom Bar */}
+        {}
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50">
           <div className="grid grid-cols-2 gap-3 max-w-2xl mx-auto">
             <Link to="/my-bookings" className="bg-black text-white text-[12px] font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-1.5 hover:bg-gray-900">
@@ -213,9 +213,9 @@ const BookingSuccessPage = () => {
         </div>
       </div>
 
-      {/* DESKTOP LAYOUT */}
+      {}
       <div className="hidden lg:block max-w-5xl mx-auto px-6 py-8 bg-gray-50 min-h-screen">
-        {/* Header */}
+        {}
         <div className="bg-white rounded-3xl border border-gray-200 p-6 mb-8 text-center">
           <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-emerald-200">
             <CheckCircleIcon className="w-8 h-8 text-emerald-500" />
@@ -227,7 +227,7 @@ const BookingSuccessPage = () => {
         <div className="space-y-6 mb-12">
           {bookings.map((b) => (
             <div key={b._id} className="bg-white rounded-3xl border border-gray-200 w-full overflow-hidden">
-              {/* Header */}
+              {}
               <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
                 <div className="flex items-center justify-between">
                   <div>
@@ -240,9 +240,9 @@ const BookingSuccessPage = () => {
                 </div>
               </div>
 
-              {/* Content */}
+              {}
               <div className="grid grid-cols-1 lg:grid-cols-2 p-6 gap-6 lg:gap-8">
-                {/* LEFT: All Details */}
+                {}
                 <div className="space-y-4">
                   <div className="space-y-3 text-[12px] text-gray-700">
                     <div className="flex items-center gap-2">
@@ -266,7 +266,7 @@ const BookingSuccessPage = () => {
                     </div>
                   </div>
 
-                  {/* Pricing */}
+                  {}
                   <div className="border-t border-gray-100 pt-4 pb-2">
                     <div className="space-y-1 mb-4">
                       <div className="flex justify-between text-sm">
@@ -297,7 +297,7 @@ const BookingSuccessPage = () => {
                     </div>
                   </div>
 
-                  {/* Extra Info */}
+                  {}
                   <div className="text-[11px] text-gray-500 space-y-1 pt-2">
                     <div className="flex items-center gap-1.5">
                       <ClockIcon className="w-3.5 h-3.5" />
@@ -312,7 +312,7 @@ const BookingSuccessPage = () => {
                   </div>
                 </div>
 
-                {/* RIGHT: QR */}
+                {}
                 <div className="flex items-center justify-center p-2">
                   <div 
                     className="bg-gray-50 rounded-2xl p-4 cursor-pointer hover:bg-gray-100 transition-colors w-full max-w-xs mx-auto border border-gray-200"
@@ -329,7 +329,7 @@ const BookingSuccessPage = () => {
           ))}
         </div>
 
-        {/* Total */}
+        {}
         <div className="bg-white rounded-3xl border border-gray-200 p-6 mb-8">
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Total Amount</span>
@@ -337,7 +337,7 @@ const BookingSuccessPage = () => {
           </div>
         </div>
 
-        {/* Action Buttons */}
+        {}
         <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
           <Link to="/my-bookings" className="bg-black text-white text-sm font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-2 hover:bg-gray-900 border border-black">
             My Bookings
@@ -348,7 +348,7 @@ const BookingSuccessPage = () => {
         </div>
       </div>
 
-      {/* QR Popup */}
+      {}
       {selectedQR && (
         <div className="fixed inset-0 bg-black/70 z-[9999] flex items-center justify-center p-4" onClick={() => setSelectedQR(null)}>
           <div className="bg-white rounded-3xl p-6 max-w-sm w-full relative border border-gray-200" onClick={(e) => e.stopPropagation()}>

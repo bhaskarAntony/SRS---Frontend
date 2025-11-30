@@ -1,12 +1,12 @@
-// src/lib/api.js  ← CREATE THIS FILE EXACTLY
+
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://srs-backend-7ch1.onrender.com/api',
+  baseURL: 'http://localhost:5000/api',
   timeout: 15000,
 });
 
-// THIS IS THE KEY — ADD TOKEN TO EVERY REQUEST
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -15,7 +15,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// GLOBAL 401 HANDLER — Auto logout if token expired
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {

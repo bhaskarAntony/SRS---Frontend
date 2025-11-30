@@ -8,7 +8,7 @@ export const bookingService = {
 
  getUserBookings: async () => {
   const response = await api.get('/bookings/user');
-  // Add safety check
+  
   const bookings = response.data.data || [];
   console.log(bookings)
   return {

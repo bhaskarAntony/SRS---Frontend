@@ -23,7 +23,7 @@ import CartPage from './pages/user/CartPage';
 import CheckoutPage from './pages/user/CheckoutPage';
 import BookingSuccessPage from './pages/user/BookingSuccessPage';
 
-import { LoginPage, RegisterPage } from './pages/auth/AuthPages';
+import AuthPage from './pages/auth/AuthPages';
 
 import AdminDashboard from './pages/admin/AdminDashboard';
 import UsersManagement from './pages/admin/UsersManagement';
@@ -32,6 +32,8 @@ import EventsManagement from './pages/admin/EventsManagement';
 import BookingsManagement from './pages/admin/BookingsManagement';
 import AdminProfile from './pages/admin/AdminProfile';
 import ScrollToTopButton from './components/ScrollToTopButton';
+import BookingDetailPage from './pages/user/BookingDetailPage';
+import QrScanPage from './pages/admin/QrScanPage';
 
 // Protected Route (Only for logged-in users)
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -48,9 +50,9 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
     );
   }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  // if (!isAuthenticated) {
+  //   return <Navigate to="/login" replace />;
+  // }
 
   if (adminOnly && user?.role !== 'admin') {
     return <Navigate to="/" replace />;
@@ -96,8 +98,8 @@ const App = () => {
         </Route>
 {/* q */}
         {}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<AuthPage />} />
+        <Route path="/register" element={<AuthPage />} />
 
         {}
         <Route element={<ProtectedRoute><ResponsiveLayout><Outlet /></ResponsiveLayout></ProtectedRoute>}>
@@ -107,6 +109,8 @@ const App = () => {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/booking-success" element={<BookingSuccessPage />} />
+          <Route path="/booking/:id" element={<BookingDetailPage />} />
+          <Route path="/scan" element={<QrScanPage />} />
         </Route>
 
         {}

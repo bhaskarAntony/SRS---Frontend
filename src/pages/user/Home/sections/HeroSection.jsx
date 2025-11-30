@@ -1,113 +1,90 @@
 import React from "react";
-import { ArrowRight, PlayCircle, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-950">
-      {}
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-20"
-        style={{
-          backgroundImage: "url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1600')",
-        }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-blue-950/90 via-transparent to-blue-950/60" />
-
-      {}
-      <div className="absolute top-20 left-10 w-80 h-80 md:w-96 md:h-96 bg-cyan-500 rounded-full blur-3xl opacity-20 animate-pulse" />
-      <div className="absolute bottom-20 right-10 w-72 h-72 md:w-80 md:h-80 bg-blue-400 rounded-full blur-3xl opacity-20 animate-pulse delay-1000" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-5 py-20 text-center">
-
-        {}
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-cyan-300 text-sm font-medium mb-6">
-          <Sparkles className="w-5 h-5" />
+    <section className="min-h-[80vh] flex items-center justify-center bg-white">
+      <div className="max-w-6xl mx-auto px-6 sm:px-10 py-20 text-center">
+        {/* Trusted badge */}
+        <div className="inline-flex items-center gap-2 px-6 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 text-sm font-bold mb-8 inline-block">
+          <Sparkles className="w-4 h-4 text-gray-600" />
           Trusted by 18,000+ College Clubs
         </div>
 
-        {}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight">
+        {/* Headline */}
+        <h1 className="font-black text-gray-900 text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[0.9] tracking-tight max-w-5xl mx-auto whitespace-nowrap">
           Sell Out Every Event
-          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-300 to-indigo-400 mt-2">
-            In Record Time
-          </span>
         </h1>
+        <h2 className="font-black text-gray-900 text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight mt-4 max-w-5xl mx-auto whitespace-nowrap">
+          In Record Time
+        </h2>
 
-        {}
-        <p className="mt-6 text-base sm:text-lg md:text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-          Guests get up to 70% off • Instant QR tickets • Zero queue entry
+        {/* Subtitle */}
+        <p className="mt-8 max-w-2xl mx-auto text-gray-700 text-lg sm:text-xl md:text-2xl font-semibold leading-relaxed">
+          Guests get up to <span className="text-gray-900 font-black">70% off</span> • Instant QR tickets • Zero queue entry
         </p>
 
-        {}
-        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-          <button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-2xl hover:scale-105 transition-all flex items-center justify-center gap-3">
+        {/* Buttons */}
+        <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center max-w-xs mx-auto">
+          <button className="group flex items-center justify-center gap-2 bg-black text-white px-8 py-4 rounded-3xl font-bold text-base shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-black whitespace-nowrap">
             Start Free Instantly
-            <ArrowRight className="w-6 h-6" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
-          <button className="bg-white/10 backdrop-blur-lg border border-white/30 hover:bg-white/20 text-white px-10 py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all">
-            <PlayCircle className="w-6 h-6" />
+          
+          <button className="group flex items-center justify-center gap-2 bg-white border-2 border-gray-300 hover:border-black hover:bg-black hover:text-white px-8 py-4 rounded-3xl font-bold text-base shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 whitespace-nowrap">
             Watch 60s Demo
+            <Sparkles className="w-4 h-4" />
           </button>
         </div>
 
-        {}
-        <div className="mt-12 flex flex-wrap justify-center gap-8 md:gap-12 text-center">
+        {/* Stats */}
+        <div className="mt-20 flex flex-col sm:flex-row justify-center items-center gap-8 sm:gap-16 text-center">
           <div>
-            <div className="text-3xl md:text-4xl font-black text-cyan-300">2.4M+</div>
-            <div className="text-blue-200">Tickets Sold</div>
+            <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900">2.4M+</div>
+            <div className="text-gray-700 text-sm sm:text-base font-semibold mt-2 tracking-wide">Tickets Sold</div>
           </div>
+          
+          <div className="hidden sm:block w-px h-16 bg-gray-300" />
+          
           <div>
-            <div className="text-3xl md:text-4xl font-black text-cyan-300">₹520Cr+</div>
-            <div className="text-blue-200">Revenue</div>
+            <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900">₹520Cr+</div>
+            <div className="text-gray-700 text-sm sm:text-base font-semibold mt-2 tracking-wide">Revenue</div>
           </div>
+          
+          <div className="hidden sm:block w-px h-16 bg-gray-300" />
+          
           <div>
-            <div className="text-3xl md:text-4xl font-black text-cyan-300">400+</div>
-            <div className="text-blue-200">Colleges</div>
+            <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900">400+</div>
+            <div className="text-gray-700 text-sm sm:text-base font-semibold mt-2 tracking-wide">Colleges</div>
           </div>
         </div>
 
-        {}
-        <div className="mt-16 relative max-w-5xl mx-auto">
-          {}
-          <div className="absolute -top-8 -left-4 md:left-10 w-72 md:w-80 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-2xl -rotate-6 hover:rotate-0 transition-all duration-500 z-20 text-center">
-            <img src="https://www.nicepng.com/png/detail/851-8518258_qr-code-png-images-qr-code.png" alt=""  width={150}/>
-            <h4 className="text-white font-bold text-lg">Instant QR Ticket</h4>
-            <p className="text-cyan-200 text-sm mt-1">Delivered in 5 seconds</p>
-          </div>
-
-          {}
-          <div className="relative z-30 bg-white rounded-3xl shadow-2xl overflow-hidden ring-8 ring-cyan-400/40 mx-auto max-w-sm md:max-w-md transform hover:scale-105 transition-all duration-500">
-            <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-6 text-white text-center">
-              <h3 className="text-2xl font-bold">SRS Events Dashboard</h3>
-              <p className="text-sm opacity-90 mt-1">Live • Technovation 2025</p>
+        {/* Features */}
+        <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="flex flex-col items-center text-center p-8 hover:-translate-y-2 transition-transform duration-300 group">
+            <div className="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center mb-6 border border-gray-200 hover:bg-gray-100 transition-all group-hover:shadow-lg">
+              <Sparkles className="w-8 h-8 text-gray-700" />
             </div>
-            <div className="p-8 bg-gray-50">
-              <div className="flex justify-between items-center mb-5">
-                <span className="text-gray-600 font-medium">Tickets Sold</span>
-                <span className="text-3xl font-black text-green-600">1,842</span>
-              </div>
-              <div className="w-full bg-gray-300 rounded-full h-4">
-                <div className="bg-gradient-to-r from-green-500 to-emerald-500 h-4 rounded-full w-[92%]" />
-              </div>
-            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">Instant QR Tickets</h3>
+            <p className="text-gray-600 font-medium text-sm leading-relaxed max-w-sm">Delivered in 5 seconds, scan & enter</p>
           </div>
-
-          {}
-          <div className="absolute -top-8 -right-4 md:right-10 w-72 md:w-80 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-2xl rotate-6 hover:rotate-0 transition-all duration-500 z-20 none md:block">
-                       <img src="https://www.nicepng.com/png/detail/851-8518258_qr-code-png-images-qr-code.png" alt=""  width={150} style={{float:"right"}}/>
-
-            <h4 className="text-white font-bold text-lg">Referral Magic</h4>
-            <p className="text-cyan-amber-200 text-sm mt-1">1,200+ guests saved today</p>
+          
+          <div className="flex flex-col items-center text-center p-8 hover:-translate-y-2 transition-transform duration-300 group">
+            <div className="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center mb-6 border border-gray-200 hover:bg-gray-100 transition-all group-hover:shadow-lg">
+              <ArrowRight className="w-8 h-8 text-gray-700 rotate-[-45deg]" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">70% Guest Discounts</h3>
+            <p className="text-gray-600 font-medium text-sm leading-relaxed max-w-sm">Fill seats fast with referral magic</p>
+          </div>
+          
+          <div className="flex flex-col items-center text-center p-8 hover:-translate-y-2 transition-transform duration-300 group">
+            <div className="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center mb-6 border border-gray-200 hover:bg-gray-100 transition-all group-hover:shadow-lg">
+              <Sparkles className="w-8 h-8 text-gray-700" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">Zero Queue Entry</h3>
+            <p className="text-gray-600 font-medium text-sm leading-relaxed max-w-sm">Lightning fast entry, happy guests</p>
           </div>
         </div>
-
-      </div>
-
-      {}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 1440 120" fill="none" className="w-full h-24 md:h-32" preserveAspectRatio="none">
-          <path d="M0,120 L60,100 C180,70 360,40 540,45 C720,50 900,80 1080,85 C1260,90 1380,80 1440,75 L1440,120 Z" fill="white" />
-        </svg>
       </div>
     </section>
   );

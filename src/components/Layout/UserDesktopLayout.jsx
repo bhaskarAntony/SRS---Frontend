@@ -1,12 +1,13 @@
-
-import React from 'react';
+// components/Layout/UserDesktopLayout.jsx
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   ShoppingCartIcon, 
   UserCircleIcon, 
   ChevronDownIcon, 
   ArrowRightOnRectangleIcon,
-  Cog6ToothIcon
+  Cog6ToothIcon,
+  HeartIcon
 } from '@heroicons/react/24/outline';
 import logo from '../../assets/logo.png';
 import { useAuth } from '../../context/AuthContext';
@@ -16,18 +17,16 @@ const UserDesktopLayout = ({ children }) => {
   const { user, isAuthenticated, logout } = useAuth();
   const { getTotalItems } = useCartStore();        
   const navigate = useNavigate();
-
   const cartCount = getTotalItems();               
 
-  const [moreOpen, setMoreOpen] = React.useState(false);
-  const [profileOpen, setProfileOpen] = React.useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const publicPages = [
-    { name: 'About Us', path: '/about-us' },
-    { name: 'Contact Us', path: '/contact-us' },
-    { name: 'Privacy Policy', path: '/privacy' },
+    { name: 'About', path: '/about-us' },
+    { name: 'Contact', path: '/contact-us' },
+    { name: 'Privacy', path: '/privacy' },
     { name: 'FAQs', path: '/faqs' },
-    { name: 'Sitemap', path: '/sitemap' },
   ];
 
   const handleLogout = () => {
@@ -38,144 +37,83 @@ const UserDesktopLayout = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="bg-white shadow-sm border-b-4 border-primary-600 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-
-            {}
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 lg:px-6 py-3">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
             <Link to="/" className="flex items-center">
-              <div className="bg-white rounded-full shadow-lg border-4 border-primary-600" style={{transform:'translateY(50%)'}}>
-                <img src={logo} alt="SRS Events" className="w-24 h-24 object-contain"  />
+              <div className="w-12 h-12 rounded-2xl bg-black flex items-center justify-center">
+                <img src={logo} alt="SRS" className="w-10 h-10 object-contain" />
               </div>
             </Link>
 
-            {}
-            <nav className="hidden lg:flex items-center space-x-8">
-              <Link to="/" className="text-gray-700 hover:text-primary-600 font-semibold transition">
-                Home
-              </Link>
-              <Link to="/events" className="text-gray-700 hover:text-primary-600 font-semibold transition">
-                Events
-              </Link>
-
-              {}
+            {/* Desktop Nav */}
+            <nav className="hidden lg:flex items-center gap-6">
+              <Link to="/" className="text-[12px] font-semibold text-gray-700 hover:text-black uppercase tracking-wide transition">Home</Link>
+              <Link to="/events" className="text-[12px] font-semibold text-gray-700 hover:text-black uppercase tracking-wide transition">Events</Link>
               {isAuthenticated && (
-                <div className="relative">
-                  <button
-                    onClick={() => setMoreOpen(!moreOpen)}
-                    className="flex items-center gap-1 text-gray-700 hover:text-primary-600 font-semibold transition"
-                  >
-                    More
-                    <ChevronDownIcon className={`w-4 h-4 transition-transform ${moreOpen ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {moreOpen && (
-                    <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50">
-                      {publicPages.map(page => (
-                        <Link
-                          key={page.path}
-                          to={page.path}
-                          onClick={() => setMoreOpen(false)}
-                          className="block px-5 py-3 text-gray-700 hover:bg-blue-50 transition"
-                        >
-                          {page.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <>
+                  <Link to="/favorites" className="text-[12px] font-semibold text-gray-700 hover:text-black uppercase tracking-wide transition flex items-center gap-1">
+                    <HeartIcon className="w-4 h-4" />
+                    Favorites
+                  </Link>
+                  <Link to="/profile" className="text-[12px] font-semibold text-gray-700 hover:text-black uppercase tracking-wide transition">Profile</Link>
+                </>
               )}
-
-              {}
-              {!isAuthenticated && publicPages.map(page => (
-                <Link
-                  key={page.path}
-                  to={page.path}
-                  className="text-gray-700 hover:text-primary-600 font-semibold transition"
-                >
-                  {page.name}
-                </Link>
-              ))}
             </nav>
 
-            {}
-            <div className="flex items-center space-x-6">
-
-              {}
-              {isAuthenticated && user?.role !== 'admin' && (
-                <Link to="/cart" className="relative">
-                  <ShoppingCartIcon className="w-7 h-7 text-gray-700 hover:text-primary-600 transition" />
-                  {cartCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center animate-pulse">
-                      {cartCount}
-                    </span>
-                  )}
+            {/* Right Actions */}
+            <div className="flex items-center gap-3">
+              {isAuthenticated && user?.role !== 'admin' && cartCount > 0 && (
+                <Link to="/cart" className="relative p-1.5 rounded-xl hover:bg-gray-50">
+                  <ShoppingCartIcon className="w-5 h-5 text-gray-700" />
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    {cartCount}
+                  </span>
                 </Link>
               )}
 
-              {}
               {!isAuthenticated ? (
-                <div className="flex items-center gap-4">
-                  <Link to="/login" className="text-primary-600 font-semibold hover:underline">
-                    Login
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="bg-primary-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-primary-700 shadow-lg transition"
-                  >
-                    Register
-                  </Link>
+                <div className="hidden lg:flex items-center gap-3">
+                  <Link to="/login" className="text-[12px] font-semibold text-gray-700 hover:text-black">Login</Link>
+                  <Link to="/register" className="bg-black text-white text-[12px] font-semibold px-4 py-2 rounded-2xl hover:bg-gray-900 transition">Join</Link>
                 </div>
               ) : (
-                <div className="flex items-center gap-4">
-                  {}
+                <div className="flex items-center gap-2">
                   {user?.role === 'admin' && (
-                    <Link
-                      to="/admin/dashboard"
-                      className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg"
-                    >
-                      <Cog6ToothIcon className="w-5 h-5" />
-                      Admin Panel
+                    <Link to="/admin/dashboard" className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-[11px] px-3 py-1.5 rounded-xl font-semibold flex items-center gap-1">
+                      <Cog6ToothIcon className="w-3.5 h-3.5" />
+                      Admin
                     </Link>
                   )}
+                  
+                  <div className="relative">
+                    <button
+                      onClick={() => setProfileOpen(!profileOpen)}
+                      className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-gray-50 transition"
+                    >
+                      <div className="w-9 h-9 bg-gray-100 rounded-2xl flex items-center justify-center">
+                        <UserCircleIcon className="w-5 h-5 text-gray-600" />
+                      </div>
+                      <ChevronDownIcon className={`w-3.5 h-3.5 transition-transform ${profileOpen ? 'rotate-180' : ''}`} />
+                    </button>
 
-                  {}
-                  {user?.role !== 'admin' && (
-                    <div className="relative">
-                      <button
-                        onClick={() => setProfileOpen(!profileOpen)}
-                        className="flex items-center gap-3 hover:opacity-80 transition"
-                      >
-                        <div className="w-11 h-11 bg-primary-100 rounded-full flex items-center justify-center shadow">
-                          <UserCircleIcon className="w-9 h-9 text-primary-600" />
+                    {profileOpen && (
+                      <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-3xl border border-gray-200 py-2 z-50">
+                        <div className="px-4 py-3 border-b border-gray-100">
+                          <p className="text-sm font-semibold text-gray-900">{user?.firstName}</p>
+                          <p className="text-[11px] text-gray-500 truncate">{user?.email}</p>
                         </div>
-                        <div className="text-left hidden xl:block">
-                          <p className="font-semibold text-gray-800">{user?.firstName}</p>
-                          <p className="text-xs text-gray-500">{user?.email}</p>
-                        </div>
-                        <ChevronDownIcon className={`w-5 h-5 transition ${profileOpen ? 'rotate-180' : ''}`} />
-                      </button>
-
-                      {profileOpen && (
-                        <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50">
-                          <div className="p-4 border-b">
-                            <p className="font-bold text-gray-900">{user?.firstName} {user?.lastName}</p>
-                            <p className="text-sm text-gray-500">{user?.email}</p>
-                          </div>
-                          <Link to="/profile" className="block px-4 py-3 hover:bg-gray-50">My Profile</Link>
-                          <Link to="/bookings" className="block px-4 py-3 hover:bg-gray-50">My Bookings</Link>
-                          <hr className="my-2" />
-                          <button
-                            onClick={handleLogout}
-                            className="w-full text-left px-4 py-3 hover:bg-red-50 text-red-600 font-medium flex items-center gap-3"
-                          >
-                            <ArrowRightOnRectangleIcon className="w-5 h-5" />
-                            Logout
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                        <Link to="/profile" onClick={() => setProfileOpen(false)} className="block px-4 py-3 text-[12px] text-gray-700 hover:bg-gray-50 rounded-2xl mx-1 my-1 font-semibold">Profile</Link>
+                        <Link to="/bookings" onClick={() => setProfileOpen(false)} className="block px-4 py-3 text-[12px] text-gray-700 hover:bg-gray-50 rounded-2xl mx-1 my-1 font-semibold">Bookings</Link>
+                        <hr className="border-gray-100 mx-3" />
+                        <button onClick={handleLogout} className="w-full text-left px-4 py-3 text-[12px] text-rose-600 hover:bg-rose-50 rounded-2xl mx-1 font-semibold flex items-center gap-2">
+                          <ArrowRightOnRectangleIcon className="w-4 h-4" />
+                          Logout
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -183,9 +121,7 @@ const UserDesktopLayout = ({ children }) => {
         </div>
       </header>
 
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
     </div>
   );
 };

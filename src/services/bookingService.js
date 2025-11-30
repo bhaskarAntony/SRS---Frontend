@@ -2,14 +2,15 @@ import api from './api';
 
 export const bookingService = {
   createBooking: async (bookingData) => {
-    const response = await api.post('/bookings', bookingData);
-    return response.data;
+    const res = await api.post('/bookings', bookingData);
+    return res.data;
   },
 
  getUserBookings: async () => {
   const response = await api.get('/bookings/user');
   // Add safety check
   const bookings = response.data.data || [];
+  console.log(bookings)
   return {
     ...response,
     data: bookings.map(booking => ({

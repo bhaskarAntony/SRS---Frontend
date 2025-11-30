@@ -3,20 +3,19 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
-const API_BASE_URL = 'https://srs-backend-7ch1.onrender.com/api';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://srs-backend-7ch1.onrender.com/api';
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token') || null);
+ const [user, setUser] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem('token'));
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // ← THIS MUST BE TRUE INITIALLY
 
-  // Auto-login on app start (verify token)
-// src/context/AuthContext.jsx
-useEffect(() => {
+  useEffect(() => {
     const verifyToken = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
+      const storedToken = localStorage.getItem('token');
+      if (!storedToken) {
         setIsLoading(false);
         return;
       }
@@ -24,90 +23,109 @@ useEffect(() => {
       try {
         const response = await fetch('https://srs-backend-7ch1.onrender.com/api/auth/me', {
           method: 'GET',
-          credentials: 'include',
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
+            'Authorization': `Bearer ${storedToken}`,
+            'Content-Type': 'application/json'
+          }
         });
 
         if (response.ok) {
           const result = await response.json();
           setUser(result.data.user);
           setIsAuthenticated(true);
+          setToken(storedToken);
         } else {
           localStorage.removeItem('token');
-          toast.error('Session expired. Please login again.');
         }
       } catch (err) {
         console.error('Auth check failed:', err);
         localStorage.removeItem('token');
       } finally {
-        setIsLoading(false);
+        setIsLoading(false); // ← This must run ALWAYS
       }
     };
 
     verifyToken();
   }, []);
 
+  // Login function
   const login = async (email, password) => {
-    const response = await fetch(`https://srs-backend-7ch1.onrender.com/api/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    if (!response.ok) {
-      throw new Error(result.message || 'Login failed');
+      if (!response.ok) {
+        throw new Error(result.message || 'Login failed');
+      }
+
+      const { user, token } = result.data;
+
+      localStorage.setItem('token', token);
+      setToken(token);
+      setUser(user);
+      setIsAuthenticated(true);
+
+      toast.success(`Welcome back, ${user.firstName}!`);
+      return { success: true, user };
+    } catch (error) {
+      toast.error(error.message || 'Invalid credentials');
+      throw error;
     }
-
-    const { user, token } = result.data;
-
-    localStorage.setItem('token', token);
-    setUser(user);
-    setToken(token);
-    setIsAuthenticated(true);
-
-    return { success: true, user };
   };
 
+  // Register function
   const register = async (userData) => {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userData),
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    if (!response.ok) {
-      throw new Error(result.message || 'Registration failed');
+      if (!response.ok) {
+        throw new Error(result.message || 'Registration failed');
+      }
+
+      toast.success('Account created! Logging you in...');
+      // Auto-login after register
+      return await login(userData.email, userData.password);
+    } catch (error) {
+      toast.error(error.message);
+      throw error;
     }
-
-    // Auto-login after registration
-    return await login(userData.email, userData.password);
   };
 
+  // Logout function
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
     setToken(null);
     setIsAuthenticated(false);
+    toast.success('Logged out');
   };
 
   const value = {
     user,
     token,
     isAuthenticated,
-    isLoading,
+    isLoading,        // ← This fixes ProfilePage redirect bug!
     login,
     register,
     logout,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => {

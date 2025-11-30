@@ -2,14 +2,11 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
-  HomeIcon, 
-  CalendarDaysIcon,
-  HomeIcon as HomeSolid, 
-  CalendarDaysIcon as CalendarSolid,
-  ShoppingCartIcon,
-  Bars3Icon,
-  XMarkIcon
+  HomeIcon, CalendarDaysIcon, HeartIcon, UserIcon, 
+  ShoppingCartIcon, Bars3Icon, XMarkIcon, ChevronDownIcon,
+  ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
+import { HomeIcon as HomeSolid, CalendarDaysIcon as CalendarSolid, HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import useCartStore from '../../store/cartStore';
 import { useAuth } from '../../context/AuthContext';
 import logo from '../../assets/logo.png';
@@ -22,18 +19,13 @@ const UserMobileLayout = ({ children }) => {
   const cartCount = getTotalItems();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const isActive = (path) => {
-    if (path === '/') return location.pathname === '/';
-    return location.pathname.startsWith(path);
-  };
+  const isActive = (path) => location.pathname.startsWith(path) || (path === '/' && location.pathname === '/');
 
-  // Public pages for sidebar
   const sidebarLinks = [
-    { name: 'About Us', path: '/about-us' },
-    { name: 'Contact Us', path: '/contact-us' },
-    { name: 'Privacy Policy', path: '/privacy' },
+    { name: 'About', path: '/about-us' },
+    { name: 'Contact', path: '/contact-us' },
+    { name: 'Privacy', path: '/privacy' },
     { name: 'FAQs', path: '/faqs' },
-    { name: 'Sitemap', path: '/sitemap' },
   ];
 
   const handleLogout = () => {
@@ -44,179 +36,146 @@ const UserMobileLayout = ({ children }) => {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50 flex flex-col pb-16">
-
-        {}
-        <header className="bg-white shadow-md border-b-4 border-primary-600 sticky top-0 z-50">
-          <div className="px-4 py-4 flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-2">
-              <img src={logo} alt="SRS Events" className="w-14 h-14 object-contain"  />
+      <div className="min-h-screen bg-gray-50 flex flex-col pb-20 lg:pb-0">
+        {/* Mobile Header */}
+        <header className="lg:hidden bg-white border-b border-gray-200 sticky top-0 z-50 px-4 py-3">
+          <div className="flex items-center justify-between">
+            <Link to="/" className="flex items-center">
+              <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center">
+                <img src={logo} alt="SRS" className="w-8 h-8 object-contain" />
+              </div>
             </Link>
 
             <div className="flex items-center gap-3">
-              {}
-              {isAuthenticated && user?.role !== 'admin' && (
-                <Link to="/cart" className="relative">
-                  <ShoppingCartIcon className="w-7 h-7 text-gray-700" />
-                  {cartCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
-                      {cartCount}
-                    </span>
-                  )}
+              {isAuthenticated && user?.role !== 'admin' && cartCount > 0 && (
+                <Link to="/cart" className="relative p-1.5 rounded-xl hover:bg-gray-50">
+                  <ShoppingCartIcon className="w-5 h-5 text-gray-700" />
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                    {cartCount}
+                  </span>
                 </Link>
               )}
-
-              {}
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="p-2 rounded-lg hover:bg-gray-100 transition"
-              >
-                <Bars3Icon className="w-7 h-7 text-gray-700" />
+              <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-xl hover:bg-gray-50">
+                <Bars3Icon className="w-5 h-5 text-gray-700" />
               </button>
             </div>
           </div>
         </header>
 
-        {}
-        <main className="flex-1 overflow-y-auto">
-          {children}
-        </main>
+        <main className="flex-1 overflow-y-auto">{children}</main>
 
-        {}
-        {isAuthenticated && cartCount > 0 && user?.role !== 'admin' && (
-          <Link
-            to="/cart"
-            className="fixed bottom-20 right-4 z-40 bg-primary-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl animate-bounce"
-          >
-            <ShoppingCartIcon className="w-7 h-7" />
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
-              {cartCount}
-            </span>
-          </Link>
-        )}
-
-        {}
-        <nav className="fixed bottom-0 left-0 right-0 bg-white border-t-4 border-primary-600 shadow-2xl z-50">
-          <div className="grid grid-cols-2 h-16">
-            {}
-            <Link
-              to="/"
-              className={`flex flex-col items-center justify-center gap-1 transition-all ${
-                isActive('/') ? 'text-primary-600 scale-110' : 'text-gray-600'
-              }`}
-            >
-              {isActive('/') ? <HomeSolid className="w-7 h-7" /> : <HomeIcon className="w-7 h-7" />}
-              <span className="text-xs font-bold">Home</span>
+        {/* Mobile Bottom Nav - FULLY FITTED */}
+        <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+          <div className={`grid ${isAuthenticated ? 'grid-cols-5' : 'grid-cols-2'} h-16`}>
+            {/* Home - Always visible */}
+            <Link to="/" className={`flex flex-col items-center justify-center gap-1 transition-all ${isActive('/') ? 'text-black scale-105' : 'text-gray-600'}`}>
+              {isActive('/') ? <HomeSolid className="w-6 h-6" /> : <HomeIcon className="w-6 h-6" />}
+              <span className="text-[10px] font-semibold uppercase tracking-wide">Home</span>
+            </Link>
+            
+            {/* Events - Always visible */}
+            <Link to="/events" className={`flex flex-col items-center justify-center gap-1 transition-all ${isActive('/events') ? 'text-black scale-105' : 'text-gray-600'}`}>
+              {isActive('/events') ? <CalendarSolid className="w-6 h-6" /> : <CalendarDaysIcon className="w-6 h-6" />}
+              <span className="text-[10px] font-semibold uppercase tracking-wide">Events</span>
             </Link>
 
-            {}
-            <Link
-              to="/events"
-              className={`flex flex-col items-center justify-center gap-1 transition-all ${
-                isActive('/events') ? 'text-primary-600 scale-110' : 'text-gray-600'
-              }`}
-            >
-              {isActive('/events') ? <CalendarSolid className="w-7 h-7" /> : <CalendarDaysIcon className="w-7 h-7" />}
-              <span className="text-xs font-bold">Events</span>
-            </Link>
+            {/* Logged In Only - 3 more tabs */}
+            {isAuthenticated && (
+              <>
+                <Link to="/favorites" className={`flex flex-col items-center justify-center gap-1 transition-all ${isActive('/favorites') ? 'text-black scale-105' : 'text-gray-600'}`}>
+                  {isActive('/favorites') ? <HeartSolid className="w-6 h-6" /> : <HeartIcon className="w-6 h-6" />}
+                  <span className="text-[10px] font-semibold uppercase tracking-wide">Fav</span>
+                </Link>
+                
+                <Link to="/cart" className={`flex flex-col items-center justify-center gap-1 transition-all ${isActive('/cart') ? 'text-black scale-105' : 'text-gray-600'}`}>
+                  <ShoppingCartIcon className="w-6 h-6 relative">
+                    {cartCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                        {cartCount}
+                      </span>
+                    )}
+                  </ShoppingCartIcon>
+                  <span className="text-[10px] font-semibold uppercase tracking-wide">Cart</span>
+                </Link>
+                
+                <Link to="/profile" className={`flex flex-col items-center justify-center gap-1 transition-all ${isActive('/profile') ? 'text-black scale-105' : 'text-gray-600'}`}>
+                  {isActive('/profile') ? <UserIcon className="w-6 h-6 text-black" /> : <UserIcon className="w-6 h-6" />}
+                  <span className="text-[10px] font-semibold uppercase tracking-wide">Profile</span>
+                </Link>
+              </>
+            )}
           </div>
         </nav>
       </div>
 
-      {}
+      {/* Mobile Sidebar */}
       {sidebarOpen && (
-        <div className="fixed inset-0 z-50 flex">
-          {}
-          <div
-            className="fixed inset-0 bg-black/50"
-            onClick={() => setSidebarOpen(false)}
-          />
-
-          {}
-          <div className="relative w-80 max-w-full bg-white shadow-2xl animate-slide-in">
-            <div className="p-5 border-b flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-900">Menu</h2>
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg"
-              >
-                <XMarkIcon className="w-6 h-6" />
+        <div className="lg:hidden fixed inset-0 z-[9999] flex">
+          <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
+          <div className="relative w-80 bg-white border-r border-gray-200 animate-in slide-in-from-right duration-300 max-w-full">
+            <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center">
+                  <img src={logo} alt="SRS" className="w-7 h-7 object-contain" />
+                </div>
+                <div>
+                  <h2 className="text-sm font-semibold text-gray-900">Menu</h2>
+                  {isAuthenticated && <p className="text-[11px] text-gray-500">{user?.firstName}</p>}
+                </div>
+              </div>
+              <button onClick={() => setSidebarOpen(false)} className="p-1.5 rounded-xl hover:bg-gray-100">
+                <XMarkIcon className="w-5 h-5 text-gray-700" />
               </button>
             </div>
 
-            <div className="p-4 space-y-2">
-              {}
-              {isAuthenticated && user?.role !== 'admin' && (
-                <div className="bg-gray-50 rounded-xl p-4 mb-4">
-                  <p className="font-bold text-gray-900">{user.firstName} {user.lastName}</p>
-                  <p className="text-sm text-gray-600">{user.email}</p>
+            <div className="p-4 space-y-2 divide-y divide-gray-100">
+              {isAuthenticated && (
+                <div className="pt-2 pb-4">
+                  <Link to="/profile" onClick={() => setSidebarOpen(false)} className="block w-full text-[12px] font-semibold text-gray-900 py-2.5 px-3 rounded-2xl hover:bg-gray-50 flex items-center gap-2">
+                    <UserIcon className="w-4 h-4" />
+                    Profile
+                  </Link>
+                  <Link to="/bookings" onClick={() => setSidebarOpen(false)} className="block w-full text-[12px] font-semibold text-gray-900 py-2.5 px-3 rounded-2xl hover:bg-gray-50 flex items-center gap-2">
+                    <CalendarDaysIcon className="w-4 h-4" />
+                    Bookings
+                  </Link>
                 </div>
               )}
 
-              {}
               {sidebarLinks.map(link => (
                 <Link
                   key={link.path}
                   to={link.path}
                   onClick={() => setSidebarOpen(false)}
-                  className="block px-4 py-3 rounded-lg hover:bg-blue-50 text-gray-800 font-medium transition"
+                  className="block text-[12px] font-semibold text-gray-700 py-2.5 px-3 rounded-2xl hover:bg-gray-50 flex items-center gap-2"
                 >
                   {link.name}
                 </Link>
               ))}
 
-              {}
               {isAuthenticated ? (
                 <>
                   {user?.role === 'admin' && (
-                    <Link
-                      to="/admin/dashboard"
-                      onClick={() => setSidebarOpen(false)}
-                      className="block px-4 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold"
-                    >
-                      Admin Panel
+                    <Link to="/admin/dashboard" onClick={() => setSidebarOpen(false)} className="block w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-[12px] font-semibold py-2.5 px-3 rounded-2xl flex items-center gap-2">
+                      <Cog6ToothIcon className="w-4 h-4" />
+                      Admin
                     </Link>
                   )}
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-3 rounded-lg bg-red-50 text-red-600 font-bold hover:bg-red-100 transition"
-                  >
+                  <button onClick={handleLogout} className="w-full text-[12px] text-rose-600 font-semibold py-2.5 px-3 rounded-2xl hover:bg-rose-50 flex items-center gap-2">
+                    <ArrowRightOnRectangleIcon className="w-4 h-4" />
                     Logout
                   </button>
                 </>
               ) : (
                 <>
-                  <Link
-                    to="/login"
-                    onClick={() => setSidebarOpen(false)}
-                    className="block px-4 py-3 rounded-lg bg-primary-600 text-white font-bold text-center"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/register"
-                    onClick={() => setSidebarOpen(false)}
-                    className="block px-4 py-3 rounded-lg bg-gray-800 text-white font-bold text-center"
-                  >
-                    Register
-                  </Link>
+                  <Link to="/login" onClick={() => setSidebarOpen(false)} className="block w-full bg-black text-white text-[12px] font-semibold py-2.5 px-3 rounded-2xl text-center">Login</Link>
+                  <Link to="/register" onClick={() => setSidebarOpen(false)} className="block w-full bg-gray-900 text-white text-[12px] font-semibold py-2.5 px-3 rounded-2xl text-center">Join</Link>
                 </>
               )}
             </div>
           </div>
         </div>
       )}
-
-      {}
-      <style jsx>{`
-        @keyframes slide-in {
-          from { transform: translateX(-100%); }
-          to { transform: translateX(0); }
-        }
-        .animate-slide-in {
-          animation: slide-in 0.3s ease-out;
-        }
-      `}</style>
     </>
   );
 };

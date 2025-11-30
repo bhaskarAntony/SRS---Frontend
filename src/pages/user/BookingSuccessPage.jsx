@@ -60,7 +60,7 @@ const BookingSuccessPage = () => {
 
   const downloadTicket = async (bookingId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/bookings/${bookingId}/download-ticket`, {
+      const response = await fetch(`https://srs-backend-7ch1.onrender.com/api/bookings/${bookingId}/download-ticket`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`

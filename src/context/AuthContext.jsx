@@ -1,16 +1,15 @@
-// src/context/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://srs-backend-7ch1.onrender.com/api';
 
 export const AuthProvider = ({ children }) => {
  const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // ← THIS MUST BE TRUE INITIALLY
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -21,7 +20,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       try {
-        const response = await fetch('http://localhost:5000/api/auth/me', {
+        const response = await fetch('https://srs-backend-7ch1.onrender.com/api/auth/me', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${storedToken}`,
@@ -41,14 +40,13 @@ export const AuthProvider = ({ children }) => {
         console.error('Auth check failed:', err);
         localStorage.removeItem('token');
       } finally {
-        setIsLoading(false); // ← This must run ALWAYS
+        setIsLoading(false);
       }
     };
 
     verifyToken();
   }, []);
 
-  // Login function
   const login = async (email, password) => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
@@ -78,7 +76,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Register function
   const register = async (userData) => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/register`, {
@@ -94,7 +91,6 @@ export const AuthProvider = ({ children }) => {
       }
 
       toast.success('Account created! Logging you in...');
-      // Auto-login after register
       return await login(userData.email, userData.password);
     } catch (error) {
       toast.error(error.message);
@@ -102,7 +98,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Logout function
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);

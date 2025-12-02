@@ -7,6 +7,7 @@ const useCartStore = create(
       items: [],
       
       addItem: (event, seatCount = 1, bookingType = 'user') => {
+        console.log(event, seatCount, bookingType)
         const existingItem = get().items.find(item => 
           item.eventId === event._id && item.bookingType === bookingType
         );

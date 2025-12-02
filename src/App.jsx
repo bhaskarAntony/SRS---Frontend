@@ -34,6 +34,10 @@ import AdminProfile from './pages/admin/AdminProfile';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import BookingDetailPage from './pages/user/BookingDetailPage';
 import QrScanPage from './pages/admin/QrScanPage';
+import GuestBookingPage from './pages/guest/GuestBookingPage';
+import GuestSearchStatus from './pages/guest/GuestSearchStatus';
+import MemberDashboard from './pages/member/MemberDashboard';
+import SearchBooking from './pages/guest/SearchBooking';
 
 // Protected Route (Only for logged-in users)
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -95,6 +99,9 @@ const App = () => {
           <Route path="/faqs" element={<FAQ />} />
            <Route path="/events" element={<EventsPage />} />
           <Route path="/events/:id" element={<EventDetailPage />} />
+          <Route path="/guest/book/:id" element={<GuestBookingPage />} />
+          <Route path="/search" element={<SearchBooking />} />
+          <Route path="/search/:id" element={<SearchBooking />} />
         </Route>
 {/* q */}
         {}
@@ -111,6 +118,8 @@ const App = () => {
           <Route path="/booking-success" element={<BookingSuccessPage />} />
           <Route path="/booking/:id" element={<BookingDetailPage />} />
           <Route path="/scan" element={<QrScanPage />} />
+          <Route path="/member/requests" element={<MemberDashboard />} />
+
         </Route>
 
         {}

@@ -1,836 +1,550 @@
 import React, { useState, useEffect } from 'react';
 import {
-  PlusIcon,
-  MagnifyingGlassIcon,
-  DocumentArrowDownIcon,
-  DocumentArrowUpIcon,
-  PencilIcon,
-  TrashIcon,
-  EyeIcon,
-  KeyIcon,
-  NoSymbolIcon,
-  StarIcon,
+  PlusIcon, MagnifyingGlassIcon, DocumentArrowDownIcon, DocumentArrowUpIcon,
+  PencilIcon, TrashIcon, EyeIcon, XMarkIcon, FunnelIcon, CheckIcon, EllipsisVerticalIcon,
+  StarIcon, PhoneIcon, ChevronDownIcon
 } from '@heroicons/react/24/outline';
-import { adminService } from '../../services/adminService';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import toast from 'react-hot-toast';
+import api from '../../services/api';
 
 const MembersManagement = () => {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [showFilters, setShowFilters] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
   const [showViewModal, setShowViewModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [membershipFilter, setMembershipFilter] = useState('');
 
-  useEffect(() => {
-    fetchMembers();
-  }, [currentPage, searchTerm, membershipFilter]);
-
+  
   const fetchMembers = async () => {
     try {
       setLoading(true);
-      const response = await adminService.getAllMembers({
-        page: currentPage,
-        limit: 20,
-        search: searchTerm,
-        membershipTier: membershipFilter
-      });
-      setMembers(response.data);
-      setTotalPages(response.pagination.totalPages);
+      const response = await api.get('/member'); 
+      
+      const membersArray = response.data.data?.members || response.data.members || response.data || [];
+      setMembers(Array.isArray(membersArray) ? membersArray : []);
     } catch (error) {
-      console.error('Error fetching members:', error);
       toast.error('Failed to load members');
+      console.error('API Error:', error.response?.data || error);
+      setMembers([]); 
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
-  };
+  useEffect(() => {
+    fetchMembers();
+  }, []);
 
   const handleAddMember = async (memberData) => {
     try {
-      await adminService.createMember(memberData);
-      toast.success('Member created successfully and credentials sent via email');
+      await api.post('/members/add', {
+        firstName: memberData.firstName,
+        lastName: memberData.lastName || '',
+        memberId: memberData.memberId.toUpperCase(),
+        role: 'member',
+        membershipTier: memberData.membershipTier,
+        isActive: true
+      });
+      toast.success(`${memberData.firstName.toLowerCase()}@${memberData.memberId.toLowerCase()}`);
       setShowAddModal(false);
       fetchMembers();
     } catch (error) {
-      toast.error('Failed to create member');
-    }
-  };
-
-  const handleUpdateMember = async (memberData) => {
-    try {
-      await adminService.updateMember(selectedMember._id, memberData);
-      toast.success('Member updated successfully');
-      setShowEditModal(false);
-      setSelectedMember(null);
-      fetchMembers();
-    } catch (error) {
-      toast.error('Failed to update member');
-    }
-  };
-
-  const handleDeactivateMember = async (memberId) => {
-    if (window.confirm('Are you sure you want to deactivate this member?')) {
-      try {
-        await adminService.deactivateMember(memberId);
-        toast.success('Member deactivated successfully');
-        fetchMembers();
-      } catch (error) {
-        toast.error('Failed to deactivate member');
-      }
-    }
-  };
-
-  const handleDeleteMember = async (memberId) => {
-    if (window.confirm('Are you sure you want to delete this member?')) {
-      try {
-        await adminService.deleteMember(memberId);
-        toast.success('Member deleted successfully');
-        fetchMembers();
-      } catch (error) {
-        toast.error('Failed to delete member');
-      }
+      toast.error(error.response?.data?.message || 'Failed to create member');
     }
   };
 
   const handleImportMembers = async (file) => {
+    const formData = new FormData();
+    formData.append('membersFile', file);
     try {
-      const response = await adminService.importMembers(file);
-      toast.success(`Imported ${response.data.success} members successfully`);
-      if (response.data.failed > 0) {
-        toast.error(`Failed to import ${response.data.failed} members`);
-      }
+      await api.post('/members/import', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      toast.success('Imported successfully!');
+      setShowImportModal(false);
       fetchMembers();
     } catch (error) {
-      toast.error('Failed to import members');
-    }
-  };
-
-  const handleExportMembers = async () => {
-    try {
-      const response = await adminService.exportMembers();
-      const blob = new Blob([response], { 
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
-      });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'members.xlsx';
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      toast.success('Members exported successfully');
-    } catch (error) {
-      toast.error('Failed to export members');
+      toast.error('Import failed');
     }
   };
 
   const handleDownloadTemplate = async () => {
     try {
-      const response = await adminService.getMemberTemplate();
-      const blob = new Blob([response], { 
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
-      });
-      const url = window.URL.createObjectURL(blob);
+      const response = await api.get('/members/template', { responseType: 'blob' });
+      const blob = new Blob([response.data]);
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'member-template.xlsx';
-      document.body.appendChild(a);
+      a.download = 'members-template.xlsx';
       a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      toast.success('Template downloaded successfully');
+      URL.revokeObjectURL(url);
+      toast.success('Template downloaded');
     } catch (error) {
-      toast.error('Failed to download template');
+      toast.error('Download failed');
     }
   };
 
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-IN', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    });
-  };
-
-  const getTierColor = (tier) => {
-    switch (tier) {
-      case 'Gold':
-        return 'bg-yellow-100 text-yellow-700';
-      case 'Premium':
-        return 'bg-purple-100 text-purple-700';
-      case 'Elite':
-        return 'bg-gray-100 text-gray-700';
-      default:
-        return 'bg-blue-100 text-blue-700';
-    }
-  };
+  
+  const filteredMembers = Array.isArray(members) 
+    ? members.filter(member =>
+        member && (
+          `${member.firstName || ''} ${member.lastName || ''}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (member.memberId || '').toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      )
+    : [];
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-black/5 to-gray-900/10">
       {}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Members Management</h1>
-          <p className="text-gray-600 mt-2">Manage all members and their privileges</p>
-        </div>
-        <div className="flex items-center space-x-3 mt-4 sm:mt-0">
-          <button
-            onClick={handleDownloadTemplate}
-            className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-          >
-            <DocumentArrowDownIcon className="w-4 h-4 mr-2" />
-            Template
-          </button>
-          <input
-            type="file"
-            accept=".xlsx,.xls"
-            onChange={(e) => handleImportMembers(e.target.files[0])}
-            className="hidden"
-            id="import-members"
-          />
-          <label
-            htmlFor="import-members"
-            className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer"
-          >
-            <DocumentArrowUpIcon className="w-4 h-4 mr-2" />
-            Import
-          </label>
-          <button
-            onClick={handleExportMembers}
-            className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-          >
-            <DocumentArrowDownIcon className="w-4 h-4 mr-2" />
-            Export
-          </button>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="btn-primary flex items-center"
-          >
-            <PlusIcon className="w-4 h-4 mr-2" />
-            Add Member
-          </button>
+      <div className="bg-white/95 backdrop-blur-sm border-b border-black/10 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-3 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
+                <StarIcon className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <h1 className="text-lg font-black text-gray-900 leading-tight">Members</h1>
+                <p className="text-xs text-gray-500 font-medium">Manage members ({members.length})</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1.5 flex-nowrap">
+              <button onClick={handleDownloadTemplate}
+                className="flex items-center gap-1 px-2.5 py-1.5 text-xs bg-white/80 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all h-9 whitespace-nowrap"
+                title="Download Excel template"
+              >
+                <DocumentArrowDownIcon className="w-3.5 h-3.5" />
+                Template
+              </button>
+              <button onClick={() => setShowImportModal(true)}
+                className="flex items-center gap-1 px-2.5 py-1.5 text-xs bg-gradient-to-r from-emerald-500/90 to-teal-500/90 text-white border border-emerald-400 rounded-lg hover:from-emerald-600 transition-all h-9 font-medium whitespace-nowrap"
+                title="Import from Excel"
+              >
+                <DocumentArrowUpIcon className="w-3.5 h-3.5" />
+                Import
+              </button>
+              <button onClick={() => setShowAddModal(true)}
+                className="flex items-center gap-1 px-3 py-1.5 text-xs bg-gradient-to-r from-black to-gray-900 text-white rounded-lg hover:from-gray-900 transition-all h-9 font-bold shadow-sm whitespace-nowrap"
+                title="Add single member"
+              >
+                <PlusIcon className="w-3.5 h-3.5" />
+                Add
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="relative">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+      <div className="max-w-7xl mx-auto px-3 py-4">
+        {}
+        <div className="flex items-center gap-2 mb-4">
+          <div className="relative flex-1 max-w-md">
+            <MagnifyingGlassIcon className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
-              type="text"
-              placeholder="Search members by name, email, or phone..."
               value={searchTerm}
-              onChange={handleSearch}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search name or ID..."
+              className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-xl bg-white/50 focus:ring-1 focus:ring-black focus:border-transparent transition-all"
             />
           </div>
-          <select
-            value={membershipFilter}
-            onChange={(e) => setMembershipFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+          <button onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center gap-1 px-2.5 py-2 text-xs bg-white/80 border border-gray-200 rounded-xl hover:bg-gray-50 h-10 transition-all"
           >
-            <option value="">All Membership Tiers</option>
-            <option value="Gold">Gold</option>
-            <option value="Premium">Premium</option>
-            <option value="Elite">Elite</option>
-          </select>
+            <FunnelIcon className="w-3.5 h-3.5 flex-shrink-0" />
+            <span className="hidden sm:inline">Filters</span>
+            <ChevronDownIcon className={`w-3 h-3 transition-transform ${showFilters ? 'rotate-180' : ''} flex-shrink-0`} />
+          </button>
         </div>
-      </div>
 
-      {}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-        {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <LoadingSpinner size="large" />
+        {}
+        {showFilters && (
+          <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-2 mb-4 flex flex-wrap gap-1.5">
+            <button className="px-2.5 py-1.5 text-xs bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-all whitespace-nowrap">All</button>
+            <button className="px-2.5 py-1.5 text-xs bg-gradient-to-r from-yellow-400 to-yellow-500 text-white rounded-lg shadow-sm whitespace-nowrap">Gold</button>
+            <button className="px-2.5 py-1.5 text-xs bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg shadow-sm whitespace-nowrap">Premium</button>
+            <button className="px-2.5 py-1.5 text-xs bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-lg shadow-sm whitespace-nowrap">Elite</button>
           </div>
-        ) : (
-          <>
-            {}
-            <div className="hidden md:block overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Member
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Contact
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Membership
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Points
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {members.map((member) => (
-                    <tr key={member._id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="w-10 h-10 bg-secondary-100 rounded-full flex items-center justify-center">
-                            <StarIcon className="w-5 h-5 text-secondary-700" />
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {member.firstName} {member.lastName}
-                            </div>
-                            <div className="text-sm text-gray-500">{member.email}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{member.phone}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="space-y-1">
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${getTierColor(member.membershipTier)}`}>
-                            {member.membershipTier || 'Gold'}
-                          </span>
-                          <div className="text-xs text-gray-500">
-                            Since {formatDate(member.membershipDate || member.createdAt)}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{member.loyaltyPoints || 0}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                          member.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                        }`}>
-                          {member.isActive ? 'Active' : 'Inactive'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <div className="flex items-center justify-end space-x-2">
-                          <button
-                            onClick={() => {
-                              setSelectedMember(member);
-                              setShowViewModal(true);
-                            }}
-                            className="text-primary-600 hover:text-primary-700"
-                          >
-                            <EyeIcon className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => {
-                              setSelectedMember(member);
-                              setShowEditModal(true);
-                            }}
-                            className="text-blue-600 hover:text-blue-700"
-                          >
-                            <PencilIcon className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDeactivateMember(member._id)}
-                            className="text-orange-600 hover:text-orange-700"
-                          >
-                            <NoSymbolIcon className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteMember(member._id)}
-                            className="text-red-600 hover:text-red-700"
-                          >
-                            <TrashIcon className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+        )}
 
-            {}
-            <div className="md:hidden">
-              {members.map((member) => (
-                <div key={member._id} className="p-6 border-b border-gray-200 last:border-b-0">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center">
-                      <div className="w-12 h-12 bg-secondary-100 rounded-full flex items-center justify-center">
-                        <StarIcon className="w-6 h-6 text-secondary-700" />
-                      </div>
-                      <div className="ml-4">
-                        <div className="font-medium text-gray-900">
-                          {member.firstName} {member.lastName}
-                        </div>
-                        <div className="text-sm text-gray-500">{member.email}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${getTierColor(member.membershipTier)}`}>
-                        {member.membershipTier || 'Gold'}
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        member.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                      }`}>
-                        {member.isActive ? 'Active' : 'Inactive'}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="space-y-2 text-sm text-gray-600 mb-4">
-                    <p>Phone: {member.phone}</p>
-                    <p>Points: {member.loyaltyPoints || 0}</p>
-                    <p>Member since: {formatDate(member.membershipDate || member.createdAt)}</p>
-                  </div>
-                  <div className="flex items-center justify-end space-x-2">
-                    <button
-                      onClick={() => {
-                        setSelectedMember(member);
-                        setShowViewModal(true);
-                      }}
-                      className="flex items-center px-3 py-1 text-sm text-primary-600 hover:text-primary-700"
-                    >
-                      <EyeIcon className="w-4 h-4 mr-1" />
-                      View
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedMember(member);
-                        setShowEditModal(true);
-                      }}
-                      className="flex items-center px-3 py-1 text-sm text-blue-600 hover:text-blue-700"
-                    >
-                      <PencilIcon className="w-4 h-4 mr-1" />
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeactivateMember(member._id)}
-                      className="flex items-center px-3 py-1 text-sm text-orange-600 hover:text-orange-700"
-                    >
-                      <NoSymbolIcon className="w-4 h-4 mr-1" />
-                      Deactivate
-                    </button>
-                  </div>
-                </div>
-              ))}
+        {}
+        <div className="space-y-3">
+          {loading ? (
+            <div className="flex items-center justify-center py-16 text-sm text-gray-500">
+              <LoadingSpinner size="small" />
+              <span className="ml-3">Loading members...</span>
             </div>
+          ) : filteredMembers.length === 0 ? (
+            <div className="text-center py-20">
+              <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <StarIcon className="w-10 h-10 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-black text-gray-900 mb-2">No members</h3>
+              <p className="text-sm text-gray-500 mb-6">Add your first member using the button above</p>
+              <button onClick={() => setShowAddModal(true)}
+                className="px-6 py-2.5 text-xs font-bold bg-gradient-to-r from-black to-gray-900 text-white rounded-xl hover:from-gray-900 transition-all"
+              >
+                Add First Member
+              </button>
+            </div>
+          ) : (
+            <>
+              {}
+              <div className="md:hidden space-y-3">
+                {filteredMembers.map(member => (
+                  <MemberCard key={member._id} member={member} onView={() => { setSelectedMember(member); setShowViewModal(true); }} />
+                ))}
+              </div>
 
-            {}
-            {totalPages > 1 && (
-              <div className="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <p className="text-sm text-gray-700">
-                      Page {currentPage} of {totalPages}
-                    </p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                      disabled={currentPage === 1}
-                      className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Previous
-                    </button>
-                    <button
-                      onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                      disabled={currentPage === totalPages}
-                      className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Next
-                    </button>
-                  </div>
+              {}
+              <div className="hidden md:block">
+                <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white/80 backdrop-blur-sm">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="bg-white/90">
+                        <th className="px-4 py-3 text-left font-bold text-gray-900 sticky left-0 bg-white/90 z-10">Member</th>
+                        <th className="px-3 py-3 text-left font-bold text-gray-900">ID</th>
+                        <th className="px-3 py-3 text-left font-bold text-gray-900">Phone</th>
+                        <th className="px-3 py-3 text-left font-bold text-gray-900">Tier</th>
+                        <th className="px-3 py-3 text-left font-bold text-gray-900">Points</th>
+                        <th className="px-3 py-3 text-left font-bold text-gray-900">Status</th>
+                        <th className="px-3 py-3 text-right font-bold text-gray-900">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {filteredMembers.map(member => (
+                        <MemberTableRow key={member._id} member={member} onView={() => { setSelectedMember(member); setShowViewModal(true); }} />
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
-            )}
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
 
       {}
-      {showAddModal && (
-        <AddMemberModal
-          onClose={() => setShowAddModal(false)}
-          onSubmit={handleAddMember}
-        />
-      )}
-
-      {}
-      {showEditModal && selectedMember && (
-        <EditMemberModal
-          member={selectedMember}
-          onClose={() => {
-            setShowEditModal(false);
-            setSelectedMember(null);
-          }}
-          onSubmit={handleUpdateMember}
-        />
-      )}
-
-      {}
-      {showViewModal && selectedMember && (
-        <ViewMemberModal
-          member={selectedMember}
-          onClose={() => {
-            setShowViewModal(false);
-            setSelectedMember(null);
-          }}
-        />
-      )}
+      {showAddModal && <AddMemberModal onClose={() => setShowAddModal(false)} onSubmit={handleAddMember} />}
+      {showImportModal && <ImportModal onClose={() => setShowImportModal(false)} onImport={handleImportMembers} onDownloadTemplate={handleDownloadTemplate} />}
+      {showViewModal && selectedMember && <ViewMemberModal member={selectedMember} onClose={() => setShowViewModal(false)} />}
     </div>
   );
 };
 
-// Add Member Modal Component
+
+
+
+
+const MemberCard = ({ member, onView }) => {
+  const getTierClass = tier => {
+    const colors = { Gold: 'from-yellow-400 to-yellow-500', Premium: 'from-purple-500 to-purple-600', Elite: 'from-gray-600 to-gray-700' };
+    return colors[tier] || 'from-blue-400 to-blue-500';
+  };
+
+  return (
+    <div className="group bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-4 hover:border-black/20 hover:bg-white transition-all h-full" onClick={onView}>
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-2.5">
+          <div className={`w-10 h-10 bg-gradient-to-r ${getTierClass(member.membershipTier)} rounded-xl flex items-center justify-center`}>
+            <StarIcon className="w-4 h-4 text-white" />
+          </div>
+          <div className="min-w-0">
+            <div className="font-bold text-sm leading-tight text-gray-900 truncate">{member.firstName}</div>
+            <div className="text-xs text-gray-500 font-medium truncate max-w-[120px]">{member.memberId}</div>
+          </div>
+        </div>
+        <EllipsisVerticalIcon className="w-4 h-4 text-gray-400 group-hover:text-gray-600" />
+      </div>
+      
+      <div className="grid grid-cols-2 gap-2 text-xs mb-3">
+        <div className="flex items-center gap-1 text-gray-600">
+          <PhoneIcon className="w-3 h-3" />
+          <span className="truncate">{member.phone}</span>
+        </div>
+        <div className="text-right">
+          <span className="font-bold text-emerald-600 text-sm">{member.loyaltyPoints || 0}</span>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <span className={`px-2 py-1 text-xs font-bold rounded-full ${
+          member.membershipTier === 'Gold' ? 'bg-yellow-100 text-yellow-800' :
+          member.membershipTier === 'Premium' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'
+        }`}>
+          {member.membershipTier?.slice(0,3) || 'G'}
+        </span>
+        <span className={`px-2 py-1 text-xs font-bold rounded-full ml-auto ${
+          member.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+        }`}>
+          {member.isActive ? 'A' : 'I'}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+
+const MemberTableRow = ({ member, onView }) => (
+  <tr className="hover:bg-gray-50/50 group transition-all cursor-pointer" onClick={onView}>
+    <td className="px-4 py-3">
+      <div className="flex items-center gap-2">
+        <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
+          <StarIcon className="w-3.5 h-3.5 text-white" />
+        </div>
+        <div className="min-w-0">
+          <div className="font-bold text-sm leading-tight text-gray-900 truncate max-w-[140px]">{member.firstName}</div>
+          <div className="text-xs text-gray-500 truncate max-w-[140px]">{member.email}</div>
+        </div>
+      </div>
+    </td>
+    <td className="px-3 py-3">
+      <span className="text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded">{member.memberId}</span>
+    </td>
+    <td className="px-3 py-3">
+      <div className="flex items-center gap-1">
+        <PhoneIcon className="w-3 h-3 text-gray-400" />
+        <span className="text-xs font-medium text-gray-900 truncate">{member.phone}</span>
+      </div>
+    </td>
+    <td className="px-3 py-3">
+      <span className={`px-2 py-0.5 text-xs font-bold rounded-full ${
+        member.membershipTier === 'Gold' ? 'bg-yellow-100 text-yellow-800' :
+        member.membershipTier === 'Premium' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'
+      }`}>
+        {member.membershipTier?.slice(0,3)}
+      </span>
+    </td>
+    <td className="px-3 py-3">
+      <span className="font-bold text-emerald-600 text-sm">{member.loyaltyPoints || 0}</span>
+    </td>
+    <td className="px-3 py-3">
+      <span className={`px-2 py-0.5 text-xs font-bold rounded-full ${
+        member.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+      }`}>
+        {member.isActive ? 'Active' : 'Inactive'}
+      </span>
+    </td>
+    <td className="px-3 py-3 text-right">
+      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+        <EyeIcon className="w-3.5 h-3.5 text-blue-600 hover:bg-blue-50 p-1 rounded cursor-pointer" />
+        <PencilIcon className="w-3.5 h-3.5 text-emerald-600 hover:bg-emerald-50 p-1 rounded cursor-pointer" />
+      </div>
+    </td>
+  </tr>
+);
+
+
 const AddMemberModal = ({ onClose, onSubmit }) => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    membershipTier: 'Gold',
-    sponsoredBy: '',
-  });
+  const [formData, setFormData] = useState({ firstName: '', lastName: '', memberId: '', membershipTier: 'Gold' });
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      await onSubmit(formData);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const password = formData.firstName && formData.memberId 
+    ? `${formData.firstName.toLowerCase()}@${formData.memberId.toLowerCase()}` 
+    : '';
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Add New Member</h3>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-2">
+      <div className="bg-white rounded-2xl w-full max-w-[340px] max-h-[85vh] overflow-hidden border border-gray-200">
+        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+          <h3 className="text-base font-black text-gray-900">Add Member</h3>
+          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg">
+            <XMarkIcon className="w-4 h-4 text-gray-500" />
+          </button>
+        </div>
+        
+        <div className="p-4 space-y-3">
+          <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                First Name
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                className="input-field"
-              />
+              <label className="text-xs font-bold text-gray-700 block mb-1">Name *</label>
+              <input value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})}
+                className="w-full px-2.5 py-2 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-black h-9" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Last Name
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                className="input-field"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="input-field"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Phone
-            </label>
-            <input
-              type="tel"
-              required
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="input-field"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Membership Tier
-            </label>
-            <select
-              value={formData.membershipTier}
-              onChange={(e) => setFormData({ ...formData, membershipTier: e.target.value })}
-              className="input-field"
-            >
-              <option value="Gold">Gold</option>
-              <option value="Premium">Premium</option>
-              <option value="Elite">Elite</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Sponsored By (Email)
-            </label>
-            <input
-              type="email"
-              value={formData.sponsoredBy}
-              onChange={(e) => setFormData({ ...formData, sponsoredBy: e.target.value })}
-              className="input-field"
-              placeholder="Optional"
-            />
-          </div>
-          <div className="flex items-center justify-end space-x-3 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary flex items-center"
-            >
-              {loading && <LoadingSpinner size="small" className="mr-2" />}
-              Add Member
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-// Edit Member Modal Component
-const EditMemberModal = ({ member, onClose, onSubmit }) => {
-  const [formData, setFormData] = useState({
-    firstName: member.firstName || '',
-    lastName: member.lastName || '',
-    email: member.email || '',
-    phone: member.phone || '',
-    membershipTier: member.membershipTier || 'Gold',
-    loyaltyPoints: member.loyaltyPoints || 0,
-  });
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      await onSubmit(formData);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Edit Member</h3>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                First Name
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                className="input-field"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Last Name
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                className="input-field"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="input-field"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Phone
-            </label>
-            <input
-              type="tel"
-              required
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="input-field"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Membership Tier
-            </label>
-            <select
-              value={formData.membershipTier}
-              onChange={(e) => setFormData({ ...formData, membershipTier: e.target.value })}
-              className="input-field"
-            >
-              <option value="Gold">Gold</option>
-              <option value="Premium">Premium</option>
-              <option value="Elite">Elite</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Loyalty Points
-            </label>
-            <input
-              type="number"
-              min="0"
-              value={formData.loyaltyPoints}
-              onChange={(e) => setFormData({ ...formData, loyaltyPoints: parseInt(e.target.value) || 0 })}
-              className="input-field"
-            />
-          </div>
-          <div className="flex items-center justify-end space-x-3 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary flex items-center"
-            >
-              {loading && <LoadingSpinner size="small" className="mr-2" />}
-              Update Member
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-// View Member Modal Component
-const ViewMemberModal = ({ member, onClose }) => {
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-IN', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
-
-  const getTierColor = (tier) => {
-    switch (tier) {
-      case 'Gold':
-        return 'bg-yellow-100 text-yellow-700';
-      case 'Premium':
-        return 'bg-purple-100 text-purple-700';
-      case 'Elite':
-        return 'bg-gray-100 text-gray-700';
-      default:
-        return 'bg-blue-100 text-blue-700';
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Member Details</h3>
-        <div className="space-y-4">
-          <div className="flex items-center space-x-4 mb-6">
-            <div className="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center">
-              <StarIcon className="w-8 h-8 text-secondary-700" />
-            </div>
-            <div>
-              <h4 className="text-lg font-medium text-gray-900">
-                {member.firstName} {member.lastName}
-              </h4>
-              <p className="text-sm text-gray-500">{member.email}</p>
-              <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full mt-1 ${getTierColor(member.membershipTier)}`}>
-                {member.membershipTier || 'Gold'} Member
-              </span>
+              <label className="text-xs font-bold text-gray-700 block mb-1">Last</label>
+              <input value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})}
+                className="w-full px-2.5 py-2 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-black h-9" />
             </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <span className="font-medium text-gray-700">Phone:</span>
-              <p className="text-gray-900">{member.phone}</p>
-            </div>
-            <div>
-              <span className="font-medium text-gray-700">Status:</span>
-              <p className={member.isActive ? 'text-green-600' : 'text-red-600'}>
-                {member.isActive ? 'Active' : 'Inactive'}
-              </p>
-            </div>
-            <div>
-              <span className="font-medium text-gray-700">Loyalty Points:</span>
-              <p className="text-gray-900 font-semibold">{member.loyaltyPoints || 0}</p>
-            </div>
-            <div>
-              <span className="font-medium text-gray-700">Member Since:</span>
-              <p className="text-gray-900">{formatDate(member.membershipDate || member.createdAt)}</p>
-            </div>
-            {member.sponsoredBy && (
-              <div className="col-span-2">
-                <span className="font-medium text-gray-700">Sponsored By:</span>
-                <p className="text-gray-900">
-                  {member.sponsoredBy.firstName} {member.sponsoredBy.lastName}
-                </p>
-                <p className="text-sm text-gray-500">{member.sponsoredBy.email}</p>
-              </div>
-            )}
+          <div>
+            <label className="text-xs font-bold text-gray-700 block mb-1">ID *</label>
+            <input value={formData.memberId} onChange={e => setFormData({...formData, memberId: e.target.value.toUpperCase()})}
+              className="w-full px-2.5 py-2 text-xs font-mono border border-gray-200 rounded-lg focus:ring-1 focus:ring-indigo-400 h-9" />
           </div>
+
+          <div>
+            <label className="text-xs font-bold text-gray-700 block mb-1">Tier</label>
+            <select value={formData.membershipTier} onChange={e => setFormData({...formData, membershipTier: e.target.value})}
+              className="w-full px-2.5 py-2 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-purple-400 h-9">
+              <option>Gold</option><option>Premium</option><option>Elite</option>
+            </select>
+          </div>
+
+          {password && (
+            <div className="bg-gradient-to-r from-indigo-50/80 p-2.5 rounded-xl border border-indigo-200">
+              <div className="flex items-center gap-1.5 mb-1 text-xs">
+                <KeyIcon className="w-3 h-3 text-indigo-600" />
+                <span className="font-bold text-indigo-800">Password</span>
+              </div>
+              <div className="font-mono text-indigo-900 font-bold text-xs bg-white px-2.5 py-1.5 rounded-lg border border-indigo-200 truncate">
+                {password}
+              </div>
+            </div>
+          )}
         </div>
-        
-        <div className="flex items-center justify-end pt-6">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+
+        <div className="px-4 py-3 border-t border-gray-100 flex gap-2 bg-gray-50/50">
+          <button onClick={onClose}
+            className="flex-1 h-9 px-3 text-xs font-bold text-gray-700 border border-gray-300 rounded-lg hover:bg-white transition-all"
+          >Cancel</button>
+          <button onClick={e => {
+            e.preventDefault();
+            handleSubmit(e, formData, onSubmit, setFormData, setLoading);
+          }} disabled={!formData.firstName || !formData.memberId || loading}
+            className="flex-1 h-9 px-3 text-xs font-bold text-white bg-gradient-to-r from-black to-gray-900 rounded-lg hover:from-gray-900 disabled:opacity-50 transition-all flex items-center justify-center gap-1"
           >
-            Close
+            {loading ? <LoadingSpinner size="tiny" /> : <PlusIcon className="w-3.5 h-3.5" />}
+            <span>Add</span>
           </button>
         </div>
       </div>
     </div>
   );
 };
+
+
+const ImportModal = ({ onClose, onImport, onDownloadTemplate }) => {
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-2">
+      <div className="bg-white rounded-2xl w-full max-w-[360px] max-h-[85vh] overflow-hidden border border-gray-200">
+        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+          <h3 className="text-base font-black text-gray-900">Import Members</h3>
+          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg">
+            <XMarkIcon className="w-4 h-4" />
+          </button>
+        </div>
+        
+        <div className="p-4">
+          <label className="block border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-gray-400 hover:bg-gray-50 cursor-pointer mb-4 transition-all h-32 flex flex-col items-center justify-center"
+            htmlFor="import-file">
+            <DocumentArrowUpIcon className="w-8 h-8 text-gray-400 mb-2" />
+            <div className="text-xs font-bold text-gray-900 mb-1">Click or drag file</div>
+            <div className="text-xs text-gray-500">.xlsx, .xls only</div>
+            <input id="import-file" type="file" accept=".xlsx,.xls" onChange={e => {
+              const file = e.target.files[0];
+              if (file) setFile(file);
+            }} className="hidden" />
+          </label>
+
+          {file && (
+            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 mb-4 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-emerald-800 truncate max-w-[200px]">{file.name}</span>
+                <button onClick={() => setFile(null)} className="p-1 hover:bg-emerald-200 rounded">
+                  <XMarkIcon className="w-3.5 h-3.5 text-emerald-600" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs mb-4">
+            <div className="font-bold text-blue-900 mb-1 flex items-center gap-1">
+              <KeyIcon className="w-3.5 h-3.5" />
+              Format: A=Name, B=ID, C=LastName
+            </div>
+          </div>
+        </div>
+
+        <div className="px-4 py-3 border-t border-gray-100 flex gap-2 bg-gray-50/50">
+          <button onClick={onDownloadTemplate}
+            className="flex-1 h-9 px-3 text-xs font-bold text-blue-700 bg-blue-100 border border-blue-300 rounded-lg hover:bg-blue-200 transition-all"
+          >Sample</button>
+          <button onClick={onClose}
+            className="flex-1 h-9 px-3 text-xs font-bold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+          >Cancel</button>
+          <button onClick={async () => {
+            if (!file) return toast.error('Select file');
+            setLoading(true);
+            await handleImportMembers(file);
+            setLoading(false);
+          }} disabled={!file || loading}
+            className="flex-1 h-9 px-3 text-xs font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg hover:from-emerald-600 disabled:opacity-50 transition-all flex items-center justify-center gap-1"
+          >
+            {loading ? <LoadingSpinner size="tiny" /> : <DocumentArrowUpIcon className="w-3.5 h-3.5" />}
+            <span>Import</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+const ViewMemberModal = ({ member, onClose }) => (
+  <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-2">
+    <div className="bg-white rounded-2xl w-full max-w-[340px] max-h-[85vh] overflow-hidden border border-gray-200">
+      <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+        <h3 className="text-base font-black text-gray-900">Member Details</h3>
+        <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg">
+          <XMarkIcon className="w-4 h-4" />
+        </button>
+      </div>
+      
+      <div className="p-4 space-y-3 text-xs">
+        <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-500 rounded-xl flex items-center justify-center">
+            <StarIcon className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <div className="font-black text-sm leading-tight">{member.firstName} {member.lastName}</div>
+            <div className="text-indigo-600 font-bold bg-indigo-100 px-2 py-0.5 rounded text-xs">{member.memberId}</div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 text-xs">
+          <div className="p-2.5 bg-gray-50 rounded-xl space-y-1">
+            <span className="text-gray-500 block">Phone</span>
+            <span className="font-bold text-gray-900">{member.phone}</span>
+          </div>
+          <div className="p-2.5 bg-gray-50 rounded-xl space-y-1">
+            <span className="text-gray-500 block">Points</span>
+            <span className="text-lg font-black text-emerald-600">{member.loyaltyPoints || 0}</span>
+          </div>
+          <div className="p-2.5 bg-gray-50 rounded-xl space-y-1">
+            <span className="text-gray-500 block">Tier</span>
+            <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
+              member.membershipTier === 'Gold' ? 'bg-yellow-100 text-yellow-800' : 'bg-purple-100 text-purple-800'
+            }`}>
+              {member.membershipTier}
+            </span>
+          </div>
+          <div className="p-2.5 bg-gray-50 rounded-xl space-y-1">
+            <span className="text-gray-500 block">Status</span>
+            <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
+              member.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+            }`}>
+              {member.isActive ? 'Active' : 'Inactive'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-4 py-3 border-t border-gray-100">
+        <button onClick={onClose}
+          className="w-full h-10 px-4 text-xs font-bold text-gray-700 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all"
+        >Close</button>
+      </div>
+    </div>
+  </div>
+);
 
 export default MembersManagement;

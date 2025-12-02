@@ -10,6 +10,7 @@ import { HomeIcon as HomeSolid, CalendarDaysIcon as CalendarSolid, HeartIcon as 
 import useCartStore from '../../store/cartStore';
 import { useAuth } from '../../context/AuthContext';
 import logo from '../../assets/logo.png';
+import { BookKeyIcon, ListFilterPlus } from 'lucide-react';
 
 const UserMobileLayout = ({ children }) => {
   const location = useLocation();
@@ -37,7 +38,7 @@ const UserMobileLayout = ({ children }) => {
   return (
     <>
       <div className="min-h-screen bg-gray-50 flex flex-col pb-20 lg:pb-0">
-        {/* Mobile Header */}
+        {}
         <header className="lg:hidden bg-white border-b border-gray-200 sticky top-0 z-50 px-4 py-3">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center">
@@ -64,22 +65,22 @@ const UserMobileLayout = ({ children }) => {
 
         <main className="flex-1 overflow-y-auto">{children}</main>
 
-        {/* Mobile Bottom Nav - FULLY FITTED */}
+        {}
         <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
           <div className={`grid ${isAuthenticated ? 'grid-cols-5' : 'grid-cols-2'} h-16`}>
-            {/* Home - Always visible */}
+            {}
             <Link to="/" className={`flex flex-col items-center justify-center gap-1 transition-all ${isActive('/') ? 'text-black scale-105' : 'text-gray-600'}`}>
               {isActive('/') ? <HomeSolid className="w-6 h-6" /> : <HomeIcon className="w-6 h-6" />}
               <span className="text-[10px] font-semibold uppercase tracking-wide">Home</span>
             </Link>
             
-            {/* Events - Always visible */}
+            {}
             <Link to="/events" className={`flex flex-col items-center justify-center gap-1 transition-all ${isActive('/events') ? 'text-black scale-105' : 'text-gray-600'}`}>
               {isActive('/events') ? <CalendarSolid className="w-6 h-6" /> : <CalendarDaysIcon className="w-6 h-6" />}
               <span className="text-[10px] font-semibold uppercase tracking-wide">Events</span>
             </Link>
 
-            {/* Logged In Only - 3 more tabs */}
+            {}
             {isAuthenticated && (
               <>
                 <Link to="/favorites" className={`flex flex-col items-center justify-center gap-1 transition-all ${isActive('/favorites') ? 'text-black scale-105' : 'text-gray-600'}`}>
@@ -108,7 +109,7 @@ const UserMobileLayout = ({ children }) => {
         </nav>
       </div>
 
-      {/* Mobile Sidebar */}
+      {}
       {sidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-[9999] flex">
           <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
@@ -139,6 +140,14 @@ const UserMobileLayout = ({ children }) => {
                     <CalendarDaysIcon className="w-4 h-4" />
                     Bookings
                   </Link>
+                   {
+                                      user.role=="member"&&(
+                                        <Link to="/member/requests" className="block w-full text-[12px] font-semibold text-gray-900 py-2.5 px-3 rounded-2xl hover:bg-gray-50 flex items-center gap-2">
+                                      <ListFilterPlus className="w-4 h-4" />
+                                      My Requests
+                                    </Link>
+                                      )
+                                    }
                 </div>
               )}
 

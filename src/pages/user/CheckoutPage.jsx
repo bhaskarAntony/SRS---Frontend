@@ -23,14 +23,23 @@ const CheckoutPage = () => {
 
   const items = location.state?.items?.length > 0 ? location.state.items : cartItems;
 
+  const getPrice = (item) => {
+    const event = item.event;
+    let unitPrice = 0;
+
+    if (user?.role === 'member' && event?.memberPrice > 0) {
+      unitPrice = event.memberPrice;
+    } else if (user?.role === 'guest' && event?.guestPrice > 0) {
+      unitPrice = event.guestPrice;
+    } else {
+      unitPrice = event?.userPrice || event?.price || 0;
+    }
+
+    return unitPrice * (item.seatCount || 1);
+  };
+
   const total = items.reduce((sum, item) => {
-    const price =
-      item.bookingType === 'member'
-        ? item.event.memberPrice
-        : item.bookingType === 'guest'
-        ? item.event.guestPrice
-        : item.event.userPrice;
-    return sum + price * item.seatCount;
+    return sum + getPrice(item);
   }, 0);
 
   useEffect(() => {
@@ -42,14 +51,19 @@ const CheckoutPage = () => {
   }, [authLoading, isAuthenticated, user, navigate, location]);
 
   const handlePayment = async () => {
+    if (total <= 0) {
+      toast.error('Invalid amount');
+      return;
+    }
+
     setLoading(true);
     try {
       const bookings = await Promise.all(
         items.map((item) =>
           bookingService.createBooking({
             eventId: item.event._id || item.eventId,
-            seatCount: item.seatCount,
-            bookingType: item.bookingType,
+            seatCount: item.seatCount || 1,
+            bookingType: user.role === 'member' ? 'member' : user.role === 'guest' ? 'guest' : 'user',
           })
         )
       );
@@ -60,39 +74,39 @@ const CheckoutPage = () => {
       script.src = 'https://checkout.razorpay.com/v1/checkout.js';
       script.onload = () => {
         const rzp = new window.Razorpay({
-          key: paymentRes.data.key,
-          amount: paymentRes.data.amount,
-          currency: 'INR',
-          order_id: paymentRes.data.orderId,
-          name: 'SRS Events',
-          description: 'Event Booking',
-          handler: async (response) => {
-            try {
-              await bookingService.verifyPayment({
-                bookingId: bookings[0].data._id,
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature
-              });
+            key: paymentRes.data.key,
+            amount: paymentRes.data.amount,
+            currency: 'INR',
+            order_id: paymentRes.data.orderId,
+            name: 'SRS Events',
+            description: 'Event Booking',
+            handler: async (response) => {
+              try {
+                await bookingService.verifyPayment({
+                  bookingId: bookings[0].data._id,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature
+                });
 
-              clearCart();
-              toast.success('Payment successful! Your tickets are ready.');
-              navigate('/booking-success', { 
-                state: { bookings: bookings.map(b => b.data) } 
-              });
-            } catch (err) {
-              toast.error('Payment verification failed');
-              console.error(err);
-            }
-          },
-          prefill: {
-            name: `${user.firstName} ${user.lastName}`,
-            email: user.email,
-            contact: user.phone || '',
-          },
-          theme: { color: '#000000' },
-          modal: { ondismiss: () => setLoading(false) },
-        });
+                clearCart();
+                toast.success('Payment successful! Your tickets are ready.');
+                navigate('/booking-success', { 
+                  state: { bookings: bookings.map(b => b.data) } 
+                });
+              } catch (err) {
+                toast.error('Payment verification failed');
+                console.error(err);
+              }
+            },
+            prefill: {
+              name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Guest',
+              email: user.email || '',
+              contact: user.phone || '',
+            },
+            theme: { color: '#000000' },
+            modal: { ondismiss: () => setLoading(false) },
+          });
         rzp.open();
       };
       document.body.appendChild(script);
@@ -110,16 +124,6 @@ const CheckoutPage = () => {
       </div>
     );
   }
-
-  const getPrice = (item) => {
-    const price =
-      item.bookingType === 'member'
-        ? item.event.memberPrice
-        : item.bookingType === 'guest'
-        ? item.event.guestPrice
-        : item.event.userPrice;
-    return price * item.seatCount;
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -190,7 +194,7 @@ const CheckoutPage = () => {
                       <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                         <div className="flex items-center gap-1.5 text-[11px] text-gray-600">
                           <TicketIcon className="w-3.5 h-3.5" />
-                          <span>{item.seatCount} × {item.bookingType.toUpperCase()}</span>
+                          <span>{item.seatCount || 1} × {user?.role?.toUpperCase() || 'USER'}</span>
                         </div>
                         <p className="text-[14px] lg:text-lg font-bold text-gray-900">
                           ₹{getPrice(item).toLocaleString('en-IN')}
@@ -232,7 +236,7 @@ const CheckoutPage = () => {
                   
                   <button
                     onClick={handlePayment}
-                    disabled={loading}
+                    disabled={loading || total === 0}
                     className="w-full bg-black hover:bg-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold text-[12px] lg:text-sm py-3 lg:py-3.5 px-4 rounded-2xl shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 uppercase tracking-wide"
                   >
                     {loading ? (
@@ -278,7 +282,7 @@ const CheckoutPage = () => {
           
           <button
             onClick={handlePayment}
-            disabled={loading}
+            disabled={loading || total === 0}
             className="w-full bg-black hover:bg-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold text-[12px] py-3.5 rounded-2xl shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 uppercase tracking-wide"
           >
             {loading ? (

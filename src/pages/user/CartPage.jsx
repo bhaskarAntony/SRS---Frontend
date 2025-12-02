@@ -19,10 +19,25 @@ import toast from 'react-hot-toast';
 
 const CartPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { items, removeItem, updateItemCount, getTotalPrice } = useCartStore();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
-  const total = getTotalPrice();
+
+  const getPrice = (item) => {
+    const event = item.event;
+
+    if (user?.role === 'member' && event.memberPrice > 0) {
+      return event.memberPrice;
+    }
+    if (user?.role === 'guest' && event.guestPrice > 0) {
+      return event.guestPrice;
+    }
+    return event.userPrice || event.price || 0; 
+  };
+
+  const total = items.reduce((sum, item) => {
+    return sum + (getPrice(item) * item.seatCount);
+  }, 0);
 
   const handleCheckout = () => {
     if (!isAuthenticated) {
@@ -31,13 +46,6 @@ const CartPage = () => {
       return;
     }
     navigate('/checkout', { state: { items } });
-  };
-
-  const getPrice = (item) => {
-    const price = item.bookingType === 'member' ? item.event.memberPrice :
-                  item.bookingType === 'guest' ? item.event.guestPrice : 
-                  item.event.userPrice;
-    return price * item.seatCount;
   };
 
   if (items.length === 0) {
@@ -59,9 +67,7 @@ const CartPage = () => {
     <>
       {}
       <div className="hidden lg:grid lg:grid-cols-3 lg:gap-8 lg:max-w-5xl lg:mx-auto lg:px-6 lg:py-8">
-        {}
         <div className="lg:col-span-2 lg:space-y-5">
-          {}
           <div className="bg-white rounded-3xl border border-gray-200 p-5 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
@@ -72,11 +78,9 @@ const CartPage = () => {
             </div>
           </div>
 
-          {}
           {items.map((item) => (
             <div key={`${item.eventId}-${item.bookingType}`} className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-all">
               <div className="flex gap-4">
-                {}
                 <div className="relative flex-shrink-0">
                   <img
                     src={item.event.bannerImage || '/placeholder.jpg'}
@@ -84,11 +88,10 @@ const CartPage = () => {
                     className="w-20 h-20 rounded-2xl object-cover"
                   />
                   <span className="absolute -top-2 -right-2 text-[9px] font-bold px-1.5 py-0.5 bg-black text-white rounded-full">
-                    {item.bookingType?.toUpperCase()}
+                    {user?.role === 'member' ? 'M' : user?.role === 'guest' ? 'G' : 'U'}
                   </span>
                 </div>
 
-                {}
                 <div className="flex-1 min-w-0">
                   <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-2">{item.event.title}</h3>
                   
@@ -103,7 +106,6 @@ const CartPage = () => {
                     </div>
                   </div>
 
-                  {}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <button
@@ -122,13 +124,14 @@ const CartPage = () => {
                     </div>
 
                     <div className="text-right">
-                      <p className="text-lg font-bold text-gray-900">₹{getPrice(item).toLocaleString('en-IN')}</p>
-                      <p className="text-[11px] text-gray-500">×{item.seatCount}</p>
+                      <p className="text-lg font-bold text-gray-900">
+                        ₹{(getPrice(item) * item.seatCount).toLocaleString('en-IN')}
+                      </p>
+                      <p className="text-[11px] text-gray-500">₹{getPrice(item).toLocaleString()} ×{item.seatCount}</p>
                     </div>
                   </div>
                 </div>
 
-                {}
                 <div className="flex flex-col items-end gap-2 ml-2">
                   <button
                     onClick={() => toggleFavorite(item.eventId)}
@@ -151,7 +154,6 @@ const CartPage = () => {
           ))}
         </div>
 
-        {}
         <div className="lg:sticky lg:top-8 lg:self-start">
           <div className="bg-white rounded-3xl border border-gray-200 p-6 shadow-sm lg:min-h-[300px]">
             <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-[0.18em]">Order Summary</h3>
@@ -187,7 +189,6 @@ const CartPage = () => {
 
       {}
       <div className="lg:hidden space-y-4 pb-24">
-        {}
         <div className="bg-white rounded-3xl border border-gray-200 p-5 shadow-sm sticky top-0 z-20 backdrop-blur">
           <div className="flex items-center justify-between">
             <div>
@@ -198,12 +199,10 @@ const CartPage = () => {
           </div>
         </div>
 
-        {}
         <div className="space-y-3 max-h-[calc(100vh-280px)] overflow-y-auto">
           {items.map((item) => (
             <div key={`${item.eventId}-${item.bookingType}`} className="bg-white rounded-3xl border border-gray-200 shadow-sm p-5">
               <div className="flex gap-3">
-                {}
                 <div className="relative flex-shrink-0">
                   <img
                     src={item.event.bannerImage || '/placeholder.jpg'}
@@ -211,11 +210,10 @@ const CartPage = () => {
                     className="w-16 h-16 rounded-2xl object-cover"
                   />
                   <span className="absolute -top-1.5 -right-1.5 text-[9px] font-bold px-1.5 py-0.5 bg-black text-white rounded-full">
-                    {item.bookingType?.toUpperCase()}
+                    {user?.role === 'member' ? 'M' : user?.role === 'guest' ? 'G' : 'U'}
                   </span>
                 </div>
 
-                {}
                 <div className="flex-1 min-w-0">
                   <h3 className="text-[12px] font-semibold text-gray-900 line-clamp-2 mb-2">{item.event.title}</h3>
                   
@@ -230,7 +228,6 @@ const CartPage = () => {
                     </div>
                   </div>
 
-                  {}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <button
@@ -249,7 +246,9 @@ const CartPage = () => {
                     </div>
 
                     <div className="text-right">
-                      <p className="text-[14px] font-bold text-gray-900">₹{getPrice(item).toLocaleString('en-IN')}</p>
+                      <p className="text-[14px] font-bold text-gray-900">
+                        ₹{(getPrice(item) * item.seatCount).toLocaleString('en-IN')}
+                      </p>
                       <button
                         onClick={() => removeItem(item.eventId, item.bookingType)}
                         className="mt-1 p-1.5 rounded-xl hover:bg-rose-50 flex items-center justify-center"
@@ -260,7 +259,6 @@ const CartPage = () => {
                   </div>
                 </div>
 
-                {}
                 <button
                   onClick={() => toggleFavorite(item.eventId)}
                   className="p-1.5 rounded-xl hover:bg-gray-50 self-start flex items-center justify-center ml-1"
@@ -275,7 +273,6 @@ const CartPage = () => {
           ))}
         </div>
 
-        {}
         <div className="fixed bottom-16 left-0 right-0 lg:hidden bg-white border-t border-gray-200 p-4 shadow-2xl z-50 mb-20">
           <div className="flex items-center justify-between mb-3">
             <div>

@@ -11,7 +11,11 @@ export const adminService = {
     return response.data;
   },
 
-  getAllUsers: async (params = {}) => {
+  getAllMembers: async (params = {}) => {
+    const response = await api.get('/member', { params });
+    return response.data;
+  },
+   getAllUsers: async (params = {}) => {
     const response = await api.get('/admin/users', { params });
     return response.data;
   },
@@ -51,7 +55,7 @@ export const adminService = {
   },
 
   createMember: async (memberData) => {
-    const response = await api.post('/admin/members', memberData);
+    const response = await api.post('/member/add', memberData);
     return response.data;
   },
 

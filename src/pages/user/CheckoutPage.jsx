@@ -19,6 +19,7 @@ const CheckoutPage = () => {
   const location = useLocation();
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const { items: cartItems, clearCart } = useCartStore();
+  console.log(cartItems)
   const [loading, setLoading] = useState(false);
 
   const items = location.state?.items?.length > 0 ? location.state.items : cartItems;
@@ -61,7 +62,7 @@ const CheckoutPage = () => {
       const bookings = await Promise.all(
         items.map((item) =>
           bookingService.createBooking({
-            eventId: item.event._id || item.eventId,
+            eventId: item.event.eventId,
             seatCount: item.seatCount || 1,
             bookingType: user.role === 'member' ? 'member' : user.role === 'guest' ? 'guest' : 'user',
           })

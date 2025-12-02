@@ -188,7 +188,7 @@ const CartPage = () => {
       </div>
 
       {}
-      <div className="lg:hidden space-y-4 pb-24">
+      <div className="lg:hidden space-y-4 pb-24 p-3">
         <div className="bg-white rounded-3xl border border-gray-200 p-5 shadow-sm sticky top-0 z-20 backdrop-blur">
           <div className="flex items-center justify-between">
             <div>

@@ -24,24 +24,22 @@ import CheckoutPage from './pages/user/CheckoutPage';
 import BookingSuccessPage from './pages/user/BookingSuccessPage';
 
 import AuthPage from './pages/auth/AuthPages';
-
+// w
 import AdminDashboard from './pages/admin/AdminDashboard';
 import UsersManagement from './pages/admin/UsersManagement';
 import MembersManagement from './pages/admin/MembersManagement';
 import EventsManagement from './pages/admin/EventsManagement';
 import BookingsManagement from './pages/admin/BookingsManagement';
 import AdminProfile from './pages/admin/AdminProfile';
-import ScrollToTopButton from './components/ScrollToTopButton';
 import BookingDetailPage from './pages/user/BookingDetailPage';
 import QrScanPage from './pages/admin/QrScanPage';
 import GuestBookingPage from './pages/guest/GuestBookingPage';
-import GuestSearchStatus from './pages/guest/GuestSearchStatus';
 import MemberDashboard from './pages/member/MemberDashboard';
 import SearchBooking from './pages/guest/SearchBooking';
 
 // Protected Route (Only for logged-in users)
 const ProtectedRoute = ({ children, adminOnly = false }) => {
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const {isLoading, user } = useAuth();
 
   if (isLoading) {
     return (

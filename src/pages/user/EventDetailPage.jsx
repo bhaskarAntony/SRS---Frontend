@@ -329,113 +329,111 @@ const EventDetailPage = () => {
 
           {}
           <div className="lg:col-span-1">
-            <div className="sticky top-20 bg-zinc-900 rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
-              <div className="relative h-56">
-                <img src={event.bannerImage} alt={event.title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80" />
-                <div className="absolute bottom-6 left-6">
-                  <h3 className="text-xl font-black text-white">{event.title}</h3>
-                  <p className="text-sm text-gray-300">{formatDate(event.startDate)}</p>
-                </div>
-              </div>
+  <div className="sticky top-20 bg-zinc-900 rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
+    {/* Hero Image */}
+    <div className="relative h-48">
+      <img src={event.bannerImage} alt={event.title} className="w-full h-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80" />
+      <div className="absolute bottom-4 left-4">
+        <h3 className="text-lg font-black text-white leading-tight line-clamp-2">{event.title}</h3>
+        <p className="text-[11px] text-gray-300 font-mono tracking-wider mt-1">{formatDate(event.startDate)}</p>
+      </div>
+    </div>
 
-              <div className="p-6 space-y-6">
-                {}
-                <div className="text-center">
-                  <div className="text-5xl font-black">₹{ticketPrice.toLocaleString()}</div>
-
-                  {}
-                  {ticketPrice < userPrice && userRole !== 'guest' && (
-                    <div className="mt-3">
-                      <p className="text-sm text-gray-400 line-through">₹{userPrice.toLocaleString()}</p>
-                      <p className="text-emerald-400 font-bold text-lg">
-                        {userRole === 'member' || userRole === 'admin' ? 'Member Discount Applied!' : 'Special Price'}
-                      </p>
-                    </div>
-                  )}
-
-                  <p className="text-sm text-gray-400 mt-2">per ticket</p>
-                </div>
-
-                {}
-                <div className="bg-zinc-800 rounded-2xl p-5">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm text-gray-400">Tickets</span>
-                    <span className="font-bold">{qty}</span>
-                  </div>
-                  <div className="flex items-center justify-center gap-6">
-                    <button
-                      onClick={decreaseQty}
-                      disabled={qty === 1 || isSoldOut}
-                      className="w-12 h-12 rounded-xl bg-zinc-700 hover:bg-zinc-600 disabled:opacity-40 transition"
-                    >
-                      <MinusIcon className="w-5 h-5" />
-                    </button>
-                    <span className="text-3xl font-bold w-16 text-center">{qty}</span>
-                    <button
-                      onClick={increaseQty}
-                      disabled={qty >= maxAllowed || isSoldOut}
-                      className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 disabled:opacity-40 transition"
-                    >
-                      <PlusIcon className="w-5 h-5" />
-                    </button>
-                  </div>
-                  <p className="text-center text-xs text-gray-500 mt-3">
-                    Max {maxAllowed} per person • {seatsLeft} left
-                  </p>
-                </div>
-
-                {}
-                <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-2xl p-6 border border-purple-500/50">
-                  <div className="flex justify-between items-center">
-                    <p className="text-xl font-bold">Total Amount</p>
-                    <p className="text-4xl font-black">₹{totalAmount.toLocaleString()}</p>
-                  </div>
-                </div>
-
-                {}
-                <div className="space-y-4">
-                 {
-                  isAuthenticated && (
-                    <>
-                     <button
-                    onClick={handleBuyNow}
-                    disabled={isSoldOut}
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 font-bold text-lg py-5 rounded-2xl transition transform hover:scale-105"
-                  >
-                    {isSoldOut ? 'Sold Out' : 'Buy Tickets Now'}
-                  </button>
-
-                  <button
-                    onClick={handleAddToCart}
-                    disabled={isSoldOut}
-                    className="w-full border-2 border-white hover:bg-white hover:text-black font-bold text-lg py-5 rounded-2xl flex items-center justify-center gap-3 transition transform hover:scale-105"
-                  >
-                    <ShoppingCartIcon className="w-6 h-6" />
-                    Add to Cart
-                  </button>
-                    </>
-                  )
-                 }
-                  {!isAuthenticated && (
-  <button
-    onClick={() => navigate(`/guest/book/${event._id}`)} className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 font-bold text-lg py-5 rounded-2xl transition transform hover:scale-105" 
-  >
-    Book as Guest (Needs Member Approval)
-  </button>
-)}
-                </div>
-                
-
-                <div className="text-center text-xs text-gray-400 pt-6 border-t border-white/10">
-                  <div className="flex items-center justify-center gap-2">
-                    <ShieldCheckIcon className="w-5 h-5 text-emerald-400" />
-                    <span>Instant QR Ticket • 100% Secure • No Hidden Fees</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div className="p-5 space-y-4">
+      {/* Price Section */}
+      <div className="text-center">
+        <div className="text-4xl font-black text-white mb-1">₹{ticketPrice.toLocaleString()}</div>
+        {ticketPrice < userPrice && userRole !== 'guest' && (
+          <div className="space-y-1">
+            <p className="text-[11px] text-gray-400 line-through font-mono">₹{userPrice.toLocaleString()}</p>
+            <p className="text-emerald-400 text-[11px] font-bold uppercase tracking-wider">
+              {userRole === 'member' || userRole === 'admin' ? 'Member Discount!' : 'Special Price'}
+            </p>
           </div>
+        )}
+        <p className="text-[10px] text-gray-500 uppercase tracking-widest font-medium">per ticket</p>
+      </div>
+
+      {/* Quantity Selector */}
+      <div className="bg-zinc-800/50 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[11px] text-gray-400 uppercase tracking-wide font-semibold">Tickets</span>
+          <span className="text-sm font-bold text-white">{qty}</span>
+        </div>
+        <div className="flex items-center justify-center gap-3">
+          <button
+            onClick={decreaseQty}
+            disabled={qty === 1 || isSoldOut}
+            className="w-10 h-10 rounded-xl bg-zinc-700/50 hover:bg-zinc-600/80 disabled:opacity-30 transition-all flex items-center justify-center"
+          >
+            <MinusIcon className="w-4 h-4 text-gray-300" />
+          </button>
+          <span className="text-2xl font-black text-white w-10 text-center">{qty}</span>
+          <button
+            onClick={increaseQty}
+            disabled={qty >= maxAllowed || isSoldOut}
+            className="w-10 h-10 rounded-xl bg-gradient-to-r from-purple-600/90 to-pink-600/90 hover:from-purple-700 hover:to-pink-700 disabled:opacity-30 shadow-md transition-all flex items-center justify-center"
+          >
+            <PlusIcon className="w-4 h-4 text-white" />
+          </button>
+        </div>
+        <p className="text-center text-[10px] text-gray-500 mt-2 font-mono tracking-wide">
+          Max {maxAllowed} • {seatsLeft} left
+        </p>
+      </div>
+
+      {/* Total */}
+      <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-2xl p-4 border border-purple-500/30 backdrop-blur-sm">
+        <div className="flex justify-between items-baseline">
+          <p className="text-lg font-bold text-white uppercase tracking-wide">Total</p>
+          <p className="text-3xl font-black text-white">₹{totalAmount.toLocaleString()}</p>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="space-y-3">
+        {isAuthenticated && (
+          <>
+            <button
+              onClick={handleBuyNow}
+              disabled={isSoldOut}
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:opacity-40 font-bold text-sm py-3.5 px-4 rounded-xl shadow-lg hover:shadow-xl active:scale-[0.98] transition-all uppercase tracking-wide text-[11px]"
+            >
+              {isSoldOut ? 'Sold Out' : 'Buy Now'}
+            </button>
+
+            <button
+              onClick={handleAddToCart}
+              disabled={isSoldOut}
+              className="w-full border-2 border-white/50 hover:border-white hover:bg-white/20 font-bold text-sm py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:shadow-lg active:scale-[0.98] text-white uppercase tracking-wide text-[11px]"
+            >
+              <ShoppingCartIcon className="w-4 h-4" />
+              Add to Cart
+            </button>
+          </>
+        )}
+        {!isAuthenticated && (
+          <button
+            onClick={() => navigate(`/guest/book/${event._id}`)}
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 font-bold text-sm py-3.5 px-4 rounded-xl shadow-lg hover:shadow-xl active:scale-[0.98] transition-all uppercase tracking-wide text-[11px]"
+          >
+            Book as Guest
+          </button>
+        )}
+      </div>
+
+      {/* Security Badge */}
+      <div className="text-center pt-4 border-t border-white/10">
+        <div className="flex items-center justify-center gap-1.5 text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
+          <ShieldCheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Instant QR • Secure • No Fees</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
         </div>
       </div>
     </div>

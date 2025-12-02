@@ -27,7 +27,6 @@ const CheckoutPage = () => {
   const getPrice = (item) => {
     const event = item.event;
     let unitPrice = 0;
-
     if (user?.role === 'member' && event?.memberPrice > 0) {
       unitPrice = event.memberPrice;
     } else if (user?.role === 'guest' && event?.guestPrice > 0) {
@@ -56,7 +55,6 @@ const CheckoutPage = () => {
       toast.error('Invalid amount');
       return;
     }
-
     setLoading(true);
     try {
       const bookings = await Promise.all(

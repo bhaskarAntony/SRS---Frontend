@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
   FunnelIcon, XMarkIcon, ChevronLeftIcon, ClockIcon, 
-  MapPinIcon, TicketIcon, CurrencyRupeeIcon 
+  MapPinIcon, TicketIcon, CurrencyRupeeIcon ,
+   MagnifyingGlassIcon, CalendarDaysIcon, StarIcon
 } from '@heroicons/react/24/outline';
+
 import EventCard from '../../components/UI/EventCard';
 import SearchBar from '../../components/UI/SearchBar';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
@@ -85,20 +87,38 @@ const EventsPage = () => {
         </div>
 
         {}
-        <div className="hidden lg:block bg-white rounded-3xl border border-gray-200 p-6 mb-8 sticky top-0 z-30 bg-opacity-95 backdrop-blur-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-1">Discover Events</h1>
-              <p className="text-sm text-gray-600">Find amazing events near you</p>
-            </div>
-            <div className="text-sm text-gray-600">
-              {events.length} event{events.length !== 1 ? 's' : ''}
-            </div>
-          </div>
-        </div>
+
+<div className="hidden lg:block bg-white/95 backdrop-blur-sm rounded-3xl border border-gray-200 p-4 mb-8 sticky top-4 z-30 shadow-sm max-w-4xl mx-auto">
+  <div className="flex items-center justify-between mb-4">
+    <div>
+      <h1 className="text-xl font-extrabold text-gray-900 leading-tight">Discover Events</h1>
+      <p className="text-[10px] uppercase tracking-widest text-gray-500 font-semibold">Find amazing events near you</p>
+    </div>
+    <div className="text-[10px] font-semibold text-gray-700 bg-gray-100 rounded-full px-2 py-0.5 select-none">
+      {events.length} event{events.length !== 1 ? 's' : ''}
+    </div>
+  </div>
+
+  {/* Buttons row */}
+  <div className="flex gap-2">
+    <button className="flex items-center gap-1 px-2.5 py-1 rounded-xl border border-gray-300 text-gray-700 text-[10px] font-semibold hover:bg-gray-100 active:scale-[0.97] transition-transform whitespace-nowrap shadow-sm">
+      <MagnifyingGlassIcon className="w-3 h-3" />
+      All Events
+    </button>
+    <button className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white text-[10px] font-semibold shadow-md hover:brightness-110 active:scale-[0.97] transition-transform whitespace-nowrap">
+      <CalendarDaysIcon className="w-3 h-3" />
+      Upcoming
+    </button>
+    <button className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-700 text-[10px] font-semibold shadow-sm hover:bg-emerald-100 active:scale-[0.97] transition-transform whitespace-nowrap">
+      <StarIcon className="w-3 h-3" />
+      Featured
+    </button>
+  </div>
+</div>
+
 
         {}
-        <div className="mb-6 lg:mb-8">
+        <div className="mb-6 lg:mb-8 mt-7">
           <div className="bg-white rounded-3xl border border-gray-200 p-4 lg:p-6">
             <div className="flex items-center gap-3 lg:gap-4">
               <SearchBar 

@@ -83,10 +83,10 @@ const UserMobileLayout = ({ children }) => {
             {}
             {isAuthenticated && (
               <>
-                <Link to="/favorites" className={`flex flex-col items-center justify-center gap-1 transition-all ${isActive('/favorites') ? 'text-black scale-105' : 'text-gray-600'}`}>
+                {/* <Link to="/favorites" className={`flex flex-col items-center justify-center gap-1 transition-all ${isActive('/favorites') ? 'text-black scale-105' : 'text-gray-600'}`}>
                   {isActive('/favorites') ? <HeartSolid className="w-6 h-6" /> : <HeartIcon className="w-6 h-6" />}
                   <span className="text-[10px] font-semibold uppercase tracking-wide">Fav</span>
-                </Link>
+                </Link> */}
                 
                 <Link to="/cart" className={`flex flex-col items-center justify-center gap-1 transition-all ${isActive('/cart') ? 'text-black scale-105' : 'text-gray-600'}`}>
                   <ShoppingCartIcon className="w-6 h-6 relative">

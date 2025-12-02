@@ -66,7 +66,7 @@ const CartPage = () => {
   return (
     <>
       {}
-      <div className="hidden lg:grid lg:grid-cols-3 lg:gap-8 lg:max-w-5xl lg:mx-auto lg:px-6 lg:py-8">
+      <div className="hidden lg:grid lg:grid-cols-3 lg:gap-8 p-2 lg:max-w-5xl lg:mx-auto px-4 py-3 lg:px-6 lg:py-8">
         <div className="lg:col-span-2 lg:space-y-5">
           <div className="bg-white rounded-3xl border border-gray-200 p-5 shadow-sm">
             <div className="flex items-center justify-between">

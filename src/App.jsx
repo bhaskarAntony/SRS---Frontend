@@ -36,6 +36,9 @@ import QrScanPage from './pages/admin/QrScanPage';
 import GuestBookingPage from './pages/guest/GuestBookingPage';
 import MemberDashboard from './pages/member/MemberDashboard';
 import SearchBooking from './pages/guest/SearchBooking';
+import OfflineCreatePage from './pages/admin/OfflineCreatePage';
+import OfflineListPage from './pages/admin/OfflineListPage';
+import EventCheckInPage from './pages/admin/EventCheckInPage';
 
 // Protected Route (Only for logged-in users)
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -128,6 +131,9 @@ const App = () => {
           <Route path="/admin/events" element={<EventsManagement />} />
           <Route path="/admin/bookings" element={<BookingsManagement />} />
           <Route path="/admin/profile" element={<AdminProfile />} />
+          <Route path="/admin/offline-booking/create" element={<OfflineCreatePage />} />
+          <Route path="/admin/offline-bookings" element={<OfflineListPage />} />
+          <Route path="/admin/events/:id/checkin" element={<EventCheckInPage />} />
         </Route>
 
         {}

@@ -5,12 +5,11 @@ import {
   EyeIcon,
   DocumentArrowDownIcon,
   QrCodeIcon,
-  FunnelIcon,
   CalendarDaysIcon,
   UserIcon,
   CurrencyRupeeIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
-import { adminService } from '../../services/adminService';
 import { bookingService } from '../../services/bookingService';
 import { eventService } from '../../services/eventService';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
@@ -138,11 +137,11 @@ const BookingsManagement = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'confirmed':
-        return 'bg-success-100 text-success-700';
+        return 'bg-green-100 text-green-700';
       case 'pending':
-        return 'bg-warning-100 text-warning-700';
+        return 'bg-yellow-100 text-yellow-700';
       case 'cancelled':
-        return 'bg-error-100 text-error-700';
+        return 'bg-red-100 text-red-700';
       case 'completed':
         return 'bg-blue-100 text-blue-700';
       default:
@@ -153,11 +152,11 @@ const BookingsManagement = () => {
   const getPaymentStatusColor = (status) => {
     switch (status) {
       case 'completed':
-        return 'bg-success-100 text-success-700';
+        return 'bg-green-100 text-green-700';
       case 'pending':
-        return 'bg-warning-100 text-warning-700';
+        return 'bg-yellow-100 text-yellow-700';
       case 'failed':
-        return 'bg-error-100 text-error-700';
+        return 'bg-red-100 text-red-700';
       case 'refunded':
         return 'bg-gray-100 text-gray-700';
       default:
@@ -166,322 +165,223 @@ const BookingsManagement = () => {
   };
 
   return (
-    <div className="space-y-6">
-      {}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-6 px-4 max-w-7xl mx-auto py-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Bookings Management</h1>
-          <p className="text-gray-600 mt-2">Manage all event bookings and create manual bookings</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Bookings Management</h1>
+          <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-md">
+            Manage all event bookings and create manual bookings
+          </p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="btn-primary flex items-center mt-4 sm:mt-0"
+          className="inline-flex items-center gap-1 rounded-lg bg-black px-3 py-2 text-white text-xs sm:text-sm font-semibold hover:bg-gray-800 transition"
         >
-          <PlusIcon className="w-4 h-4 mr-2" />
+          <PlusIcon className="w-4 h-4" />
           Manual Booking
         </button>
       </div>
 
-      {}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-          <div className="relative">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search bookings..."
-              value={searchTerm}
-              onChange={handleSearch}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
-          </div>
-          
-          <select
-            value={filters.status}
-            onChange={(e) => handleFilterChange('status', e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-          >
-            <option value="">All Statuses</option>
-            {statuses.map(status => (
-              <option key={status} value={status}>
-                {status.charAt(0).toUpperCase() + status.slice(1)}
-              </option>
-            ))}
-          </select>
-          
-          <select
-            value={filters.paymentStatus}
-            onChange={(e) => handleFilterChange('paymentStatus', e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-          >
-            <option value="">All Payment Status</option>
-            {paymentStatuses.map(status => (
-              <option key={status} value={status}>
-                {status.charAt(0).toUpperCase() + status.slice(1)}
-              </option>
-            ))}
-          </select>
-          
-          <select
-            value={filters.bookingType}
-            onChange={(e) => handleFilterChange('bookingType', e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-          >
-            <option value="">All Types</option>
-            {bookingTypes.map(type => (
-              <option key={type} value={type}>
-                {type.charAt(0).toUpperCase() + type.slice(1)}
-              </option>
-            ))}
-          </select>
-          
-          <select
-            value={filters.eventId}
-            onChange={(e) => handleFilterChange('eventId', e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-          >
-            <option value="">All Events</option>
-            {events.map(event => (
-              <option key={event._id} value={event._id}>
-                {event.title}
-              </option>
-            ))}
-          </select>
-          
-          <select
-            value={filters.dateRange}
-            onChange={(e) => handleFilterChange('dateRange', e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-          >
-            <option value="">All Dates</option>
-            <option value="today">Today</option>
-            <option value="yesterday">Yesterday</option>
-            <option value="this-week">This Week</option>
-            <option value="last-week">Last Week</option>
-            <option value="this-month">This Month</option>
-            <option value="last-month">Last Month</option>
-          </select>
+      {/* Search & Filters */}
+      <div className="bg-white rounded-lg shadow p-4 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-6 gap-3 items-center">
+        <div className="relative text-gray-400">
+          <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" />
+          <input
+            type="text"
+            placeholder="Search bookings..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className="pl-9 pr-3 py-2 border rounded-lg w-full text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-black"
+          />
         </div>
+        <select
+          value={filters.status}
+          onChange={(e) => handleFilterChange('status', e.target.value)}
+          className="text-xs sm:text-sm px-2 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-black"
+        >
+          <option value="">All Statuses</option>
+          {statuses.map((status) => (
+            <option key={status} value={status}>
+              {status.charAt(0).toUpperCase() + status.slice(1)}
+            </option>
+          ))}
+        </select>
+        <select
+          value={filters.paymentStatus}
+          onChange={(e) => handleFilterChange('paymentStatus', e.target.value)}
+          className="text-xs sm:text-sm px-2 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-black"
+        >
+          <option value="">All Payment Status</option>
+          {paymentStatuses.map((status) => (
+            <option key={status} value={status}>
+              {status.charAt(0).toUpperCase() + status.slice(1)}
+            </option>
+          ))}
+        </select>
+        <select
+          value={filters.bookingType}
+          onChange={(e) => handleFilterChange('bookingType', e.target.value)}
+          className="text-xs sm:text-sm px-2 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-black"
+        >
+          <option value="">All Types</option>
+          {bookingTypes.map((type) => (
+            <option key={type} value={type}>
+              {type.charAt(0).toUpperCase() + type.slice(1)}
+            </option>
+          ))}
+        </select>
+        <select
+          value={filters.eventId}
+          onChange={(e) => handleFilterChange('eventId', e.target.value)}
+          className="text-xs sm:text-sm px-2 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-black"
+        >
+          <option value="">All Events</option>
+          {events.map((event) => (
+            <option key={event._id} value={event._id}>
+              {event.title}
+            </option>
+          ))}
+        </select>
+        <select
+          value={filters.dateRange}
+          onChange={(e) => handleFilterChange('dateRange', e.target.value)}
+          className="text-xs sm:text-sm px-2 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-black"
+        >
+          <option value="">All Dates</option>
+          <option value="today">Today</option>
+          <option value="yesterday">Yesterday</option>
+          <option value="this-week">This Week</option>
+          <option value="last-week">Last Week</option>
+          <option value="this-month">This Month</option>
+          <option value="last-month">Last Month</option>
+        </select>
       </div>
 
-      {}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-        {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <LoadingSpinner size="large" />
-          </div>
-        ) : (
-          <>
-            {}
-            <div className="hidden lg:block overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Booking Details
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Event
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Customer
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Amount
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      QR Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
+      {/* Table */}
+      {loading ? (
+        <div className="py-20 flex justify-center">
+          <LoadingSpinner size="large" />
+        </div>
+      ) : (
+        <>
+          {/* Desktop Table */}
+          <div className="hidden lg:block overflow-x-auto rounded-lg shadow border border-gray-200 mt-4">
+            <table className="min-w-full divide-y divide-gray-200 text-xs sm:text-sm">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left">Booking ID</th>
+                  <th className="px-4 py-3 text-left">Event</th>
+                  <th className="px-4 py-3 text-left">Customer</th>
+                  <th className="px-4 py-3 text-left">Amount</th>
+                  <th className="px-4 py-3 text-left">QR Status</th>
+                  <th className="px-4 py-3 text-left">Status</th>
+                  <th className="px-4 py-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {bookings.map((booking) => (
+                  <tr key={booking._id} className="hover:bg-gray-50">
+                    <td className="px-4 py-2 font-mono">{booking.bookingId}</td>
+                    <td className="px-4 py-2 truncate max-w-xs">{booking.event?.title}</td>
+                    <td className="px-4 py-2 truncate max-w-xs">{booking.user?.firstName} {booking.user?.lastName}</td>
+                    <td className="px-4 py-2 text-right font-semibold">
+                      <CurrencyRupeeIcon className="inline w-4 h-4 mr-1" />
+                      {formatPrice(booking.totalAmount)}
+                    </td>
+                    <td className="px-4 py-2">
+                      <span className="text-xs text-gray-500">
+                        {booking.qrScanCount} / {booking.qrScanLimit}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2">
+                      <span className={`px-2 py-1 rounded-full ${getStatusColor(booking.status)}`}>
+                        {booking.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2 text-right space-x-2">
+                      <button
+                        onClick={() => {
+                          setSelectedBooking(booking);
+                          setShowViewModal(true);
+                        }}
+                        className="text-primary-600 hover:text-primary-800"
+                        aria-label="View Booking"
+                        title="View Booking"
+                      >
+                        <EyeIcon className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={() => downloadReceipt(booking._id)}
+                        className="text-blue-600 hover:text-blue-800"
+                        aria-label="Download Receipt"
+                        title="Download Receipt"
+                      >
+                        <DocumentArrowDownIcon className="w-5 h-5" />
+                      </button>
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {bookings.map((booking) => (
-                    <tr key={booking._id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm">
-                          <div className="font-medium text-gray-900">{booking.bookingId}</div>
-                          <div className="text-gray-500">
-                            {booking.seatCount} seat{booking.seatCount !== 1 ? 's' : ''} • {booking.bookingType}
-                          </div>
-                          <div className="text-gray-500">{formatDate(booking.bookingDate)}</div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm">
-                          <div className="font-medium text-gray-900 line-clamp-1">
-                            {booking.event?.title}
-                          </div>
-                          <div className="text-gray-500">
-                            {formatDate(booking.event?.startDate)}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm">
-                          <div className="font-medium text-gray-900">
-                            {booking.user?.firstName} {booking.user?.lastName}
-                          </div>
-                          <div className="text-gray-500">{booking.user?.email}</div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">
-                          ₹{formatPrice(booking.totalAmount)}
-                        </div>
-                        <div className={`text-xs px-2 py-1 rounded-full ${getPaymentStatusColor(booking.paymentStatus)}`}>
-                          {booking.paymentStatus}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm">
-                          <div className="font-medium text-gray-900">
-                            {booking.qrScanCount} / {booking.qrScanLimit}
-                          </div>
-                          <div className="text-gray-500">
-                            {booking.remainingScans} remaining
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <select
-                          value={booking.status}
-                          onChange={(e) => handleStatusChange(booking._id, e.target.value)}
-                          className={`text-xs font-medium rounded-full px-2 py-1 border-0 ${getStatusColor(booking.status)}`}
-                        >
-                          {statuses.map(status => (
-                            <option key={status} value={status}>
-                              {status.charAt(0).toUpperCase() + status.slice(1)}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <div className="flex items-center justify-end space-x-2">
-                          <button
-                            onClick={() => {
-                              setSelectedBooking(booking);
-                              setShowViewModal(true);
-                            }}
-                            className="text-primary-600 hover:text-primary-700"
-                          >
-                            <EyeIcon className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => downloadReceipt(booking._id)}
-                            className="text-blue-600 hover:text-blue-700"
-                          >
-                            <DocumentArrowDownIcon className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-            {}
-            <div className="lg:hidden">
-              {bookings.map((booking) => (
-                <div key={booking._id} className="p-6 border-b border-gray-200 last:border-b-0">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="font-medium text-gray-900 mb-1">{booking.bookingId}</h3>
-                      <p className="text-sm text-gray-600">{booking.event?.title}</p>
-                      <p className="text-sm text-gray-500">
-                        {booking.user?.firstName} {booking.user?.lastName}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-medium text-gray-900">₹{formatPrice(booking.totalAmount)}</div>
-                      <div className="flex space-x-2 mt-1">
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(booking.status)}`}>
-                          {booking.status}
-                        </span>
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getPaymentStatusColor(booking.paymentStatus)}`}>
-                          {booking.paymentStatus}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 mb-4">
-                    <div>
-                      <span className="font-medium">Seats:</span> {booking.seatCount}
-                    </div>
-                    <div>
-                      <span className="font-medium">Type:</span> {booking.bookingType}
-                    </div>
-                    <div>
-                      <span className="font-medium">QR Scans:</span> {booking.qrScanCount}/{booking.qrScanLimit}
-                    </div>
-                    <div>
-                      <span className="font-medium">Date:</span> {formatDate(booking.bookingDate)}
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-end space-x-2">
-                    <button
-                      onClick={() => {
-                        setSelectedBooking(booking);
-                        setShowViewModal(true);
-                      }}
-                      className="flex items-center px-3 py-1 text-sm text-primary-600 hover:text-primary-700"
-                    >
-                      <EyeIcon className="w-4 h-4 mr-1" />
-                      View
-                    </button>
-                    <button
-                      onClick={() => downloadReceipt(booking._id)}
-                      className="flex items-center px-3 py-1 text-sm text-blue-600 hover:text-blue-700"
-                    >
-                      <DocumentArrowDownIcon className="w-4 h-4 mr-1" />
-                      Receipt
-                    </button>
+          {/* Mobile Cards */}
+          <div className="lg:hidden mt-4 space-y-4">
+            {bookings.map((booking) => (
+              <div key={booking._id} className="bg-white shadow rounded-lg p-4 text-xs font-sans space-y-2">
+                <div className="flex justify-between items-center">
+                  <div className="font-mono font-medium text-gray-900">{booking.bookingId}</div>
+                  <div>
+                    <span className={`px-2 py-1 rounded-full ${getStatusColor(booking.status)}`}>
+                      {booking.status}
+                    </span>
                   </div>
                 </div>
-              ))}
-            </div>
-
-            {}
-            {totalPages > 1 && (
-              <div className="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <p className="text-sm text-gray-700">
-                      Page {currentPage} of {totalPages}
-                    </p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                      disabled={currentPage === 1}
-                      className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Previous
-                    </button>
-                    <button
-                      onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                      disabled={currentPage === totalPages}
-                      className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Next
-                    </button>
-                  </div>
+                <div className="flex items-center space-x-2 text-gray-700 text-xs">
+                  <CalendarDaysIcon className="w-4 h-4" />
+                  <span>{booking.event?.title}</span>
+                </div>
+                <div className="flex items-center space-x-2 text-gray-700 text-xs">
+                  <UserIcon className="w-4 h-4" />
+                  <span>{booking.user?.firstName} {booking.user?.lastName}</span>
+                </div>
+                <div className="flex items-center space-x-2 text-gray-700 text-xs font-semibold">
+                  <CurrencyRupeeIcon className="w-4 h-4" />
+                  <span>{formatPrice(booking.totalAmount)}</span>
+                </div>
+                <div className="flex items-center space-x-2 text-gray-700 text-xs">
+                  <QrCodeIcon className="w-4 h-4" />
+                  <span>
+                    Scan {booking.qrScanCount} / {booking.qrScanLimit}
+                  </span>
+                </div>
+                <div className="flex justify-end space-x-3 mt-2">
+                  <button
+                    onClick={() => {
+                      setSelectedBooking(booking);
+                      setShowViewModal(true);
+                    }}
+                    className="text-primary-600 hover:text-primary-800"
+                    aria-label="View Booking"
+                  >
+                    <EyeIcon className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => downloadReceipt(booking._id)}
+                    className="text-blue-600 hover:text-blue-800"
+                    aria-label="Download Receipt"
+                  >
+                    <DocumentArrowDownIcon className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
-            )}
-          </>
-        )}
-      </div>
+            ))}
+          </div>
+        </>
+      )}
 
-      {}
+      {/* Create Manual Booking Modal */}
       {showCreateModal && (
         <CreateManualBookingModal
           events={events}
@@ -490,7 +390,7 @@ const BookingsManagement = () => {
         />
       )}
 
-      {}
+      {/* View Booking Modal */}
       {showViewModal && selectedBooking && (
         <ViewBookingModal
           booking={selectedBooking}
@@ -504,253 +404,138 @@ const BookingsManagement = () => {
   );
 };
 
-// Create Manual Booking Modal Component
 const CreateManualBookingModal = ({ events, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
     eventId: '',
-    userDetails: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-    },
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
     seatCount: 1,
     bookingType: 'user',
     paymentMethod: 'cash',
     transactionId: '',
   });
   const [loading, setLoading] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
 
-  const handleEventChange = (eventId) => {
-    const event = events.find(e => e._id === eventId);
-    setSelectedEvent(event);
-    setFormData({ ...formData, eventId });
-  };
+  const selectedEvent = events.find(e => e._id === formData.eventId);
 
   const getPrice = () => {
     if (!selectedEvent) return 0;
-    switch (formData.bookingType) {
-      case 'member':
-        return selectedEvent.memberPrice;
-      case 'guest':
-        return selectedEvent.guestPrice;
-      default:
-        return selectedEvent.userPrice;
-    }
+    if (formData.bookingType === 'member') return selectedEvent.memberPrice || 0;
+    if (formData.bookingType === 'guest') return selectedEvent.guestPrice || 0;
+    return selectedEvent.userPrice || 0;
   };
 
-  const getTotalAmount = () => {
-    return getPrice() * formData.seatCount;
-  };
+  const getTotalAmount = () => getPrice() * formData.seatCount;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await onSubmit({
-        ...formData,
-        totalAmount: getTotalAmount(),
-      });
-    } finally {
-      setLoading(false);
+      await onSubmit({ ...formData, totalAmount: getTotalAmount() });
+    } catch {
+      // Ignore for brevity
     }
+    setLoading(false);
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Create Manual Booking</h3>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {}
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+      <div className="bg-white rounded-xl max-w-lg w-full p-6 max-h-[90vh] overflow-auto relative shadow-lg">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-red-600">
+          <XMarkIcon className="w-6 h-6" />
+        </button>
+        <h3 className="text-xl font-semibold mb-6">Create Manual Booking</h3>
+        <form onSubmit={handleSubmit} className="space-y-4 text-sm">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Select Event *
-            </label>
+            <label className="block mb-1 font-medium">Select Event *</label>
             <select
               required
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-black"
               value={formData.eventId}
-              onChange={(e) => handleEventChange(e.target.value)}
-              className="input-field"
+              onChange={(e) => setFormData({...formData, eventId: e.target.value})}
             >
-              <option value="">Choose an event</option>
-              {events.map(event => (
-                <option key={event._id} value={event._id}>
-                  {event.title} - {new Date(event.startDate).toLocaleDateString()}
-                </option>
+              <option value="">Select event</option>
+              {events.map(e => (
+                <option key={e._id} value={e._id}>{e.title}</option>
               ))}
             </select>
           </div>
-
-          {}
-          <div className="border-t pt-4">
-            <h4 className="font-medium text-gray-900 mb-3">Customer Details</h4>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.userDetails.firstName}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    userDetails: { ...formData.userDetails, firstName: e.target.value }
-                  })}
-                  className="input-field"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.userDetails.lastName}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    userDetails: { ...formData.userDetails, lastName: e.target.value }
-                  })}
-                  className="input-field"
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={formData.userDetails.email}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    userDetails: { ...formData.userDetails, email: e.target.value }
-                  })}
-                  className="input-field"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone *
-                </label>
-                <input
-                  type="tel"
-                  required
-                  value={formData.userDetails.phone}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    userDetails: { ...formData.userDetails, phone: e.target.value }
-                  })}
-                  className="input-field"
-                />
-              </div>
-            </div>
+          <div className="grid grid-cols-2 gap-3">
+            <input 
+              required placeholder="First Name" 
+              className="input-field" 
+              value={formData.firstName} 
+              onChange={e => setFormData({...formData, firstName: e.target.value})} />
+            <input 
+              required placeholder="Last Name" 
+              className="input-field" 
+              value={formData.lastName} 
+              onChange={e => setFormData({...formData, lastName: e.target.value})} />
           </div>
-
-          {}
-          <div className="border-t pt-4">
-            <h4 className="font-medium text-gray-900 mb-3">Booking Details</h4>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Booking Type
-                </label>
-                <select
-                  value={formData.bookingType}
-                  onChange={(e) => setFormData({ ...formData, bookingType: e.target.value })}
-                  className="input-field"
-                >
-                  <option value="user">User</option>
-                  <option value="member">Member</option>
-                  <option value="guest">Guest</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Number of Seats
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  max="10"
-                  value={formData.seatCount}
-                  onChange={(e) => setFormData({ ...formData, seatCount: parseInt(e.target.value) })}
-                  className="input-field"
-                />
-              </div>
-            </div>
+          <input 
+            required type="email" placeholder="Email" 
+            className="input-field" 
+            value={formData.email} 
+            onChange={e => setFormData({...formData, email: e.target.value})} />
+          <input 
+            required type="tel" placeholder="Phone"
+            className="input-field" 
+            value={formData.phone} 
+            onChange={e => setFormData({...formData, phone: e.target.value})} />
+          <div className="grid grid-cols-2 gap-3">
+            <select 
+              className="input-field" 
+              value={formData.bookingType} 
+              onChange={e => setFormData({...formData, bookingType: e.target.value})}>
+              <option value="user">User</option>
+              <option value="member">Member</option>
+              <option value="guest">Guest</option>
+            </select>
+            <input 
+              type="number" min="1" max="20" 
+              className="input-field" 
+              value={formData.seatCount} 
+              onChange={e => setFormData({...formData, seatCount: +e.target.value})} />
           </div>
-
-          {}
-          <div className="border-t pt-4">
-            <h4 className="font-medium text-gray-900 mb-3">Payment Details</h4>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Payment Method
-                </label>
-                <select
-                  value={formData.paymentMethod}
-                  onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
-                  className="input-field"
-                >
-                  <option value="cash">Cash</option>
-                  <option value="upi">UPI</option>
-                  <option value="card">Card</option>
-                </select>
-              </div>
-              {formData.paymentMethod === 'upi' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Transaction ID
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.transactionId}
-                    onChange={(e) => setFormData({ ...formData, transactionId: e.target.value })}
-                    className="input-field"
-                  />
-                </div>
-              )}
-            </div>
+          <div>
+            <select 
+              className="input-field" 
+              value={formData.paymentMethod} 
+              onChange={e => setFormData({...formData, paymentMethod: e.target.value})}>
+              <option value="cash">Cash</option>
+              <option value="upi">UPI</option>
+              <option value="card">Card</option>
+            </select>
           </div>
-
-          {}
+          {formData.paymentMethod === 'upi' && (
+            <input 
+              placeholder="Transaction ID" 
+              className="input-field" 
+              value={formData.transactionId} 
+              onChange={e => setFormData({...formData, transactionId: e.target.value})} />
+          )}
           {selectedEvent && (
-            <div className="bg-gray-50 rounded-lg p-4">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-gray-600">Unit Price ({formData.bookingType}):</span>
-                <span className="font-medium">₹{getPrice().toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-gray-600">Seats:</span>
-                <span className="font-medium">{formData.seatCount}</span>
-              </div>
-              <div className="flex justify-between items-center border-t pt-2">
-                <span className="font-medium text-gray-900">Total Amount:</span>
-                <span className="font-bold text-primary-600">₹{getTotalAmount().toLocaleString()}</span>
-              </div>
+            <div className="bg-gray-50 p-3 rounded mt-3 text-sm flex justify-between">
+              <span>Unit Price ({formData.bookingType}): ₹{getPrice().toLocaleString()}</span>
+              <span>Total: ₹{getTotalAmount().toLocaleString()}</span>
             </div>
           )}
-
-          <div className="flex items-center justify-end space-x-3 pt-4">
+          <div className="flex justify-end gap-3 mt-6">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading || !selectedEvent}
-              className="btn-primary flex items-center"
+              className="px-6 py-2 bg-black text-white rounded hover:bg-gray-900 flex items-center gap-2"
             >
-              {loading && <LoadingSpinner size="small" className="mr-2" />}
+              {loading ? <LoadingSpinner size="small" /> : <PlusIcon className="w-5 h-5" />}
               Create Booking
             </button>
           </div>
@@ -760,182 +545,81 @@ const CreateManualBookingModal = ({ events, onClose, onSubmit }) => {
   );
 };
 
-// View Booking Modal Component
 const ViewBookingModal = ({ booking, onClose }) => {
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-IN', {
-      day: 'numeric',
+  const formatDate = (dateStr) =>
+    dateStr ? new Date(dateStr).toLocaleString('en-IN', {
+      day: '2-digit',
       month: 'long',
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-    });
-  };
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-IN').format(price);
-  };
+    }) : '-';
+  const formatPrice = (price) => price ? new Intl.NumberFormat('en-IN').format(price) : '-';
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Booking Details</h3>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
-        <div className="space-y-6">
-          {}
-          <div>
-            <h4 className="font-medium text-gray-900 mb-3">Booking Information</h4>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="font-medium text-gray-700">Booking ID:</span>
-                <p className="text-gray-900">{booking.bookingId}</p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-700">Booking Date:</span>
-                <p className="text-gray-900">{formatDate(booking.bookingDate)}</p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-700">Seats:</span>
-                <p className="text-gray-900">{booking.seatCount}</p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-700">Type:</span>
-                <p className="text-gray-900 capitalize">{booking.bookingType}</p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-700">Status:</span>
-                <p className="text-gray-900 capitalize">{booking.status}</p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-700">Payment Status:</span>
-                <p className="text-gray-900 capitalize">{booking.paymentStatus}</p>
-              </div>
-            </div>
-          </div>
-
-          {}
-          <div>
-            <h4 className="font-medium text-gray-900 mb-3">Event Information</h4>
-            <div className="flex items-start space-x-4">
-              <img
-                src={booking.event?.bannerImage || 'https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg'}
-                alt={booking.event?.title}
-                className="w-16 h-16 object-cover rounded-lg"
-              />
-              <div className="flex-1">
-                <h5 className="font-medium text-gray-900">{booking.event?.title}</h5>
-                <p className="text-sm text-gray-600 mt-1">{booking.event?.description}</p>
-                <div className="mt-2 text-sm text-gray-600">
-                  <p><CalendarDaysIcon className="w-4 h-4 inline mr-1" />{formatDate(booking.event?.startDate)}</p>
-                  <p className="mt-1">{booking.event?.location}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {}
-          <div>
-            <h4 className="font-medium text-gray-900 mb-3">Customer Information</h4>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="font-medium text-gray-700">Name:</span>
-                <p className="text-gray-900">{booking.user?.firstName} {booking.user?.lastName}</p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-700">Email:</span>
-                <p className="text-gray-900">{booking.user?.email}</p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-700">Phone:</span>
-                <p className="text-gray-900">{booking.user?.phone}</p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-700">Role:</span>
-                <p className="text-gray-900 capitalize">{booking.user?.role}</p>
-              </div>
-            </div>
-          </div>
-
-          {}
-          <div>
-            <h4 className="font-medium text-gray-900 mb-3">QR Code Status</h4>
-            <div className="bg-gray-50 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-700">Scan Progress</span>
-                <span className="text-sm font-medium text-primary-600">
-                  {booking.qrScanCount} / {booking.qrScanLimit}
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                <div
-                  className="bg-primary-500 h-2 rounded-full"
-                  style={{
-                    width: `${Math.min((booking.qrScanCount / booking.qrScanLimit) * 100, 100)}%`
-                  }}
-                />
-              </div>
-              <p className="text-xs text-gray-600">
-                {booking.remainingScans > 0 
-                  ? `${booking.remainingScans} scan${booking.remainingScans !== 1 ? 's' : ''} remaining`
-                  : 'All scans used'
-                }
-              </p>
-            </div>
-          </div>
-
-          {}
-          <div>
-            <h4 className="font-medium text-gray-900 mb-3">Payment Details</h4>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="font-medium text-gray-700">Unit Price:</span>
-                <p className="text-gray-900">₹{formatPrice(booking.unitPrice)}</p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-700">Total Amount:</span>
-                <p className="text-gray-900 font-semibold">₹{formatPrice(booking.totalAmount)}</p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-700">Payment Method:</span>
-                <p className="text-gray-900 capitalize">{booking.paymentMethod}</p>
-              </div>
-              {booking.paymentDetails?.transactionId && (
-                <div>
-                  <span className="font-medium text-gray-700">Transaction ID:</span>
-                  <p className="text-gray-900">{booking.paymentDetails.transactionId}</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {}
-          {booking.qrScans && booking.qrScans.length > 0 && (
-            <div>
-              <h4 className="font-medium text-gray-900 mb-3">Scan History</h4>
-              <div className="space-y-2">
-                {booking.qrScans.map((scan, index) => (
-                  <div key={index} className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">Scan #{index + 1}</p>
-                      <p className="text-xs text-gray-600">{formatDate(scan.scannedAt)}</p>
-                    </div>
-                    {scan.location && (
-                      <p className="text-xs text-gray-600">{scan.location}</p>
-                    )}
-                  </div>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-auto">
+      <div className="bg-white max-w-2xl w-full rounded-lg p-6 shadow-lg max-h-[90vh] overflow-y-auto relative">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-red-600">
+          <XMarkIcon className="w-6 h-6" />
+        </button>
+        <h2 className="text-xl font-semibold mb-4">Booking Details</h2>
+        <div className="space-y-6 text-sm">
+          <section>
+            <h3 className="font-semibold text-gray-900 mb-2">Basic Info</h3>
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-gray-700">
+              <dt>Booking ID:</dt><dd>{booking.bookingId}</dd>
+              <dt>Status:</dt><dd>{booking.status}</dd>
+              <dt>Payment Status:</dt><dd>{booking.paymentStatus}</dd>
+              <dt>Seats:</dt><dd>{booking.seatCount}</dd>
+              <dt>Booking Type:</dt><dd>{booking.bookingType}</dd>
+              <dt>Booking Date:</dt><dd>{formatDate(booking.bookingDate)}</dd>
+            </dl>
+          </section>
+          <section>
+            <h3 className="font-semibold text-gray-900 mb-2">Event Info</h3>
+            {booking.event ? (
+              <dl className="text-gray-700 space-y-1">
+                <dt className="font-medium">{booking.event.title}</dt>
+                <dd>{booking.event.description || '-'}</dd>
+                <dd>{formatDate(booking.event.startDate)}</dd>
+                {booking.event.location && <dd>{booking.event.location}</dd>}
+              </dl>
+            ) : (
+              <p className="text-gray-500">No event information</p>
+            )}
+          </section>
+          <section>
+            <h3 className="font-semibold text-gray-900 mb-2">Customer Info</h3>
+            <dl className="text-gray-700 space-y-1">
+              <dd>{booking.user?.firstName} {booking.user?.lastName}</dd>
+              <dd>{booking.user?.email || '-'}</dd>
+              <dd>{booking.user?.phone || '-'}</dd>
+              <dd>Role: {booking.user?.role || '-'}</dd>
+            </dl>
+          </section>
+          <section>
+            <h3 className="font-semibold text-gray-900 mb-2">Payment</h3>
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-gray-700">
+              <dt>Unit Price:</dt><dd>₹{formatPrice(booking.unitPrice)}</dd>
+              <dt>Total Amount:</dt><dd className="font-semibold">₹{formatPrice(booking.totalAmount)}</dd>
+              <dt>Payment Method:</dt><dd>{booking.paymentMethod || '-'}</dd>
+              {booking.paymentDetails?.transactionId && <>
+                <dt>Transaction ID:</dt><dd>{booking.paymentDetails.transactionId}</dd>
+              </>}
+            </dl>
+          </section>
+          {booking.qrScans?.length > 0 && (
+            <section>
+              <h3 className="font-semibold text-gray-900 mb-2">QR Scan History</h3>
+              <ul className="space-y-2 max-h-48 overflow-y-auto text-xs text-gray-700">
+                {booking.qrScans.map((scan, idx) => (
+                  <li key={idx} className="border border-gray-200 rounded px-3 py-2 flex justify-between">
+                    <span>Scan #{idx + 1} on {formatDate(scan.scannedAt)}</span>
+                    <span>{scan.location || '-'}</span>
+                  </li>
                 ))}
-              </div>
-            </div>
+              </ul>
+            </section>
           )}
         </div>
       </div>

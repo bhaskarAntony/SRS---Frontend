@@ -33,7 +33,7 @@ const QRModal = ({ booking, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[85vh] overflow-auto p-6">
-        {/* Header */}
+        {}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-gray-800">Ticket #{booking.bookingId}</h2>
           <button onClick={onClose} className="text-gray-500 hover:text-red-600 transition">
@@ -41,12 +41,12 @@ const QRModal = ({ booking, onClose }) => {
           </button>
         </div>
 
-        {/* QR Image */}
+        {}
         <div className="flex justify-center mb-4">
           <img src={qrImageSrc} alt="Ticket QR" className="w-48 h-48 rounded-lg shadow-md object-contain" />
         </div>
 
-        {/* Details */}
+        {}
         <div className="space-y-2 text-gray-700 text-sm">
           <p><strong>Member:</strong> {booking.memberName} ({booking.memberIdInput})</p>
           <p><strong>Event:</strong> {booking.event?.title || 'N/A'}</p>
@@ -57,7 +57,7 @@ const QRModal = ({ booking, onClose }) => {
           <p><strong>UTR:</strong> {booking.utrNumber || booking.paymentDetails?.utrNumber || 'Pending'}</p>
         </div>
 
-        {/* Buttons */}
+        {}
         <div className="flex gap-4 mt-6">
           <button onClick={sendViaWhatsApp} className="flex-1 bg-black text-white rounded-xl py-3 font-semibold hover:bg-gray-800 transition">
             <Smartphone className="inline w-5 h-5 mr-2" /> Send WhatsApp
@@ -143,7 +143,7 @@ const OfflineListPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 max-w-7xl mx-auto">
-      {/* Header */}
+      {}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-4xl font-bold text-gray-900">Offline Bookings</h1>
         <div className="flex gap-4">
@@ -162,7 +162,7 @@ const OfflineListPage = () => {
         </div>
       </div>
 
-      {/* Filter Popup */}
+      {}
       {showFilterPopup && (
         <div className="fixed inset-0 bg-black/50 z-[999] flex items-start justify-center p-6 overflow-auto">
           <div className="bg-white rounded-xl p-6 w-full max-w-md relative shadow-lg">
@@ -225,7 +225,7 @@ const OfflineListPage = () => {
         </div>
       )}
 
-      {/* Table Content */}
+      {}
       <section className="overflow-auto bg-white rounded-xl shadow-lg p-4">
         <div className="overflow-x-auto">
           <table className="w-full table-fixed border-collapse border border-gray-200 text-sm">
@@ -281,7 +281,7 @@ const OfflineListPage = () => {
         </div>
       </section>
 
-      {/* QR Modal */}
+      {}
       {showQRModal && <QRModal booking={selectedBooking} onClose={() => setShowQRModal(false)} />}
     </div>
   );

@@ -42,7 +42,7 @@ const SuccessModal = ({ booking, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[85vh] overflow-auto p-6">
-        {/* Header */}
+        {}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-gray-800">Ticket #{booking.bookingId}</h2>
           <button onClick={onClose} className="text-gray-500 hover:text-red-600 transition">
@@ -50,12 +50,12 @@ const SuccessModal = ({ booking, onClose }) => {
           </button>
         </div>
 
-        {/* QR Image */}
+        {}
         <div className="flex justify-center mb-4">
           <img src={qrImageSrc} alt="Ticket QR" className="w-48 h-48 rounded-lg shadow-md object-contain" />
         </div>
 
-        {/* Details */}
+        {}
         <div className="space-y-2 text-gray-700 text-sm">
           <p><strong>Member:</strong> {booking.memberName} ({booking.memberIdInput})</p>
           <p><strong>Event:</strong> {booking.event?.title || 'N/A'}</p>
@@ -66,7 +66,7 @@ const SuccessModal = ({ booking, onClose }) => {
           <p><strong>UTR:</strong> {booking.utrNumber || booking.paymentDetails?.utrNumber || 'Pending'}</p>
         </div>
 
-        {/* Buttons */}
+        {}
         <div className="flex gap-4 mt-6">
           <button onClick={sendViaWhatsApp} className="flex-1 bg-black text-white rounded-xl py-3 font-semibold hover:bg-gray-800 transition">
             <Smartphone className="inline w-5 h-5 mr-2" /> Send WhatsApp
@@ -274,7 +274,7 @@ const OfflineCreatePage = () => {
         <h1 className="text-3xl font-semibold text-center text-gray-900 mb-8">Offline Booking</h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          {/* Event and Member Details */}
+          {}
           <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="md:col-span-3">
               <label className="block text-xs font-semibold mb-1 flex items-center gap-1 text-gray-700">
@@ -319,9 +319,9 @@ const OfflineCreatePage = () => {
             </div>
           </section>
 
-          {/* Tickets and Meals */}
+          {}
           <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Member Tickets */}
+            {}
             <div className="bg-indigo-50 rounded-2xl p-6 space-y-4">
               <h3 className="text-indigo-700 font-bold text-lg flex items-center gap-2"><UserIcon className="w-5 h-5" /> Member Tickets (₹1500)</h3>
               <input type="number" min={0} max={4} {...register("memberTicketCount", { valueAsNumber: true })} className="w-full p-2 border border-indigo-300 rounded-md focus:ring-2 focus:ring-indigo-400" />
@@ -334,7 +334,7 @@ const OfflineCreatePage = () => {
               ))}
             </div>
 
-            {/* Guest Tickets */}
+            {}
             <div className="bg-green-50 rounded-2xl p-6 space-y-4">
               <h3 className="text-green-700 font-bold text-lg flex items-center gap-2"><TicketIcon className="w-5 h-5" /> Guest Tickets (₹2100)</h3>
               <input type="number" min={0} max={10} {...register("guestTicketCount", { valueAsNumber: true })} className="w-full p-2 border border-green-300 rounded-md focus:ring-2 focus:ring-green-400" />
@@ -347,7 +347,7 @@ const OfflineCreatePage = () => {
               ))}
             </div>
 
-            {/* Kid Tickets */}
+            {}
             <div className="bg-purple-50 rounded-2xl p-6 space-y-4">
               <h3 className="text-purple-700 font-bold text-lg flex items-center gap-2"><UserIcon className="w-5 h-5" /> Kid Tickets (₹850)</h3>
               <input type="number" min={0} {...register("kidTicketCount", { valueAsNumber: true })} className="w-full p-2 border border-purple-300 rounded-md focus:ring-2 focus:ring-purple-400" />
@@ -358,7 +358,7 @@ const OfflineCreatePage = () => {
             </div>
           </section>
 
-          {/* Pricing & Discounts */}
+          {}
           <section className="bg-yellow-50 rounded-3xl p-6 border border-yellow-300 mt-8 space-y-4">
             <h2 className="text-yellow-800 text-2xl font-bold">Pricing & Discount</h2>
             <input
@@ -373,7 +373,7 @@ const OfflineCreatePage = () => {
             </div>
           </section>
 
-          {/* Payment Details */}
+          {}
           <section className="bg-purple-50 rounded-3xl p-6 border border-purple-300 mt-8 space-y-4">
             <h2 className="text-purple-800 text-2xl font-bold">Payment Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -402,7 +402,7 @@ const OfflineCreatePage = () => {
             </div>
           </section>
 
-          {/* Submit Area */}
+          {}
           <div className="flex justify-between items-center mt-10">
             <div className="text-2xl font-bold">
               Total Seats: <span className="text-green-600">{totalTickets}</span>

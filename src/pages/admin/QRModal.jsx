@@ -1,10 +1,8 @@
-// Inside OfflineListPage.jsx or as separate component
 const QRModal = ({ booking, onClose }) => {
   const [sending, setSending] = useState(false);
 
   if (!booking) return null;
 
-  // Safely get data with fallbacks
   const memberName = booking.memberName || 'Member';
   const memberId = booking.memberIdInput || booking.memberId || 'N/A';
   const contactNumber = booking.contactNumber || '';

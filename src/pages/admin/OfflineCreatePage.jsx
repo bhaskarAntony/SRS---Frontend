@@ -15,11 +15,13 @@ import QRCode from "qrcode.react";
 import { Download, Smartphone, X } from "lucide-react";
 
 const SuccessModal = ({ booking, onClose }) => {
+
+    console.log(booking);
   if (!booking) return null;
 
   const qrImageSrc = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${booking.qrCode}`;
 
-  const message = `Hello *${booking.memberName}*!\n\n✅ Your SRS Events ticket is confirmed!\n\n🔢 *Booking ID:* #${booking.bookingId}\n👤 *Member:* ${booking.memberName} (${booking.memberIdInput})\n🎪 *Event:* ${booking.event?.title || 'N/A'}\n🎫 *Tickets:* M:${booking.memberTicketCount} G:${booking.guestTicketCount} K:${booking.kidTicketCount}\n🍽️ *Meals:* Veg:${booking.memberVegCount + booking.guestVegCount + booking.kidVegCount} | Non-Veg:${booking.memberNonVegCount + booking.guestNonVegCount + booking.kidNonVegCount}\n💰 *Amount:* ₹${booking.finalAmount}\n📊 *Status:* ${booking.paymentStatus.toUpperCase()}\n🆔 *UTR:* ${booking.utrNumber || booking.paymentDetails?.utrNumber || 'Pending'}\n\n📱 *Show this QR at entrance*\n\nSRS Events Team 🚀`;
+  const message = `*Your Event Booking:* https://thesrsevents.com/events/${booking.event} \n\n Hello *${booking.memberName}*!\n\n✅ Your SRS Events ticket is confirmed!\n\n🔢 *Booking ID:* #${booking.bookingId}\n👤 *Member:* ${booking.memberName} (${booking.memberIdInput})\n🎪 *Event:* ${booking.eventName || 'N/A'}\n🎫 *Tickets:* M:${booking.memberTicketCount} G:${booking.guestTicketCount} K:${booking.kidTicketCount}\n🍽️ *Meals:* Veg:${booking.memberVegCount + booking.guestVegCount + booking.kidVegCount} | Non-Veg:${booking.memberNonVegCount + booking.guestNonVegCount + booking.kidNonVegCount}\n💰 *Amount:* ₹${booking.finalAmount}\n📊 *Status:* ${booking.paymentStatus.toUpperCase()}\n🆔 *UTR:* ${booking.utrNumber || booking.paymentDetails?.utrNumber || 'Pending'}\n\n📱 *Show this QR at entrance*\n\nSRS Events Team 🚀`;
 
    const sendViaWhatsApp = () => {
     const raw = booking.contactNumber?.replace(/[^0-9]/g, '') || '';
@@ -58,7 +60,7 @@ const SuccessModal = ({ booking, onClose }) => {
         {}
         <div className="space-y-2 text-gray-700 text-sm">
           <p><strong>Member:</strong> {booking.memberName} ({booking.memberIdInput})</p>
-          <p><strong>Event:</strong> {booking.event?.title || 'N/A'}</p>
+          <p><strong>Event:</strong> {booking.eventName || 'N/A'}</p>
           <p><strong>Tickets:</strong> M:{booking.memberTicketCount} | G:{booking.guestTicketCount} | K:{booking.kidTicketCount}</p>
           <p><strong>Meals:</strong> Veg: {booking.memberVegCount + booking.guestVegCount + booking.kidVegCount} | Non-Veg: {booking.memberNonVegCount + booking.guestNonVegCount + booking.kidNonVegCount}</p>
           <p><strong>Amount Paid:</strong> ₹{booking.finalAmount}</p>
@@ -185,9 +187,9 @@ const OfflineCreatePage = () => {
     const event = events.find((e) => e._id === data.eventId);
     if (!event) return { gross: 0, discount: 0, finalAmount: 0, discountPercent: 0 };
 
-    const memberPrice = event.memberPrice || 1500;
-    const guestPrice = event.guestPrice || 2100;
-    const kidPrice = event.kidPrice || 850;
+    const memberPrice = 1500;
+    const guestPrice = 2100;
+    const kidPrice =  850;
 
     const gross =
       memberTicketCount * memberPrice +

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
   PlusIcon, MagnifyingGlassIcon, DocumentArrowDownIcon, DocumentArrowUpIcon,
-  PencilIcon, TrashIcon, EyeIcon, XMarkIcon, FunnelIcon, CheckIcon, EllipsisVerticalIcon,
-  StarIcon, PhoneIcon, ChevronDownIcon
+  PencilIcon, EyeIcon, XMarkIcon, FunnelIcon, CheckIcon, EllipsisVerticalIcon,
+  StarIcon, PhoneIcon, ChevronDownIcon, KeyIcon
 } from '@heroicons/react/24/outline';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import toast from 'react-hot-toast';
@@ -18,12 +18,10 @@ const MembersManagement = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [showViewModal, setShowViewModal] = useState(false);
 
-  
   const fetchMembers = async () => {
     try {
       setLoading(true);
       const response = await api.get('/member'); 
-      
       const membersArray = response.data.data?.members || response.data.members || response.data || [];
       setMembers(Array.isArray(membersArray) ? membersArray : []);
     } catch (error) {
@@ -59,16 +57,16 @@ const MembersManagement = () => {
 
   const handleImportMembers = async (file) => {
     const formData = new FormData();
-    formData.append('membersFile', file);
+    formData.append('file', file);
     try {
-      await api.post('/members/import', formData, {
+      await api.post('http://localhost:5000/api/member/import-members', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-      toast.success('Imported successfully!');
+      toast.success('Members imported successfully!');
       setShowImportModal(false);
       fetchMembers();
     } catch (error) {
-      toast.error('Import failed');
+      toast.error(error.response?.data?.message || 'Import failed');
     }
   };
 
@@ -88,7 +86,6 @@ const MembersManagement = () => {
     }
   };
 
-  
   const filteredMembers = Array.isArray(members) 
     ? members.filter(member =>
         member && (
@@ -99,38 +96,41 @@ const MembersManagement = () => {
     : [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black/5 to-gray-900/10">
-      {}
-      <div className="bg-white/95 backdrop-blur-sm border-b border-black/10 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-3 py-3">
+    <div className="min-h-screen">
+      {/* Header without sticky */}
+      <div className="bg-white/95 backdrop-blur-xl border-b border-slate-200/50 shadow-sm">
+        <div className="">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
-                <StarIcon className="w-4 h-4 text-white" />
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 via-teal-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <StarIcon className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-black text-gray-900 leading-tight">Members</h1>
-                <p className="text-xs text-gray-500 font-medium">Manage members ({members.length})</p>
+                <h1 className="text-2xl font-black bg-gradient-to-r from-gray-900 to-slate-800 bg-clip-text text-transparent leading-tight">Members</h1>
+                <p className="text-sm text-slate-500 font-semibold mt-1">Manage your members ({members.length})</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 flex-nowrap">
-              <button onClick={handleDownloadTemplate}
-                className="flex items-center gap-1 px-2.5 py-1.5 text-xs bg-white/80 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all h-9 whitespace-nowrap"
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={handleDownloadTemplate}
+                className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold bg-black text-white rounded-xl hover:bg-gray-800 transition-all shadow-sm whitespace-nowrap"
                 title="Download Excel template"
               >
                 <DocumentArrowDownIcon className="w-3.5 h-3.5" />
                 Template
               </button>
-              <button onClick={() => setShowImportModal(true)}
-                className="flex items-center gap-1 px-2.5 py-1.5 text-xs bg-gradient-to-r from-emerald-500/90 to-teal-500/90 text-white border border-emerald-400 rounded-lg hover:from-emerald-600 transition-all h-9 font-medium whitespace-nowrap"
+              <button 
+                onClick={() => setShowImportModal(true)}
+                className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold bg-black text-white rounded-xl hover:bg-gray-800 transition-all shadow-lg whitespace-nowrap"
                 title="Import from Excel"
               >
                 <DocumentArrowUpIcon className="w-3.5 h-3.5" />
                 Import
               </button>
-              <button onClick={() => setShowAddModal(true)}
-                className="flex items-center gap-1 px-3 py-1.5 text-xs bg-gradient-to-r from-black to-gray-900 text-white rounded-lg hover:from-gray-900 transition-all h-9 font-bold shadow-sm whitespace-nowrap"
+              <button 
+                onClick={() => setShowAddModal(true)}
+                className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold bg-black text-white rounded-xl hover:bg-gray-800 transition-all shadow-xl whitespace-nowrap"
                 title="Add single member"
               >
                 <PlusIcon className="w-3.5 h-3.5" />
@@ -141,114 +141,132 @@ const MembersManagement = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-3 py-4">
-        {}
-        <div className="flex items-center gap-2 mb-4">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Search & Filters */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-6">
           <div className="relative flex-1 max-w-md">
-            <MagnifyingGlassIcon className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <MagnifyingGlassIcon className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search name or ID..."
-              className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-xl bg-white/50 focus:ring-1 focus:ring-black focus:border-transparent transition-all"
+              placeholder="Search by name or ID..."
+              className="w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl bg-white/70 focus:ring-1 focus:ring-black focus:border-transparent transition-all shadow-sm"
             />
           </div>
-          <button onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-1 px-2.5 py-2 text-xs bg-white/80 border border-gray-200 rounded-xl hover:bg-gray-50 h-10 transition-all"
+          <button 
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center gap-1 px-2.5 py-2 text-xs font-semibold bg-black text-white rounded-xl hover:bg-gray-900 transition-all h-9 flex-shrink-0 select-none"
           >
-            <FunnelIcon className="w-3.5 h-3.5 flex-shrink-0" />
+            <FunnelIcon className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Filters</span>
-            <ChevronDownIcon className={`w-3 h-3 transition-transform ${showFilters ? 'rotate-180' : ''} flex-shrink-0`} />
+            <ChevronDownIcon className={`w-3 h-3 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
           </button>
         </div>
 
-        {}
         {showFilters && (
-          <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-2 mb-4 flex flex-wrap gap-1.5">
-            <button className="px-2.5 py-1.5 text-xs bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-all whitespace-nowrap">All</button>
-            <button className="px-2.5 py-1.5 text-xs bg-gradient-to-r from-yellow-400 to-yellow-500 text-white rounded-lg shadow-sm whitespace-nowrap">Gold</button>
-            <button className="px-2.5 py-1.5 text-xs bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg shadow-sm whitespace-nowrap">Premium</button>
-            <button className="px-2.5 py-1.5 text-xs bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-lg shadow-sm whitespace-nowrap">Elite</button>
+          <div className="bg-white/90 border border-slate-200 rounded-2xl p-2 mb-6 flex flex-wrap gap-1.5 shadow-md">
+            <button className="px-3 py-1.5 text-xs font-semibold bg-black text-white rounded-lg hover:bg-gray-900 transition-all whitespace-nowrap">All</button>
+            <button className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-yellow-400 to-yellow-500 text-white rounded-lg shadow-sm whitespace-nowrap">Gold</button>
+            <button className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg shadow-sm whitespace-nowrap">Premium</button>
+            <button className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-lg shadow-sm whitespace-nowrap">Elite</button>
           </div>
         )}
 
-        {}
-        <div className="space-y-3">
-          {loading ? (
-            <div className="flex items-center justify-center py-16 text-sm text-gray-500">
-              <LoadingSpinner size="small" />
-              <span className="ml-3">Loading members...</span>
-            </div>
-          ) : filteredMembers.length === 0 ? (
-            <div className="text-center py-20">
-              <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <StarIcon className="w-10 h-10 text-gray-400" />
-              </div>
-              <h3 className="text-lg font-black text-gray-900 mb-2">No members</h3>
-              <p className="text-sm text-gray-500 mb-6">Add your first member using the button above</p>
-              <button onClick={() => setShowAddModal(true)}
-                className="px-6 py-2.5 text-xs font-bold bg-gradient-to-r from-black to-gray-900 text-white rounded-xl hover:from-gray-900 transition-all"
-              >
-                Add First Member
-              </button>
-            </div>
-          ) : (
-            <>
-              {}
-              <div className="md:hidden space-y-3">
+        {/* Large screens table */}
+        {!loading && filteredMembers.length > 0 && (
+          <div className="hidden md:block rounded-xl border border-slate-200 bg-white/80 backdrop-blur-sm shadow-lg">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="bg-white/90">
+                  <th className="px-4 py-3 text-left font-black text-gray-900 sticky left-0 bg-white/90 z-10 rounded-l-xl">Member</th>
+                  <th className="px-3 py-3 text-left font-black text-gray-900">ID</th>
+                  <th className="px-3 py-3 text-left font-black text-gray-900">Phone</th>
+                  <th className="px-3 py-3 text-left font-black text-gray-900">Tier</th>
+                  <th className="px-3 py-3 text-left font-black text-gray-900">Points</th>
+                  <th className="px-3 py-3 text-left font-black text-gray-900">Status</th>
+                  <th className="px-3 py-3 text-center font-black text-gray-900 rounded-r-xl w-[90px]">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
                 {filteredMembers.map(member => (
-                  <MemberCard key={member._id} member={member} onView={() => { setSelectedMember(member); setShowViewModal(true); }} />
+                  <MemberTableRow 
+                    key={member._id} 
+                    member={member} 
+                    onView={() => { 
+                      setSelectedMember(member); 
+                      setShowViewModal(true); 
+                    }} 
+                  />
                 ))}
-              </div>
+              </tbody>
+            </table>
+          </div>
+        )}
 
-              {}
-              <div className="hidden md:block">
-                <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white/80 backdrop-blur-sm">
-                  <table className="w-full text-xs">
-                    <thead>
-                      <tr className="bg-white/90">
-                        <th className="px-4 py-3 text-left font-bold text-gray-900 sticky left-0 bg-white/90 z-10">Member</th>
-                        <th className="px-3 py-3 text-left font-bold text-gray-900">ID</th>
-                        <th className="px-3 py-3 text-left font-bold text-gray-900">Phone</th>
-                        <th className="px-3 py-3 text-left font-bold text-gray-900">Tier</th>
-                        <th className="px-3 py-3 text-left font-bold text-gray-900">Points</th>
-                        <th className="px-3 py-3 text-left font-bold text-gray-900">Status</th>
-                        <th className="px-3 py-3 text-right font-bold text-gray-900">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      {filteredMembers.map(member => (
-                        <MemberTableRow key={member._id} member={member} onView={() => { setSelectedMember(member); setShowViewModal(true); }} />
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
+        {loading && (
+          <div className="flex items-center justify-center py-16 text-sm text-gray-500">
+            <LoadingSpinner size="small" />
+            <span className="ml-3">Loading members...</span>
+          </div>
+        )}
+
+        {/* No members fallback */}
+        {!loading && filteredMembers.length === 0 && (
+          <div className="text-center py-20">
+            <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <StarIcon className="w-10 h-10 text-gray-400" />
+            </div>
+            <h3 className="text-lg font-black text-gray-900 mb-2">No members</h3>
+            <p className="text-sm text-gray-500 mb-6">Add your first member using the button above</p>
+            <button 
+              onClick={() => setShowAddModal(true)}
+              className="px-6 py-2.5 text-xs font-bold bg-black text-white rounded-xl hover:bg-gray-900 transition-all"
+            >
+              Add First Member
+            </button>
+          </div>
+        )}
+
+        {/* Small screens show cards */}
+        {!loading && filteredMembers.length > 0 && (
+          <div className="md:hidden space-y-4">
+            {filteredMembers.map(member => (
+              <MemberCard 
+                key={member._id} 
+                member={member} 
+                onView={() => { 
+                  setSelectedMember(member); 
+                  setShowViewModal(true); 
+                }} 
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {}
+      {/* Modals */}
       {showAddModal && <AddMemberModal onClose={() => setShowAddModal(false)} onSubmit={handleAddMember} />}
-      {showImportModal && <ImportModal onClose={() => setShowImportModal(false)} onImport={handleImportMembers} onDownloadTemplate={handleDownloadTemplate} />}
+      {showImportModal && <ImportModal onClose={() => setShowImportModal(false)} onImport={handleImportMembers} />}
       {showViewModal && selectedMember && <ViewMemberModal member={selectedMember} onClose={() => setShowViewModal(false)} />}
     </div>
   );
 };
 
-
-
-
-
 const MemberCard = ({ member, onView }) => {
   const getTierClass = tier => {
-    const colors = { Gold: 'from-yellow-400 to-yellow-500', Premium: 'from-purple-500 to-purple-600', Elite: 'from-gray-600 to-gray-700' };
+    const colors = { 
+      Gold: 'from-yellow-400 to-yellow-500', 
+      Premium: 'from-purple-500 to-purple-600', 
+      Elite: 'from-gray-600 to-gray-700' 
+    };
     return colors[tier] || 'from-blue-400 to-blue-500';
   };
 
   return (
-    <div className="group bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-4 hover:border-black/20 hover:bg-white transition-all h-full" onClick={onView}>
+    <div 
+      className="group bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-4 hover:border-black/20 hover:bg-white transition-all cursor-pointer shadow-sm"
+      onClick={onView}
+    >
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2.5">
           <div className={`w-10 h-10 bg-gradient-to-r ${getTierClass(member.membershipTier)} rounded-xl flex items-center justify-center`}>
@@ -267,8 +285,8 @@ const MemberCard = ({ member, onView }) => {
           <PhoneIcon className="w-3 h-3" />
           <span className="truncate">{member.phone}</span>
         </div>
-        <div className="text-right">
-          <span className="font-bold text-emerald-600 text-sm">{member.loyaltyPoints || 0}</span>
+        <div className="text-right font-bold text-emerald-600 text-sm">
+          {member.loyaltyPoints || 0}
         </div>
       </div>
 
@@ -289,10 +307,9 @@ const MemberCard = ({ member, onView }) => {
   );
 };
 
-
 const MemberTableRow = ({ member, onView }) => (
   <tr className="hover:bg-gray-50/50 group transition-all cursor-pointer" onClick={onView}>
-    <td className="px-4 py-3">
+    <td className="px-4 py-3 rounded-l-xl">
       <div className="flex items-center gap-2">
         <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
           <StarIcon className="w-3.5 h-3.5 text-white" />
@@ -330,15 +347,17 @@ const MemberTableRow = ({ member, onView }) => (
         {member.isActive ? 'Active' : 'Inactive'}
       </span>
     </td>
-    <td className="px-3 py-3 text-right">
-      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
-        <EyeIcon className="w-3.5 h-3.5 text-blue-600 hover:bg-blue-50 p-1 rounded cursor-pointer" />
-        <PencilIcon className="w-3.5 h-3.5 text-emerald-600 hover:bg-emerald-50 p-1 rounded cursor-pointer" />
-      </div>
+    <td className="px-3 py-3 text-center rounded-r-xl">
+      <button
+        onClick={(e) => { e.stopPropagation(); onView(); }}
+        title="View Details"
+        className="inline-flex items-center justify-center w-8 h-8 bg-black text-white rounded-md hover:bg-gray-900 transition"
+      >
+        <EyeIcon className="w-4 h-4" />
+      </button>
     </td>
   </tr>
 );
-
 
 const AddMemberModal = ({ onClose, onSubmit }) => {
   const [formData, setFormData] = useState({ firstName: '', lastName: '', memberId: '', membershipTier: 'Gold' });
@@ -348,9 +367,20 @@ const AddMemberModal = ({ onClose, onSubmit }) => {
     ? `${formData.firstName.toLowerCase()}@${formData.memberId.toLowerCase()}` 
     : '';
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.firstName || !formData.memberId) return;
+    setLoading(true);
+    try {
+      await onSubmit(formData);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-2">
-      <div className="bg-white rounded-2xl w-full max-w-[340px] max-h-[85vh] overflow-hidden border border-gray-200">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl w-full max-w-[340px] max-h-[85vh] overflow-hidden border border-gray-200 shadow-lg">
         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
           <h3 className="text-base font-black text-gray-900">Add Member</h3>
           <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg">
@@ -358,12 +388,12 @@ const AddMemberModal = ({ onClose, onSubmit }) => {
           </button>
         </div>
         
-        <div className="p-4 space-y-3">
+        <form onSubmit={handleSubmit} className="p-4 space-y-3">
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="text-xs font-bold text-gray-700 block mb-1">Name *</label>
               <input value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})}
-                className="w-full px-2.5 py-2 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-black h-9" />
+                className="w-full px-2.5 py-2 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-black h-9" required />
             </div>
             <div>
               <label className="text-xs font-bold text-gray-700 block mb-1">Last</label>
@@ -375,7 +405,7 @@ const AddMemberModal = ({ onClose, onSubmit }) => {
           <div>
             <label className="text-xs font-bold text-gray-700 block mb-1">ID *</label>
             <input value={formData.memberId} onChange={e => setFormData({...formData, memberId: e.target.value.toUpperCase()})}
-              className="w-full px-2.5 py-2 text-xs font-mono border border-gray-200 rounded-lg focus:ring-1 focus:ring-indigo-400 h-9" />
+              className="w-full px-2.5 py-2 text-xs font-mono border border-gray-200 rounded-lg focus:ring-1 focus:ring-indigo-400 h-9" required />
           </div>
 
           <div>
@@ -397,35 +427,56 @@ const AddMemberModal = ({ onClose, onSubmit }) => {
               </div>
             </div>
           )}
-        </div>
-
-        <div className="px-4 py-3 border-t border-gray-100 flex gap-2 bg-gray-50/50">
-          <button onClick={onClose}
-            className="flex-1 h-9 px-3 text-xs font-bold text-gray-700 border border-gray-300 rounded-lg hover:bg-white transition-all"
-          >Cancel</button>
-          <button onClick={e => {
-            e.preventDefault();
-            handleSubmit(e, formData, onSubmit, setFormData, setLoading);
-          }} disabled={!formData.firstName || !formData.memberId || loading}
-            className="flex-1 h-9 px-3 text-xs font-bold text-white bg-gradient-to-r from-black to-gray-900 rounded-lg hover:from-gray-900 disabled:opacity-50 transition-all flex items-center justify-center gap-1"
-          >
-            {loading ? <LoadingSpinner size="tiny" /> : <PlusIcon className="w-3.5 h-3.5" />}
-            <span>Add</span>
-          </button>
-        </div>
+          <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
+            <button onClick={onClose} type="button"
+              className="px-3 py-1.5 text-xs font-bold text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all h-9">
+              Cancel
+            </button>
+            <button type="submit"
+              disabled={!formData.firstName || !formData.memberId || loading}
+              className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold text-white bg-black rounded-lg hover:bg-gray-900 disabled:opacity-50 transition-all h-9"
+            >
+              {loading ? <LoadingSpinner size="tiny" /> : <PlusIcon className="w-3.5 h-3.5" />}
+              Add
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
 };
 
-
-const ImportModal = ({ onClose, onImport, onDownloadTemplate }) => {
+const ImportModal = ({ onClose, onImport }) => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const fileInputRef = React.useRef(null);
+
+  const handleFileSelect = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile && (selectedFile.name.endsWith('.xlsx') || selectedFile.name.endsWith('.xls'))) {
+      setFile(selectedFile);
+    } else {
+      toast.error('Please select a valid Excel file (.xlsx or .xls)');
+      e.target.value = '';
+    }
+  };
+
+  const handleImport = async () => {
+    if (!file) {
+      toast.error('Please select a file first');
+      return;
+    }
+    setLoading(true);
+    try {
+      await onImport(file);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-2">
-      <div className="bg-white rounded-2xl w-full max-w-[360px] max-h-[85vh] overflow-hidden border border-gray-200">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl w-full max-w-[360px] max-h-[85vh] overflow-hidden border border-gray-200 shadow-lg">
         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
           <h3 className="text-base font-black text-gray-900">Import Members</h3>
           <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg">
@@ -434,53 +485,52 @@ const ImportModal = ({ onClose, onImport, onDownloadTemplate }) => {
         </div>
         
         <div className="p-4">
-          <label className="block border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-gray-400 hover:bg-gray-50 cursor-pointer mb-4 transition-all h-32 flex flex-col items-center justify-center"
-            htmlFor="import-file">
-            <DocumentArrowUpIcon className="w-8 h-8 text-gray-400 mb-2" />
-            <div className="text-xs font-bold text-gray-900 mb-1">Click or drag file</div>
-            <div className="text-xs text-gray-500">.xlsx, .xls only</div>
-            <input id="import-file" type="file" accept=".xlsx,.xls" onChange={e => {
-              const file = e.target.files[0];
-              if (file) setFile(file);
-            }} className="hidden" />
+          <label 
+            htmlFor="import-file" 
+            className={`block border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-gray-500 hover:bg-gray-50 cursor-pointer mb-4 transition-all h-28 flex flex-col items-center justify-center text-xs ${
+              file ? 'border-black bg-black/5' : ''
+            }`}
+          >
+            <DocumentArrowUpIcon className={`w-8 h-8 mb-2 ${file ? 'text-black' : 'text-gray-400'}`} />
+            {!file 
+              ? <>
+                  <div className="font-bold text-black mb-1">Click or drag file</div>
+                  <div className="text-gray-500">.xlsx, .xls only</div>
+                </>
+              : <div className="font-bold truncate max-w-[280px] text-black">{file.name}</div>
+            }
+            <input 
+              id="import-file" 
+              type="file" 
+              accept=".xlsx,.xls" 
+              onChange={handleFileSelect} 
+              className="hidden" 
+              ref={fileInputRef}
+            />
           </label>
 
-          {file && (
-            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 mb-4 text-xs">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-emerald-800 truncate max-w-[200px]">{file.name}</span>
-                <button onClick={() => setFile(null)} className="p-1 hover:bg-emerald-200 rounded">
-                  <XMarkIcon className="w-3.5 h-3.5 text-emerald-600" />
-                </button>
-              </div>
-            </div>
-          )}
-
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs mb-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs mb-4">
             <div className="font-bold text-blue-900 mb-1 flex items-center gap-1">
               <KeyIcon className="w-3.5 h-3.5" />
-              Format: A=Name, B=ID, C=LastName
+              Format: A=Name, B=ID, C=Last Name, D=Tier(optional)
             </div>
           </div>
         </div>
 
         <div className="px-4 py-3 border-t border-gray-100 flex gap-2 bg-gray-50/50">
-          <button onClick={onDownloadTemplate}
-            className="flex-1 h-9 px-3 text-xs font-bold text-blue-700 bg-blue-100 border border-blue-300 rounded-lg hover:bg-blue-200 transition-all"
-          >Sample</button>
           <button onClick={onClose}
             className="flex-1 h-9 px-3 text-xs font-bold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-          >Cancel</button>
-          <button onClick={async () => {
-            if (!file) return toast.error('Select file');
-            setLoading(true);
-            await handleImportMembers(file);
-            setLoading(false);
-          }} disabled={!file || loading}
-            className="flex-1 h-9 px-3 text-xs font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg hover:from-emerald-600 disabled:opacity-50 transition-all flex items-center justify-center gap-1"
+            disabled={loading}
+          >
+            Cancel
+          </button>
+          <button 
+            onClick={handleImport} 
+            disabled={!file || loading}
+            className="flex-1 h-9 px-3 text-xs font-bold text-white bg-black rounded-lg hover:bg-gray-900 disabled:opacity-50 transition-all flex items-center justify-center gap-1"
           >
             {loading ? <LoadingSpinner size="tiny" /> : <DocumentArrowUpIcon className="w-3.5 h-3.5" />}
-            <span>Import</span>
+            Import
           </button>
         </div>
       </div>
@@ -488,10 +538,9 @@ const ImportModal = ({ onClose, onImport, onDownloadTemplate }) => {
   );
 };
 
-
 const ViewMemberModal = ({ member, onClose }) => (
-  <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-2">
-    <div className="bg-white rounded-2xl w-full max-w-[340px] max-h-[85vh] overflow-hidden border border-gray-200">
+  <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="bg-white rounded-2xl w-full max-w-[340px] max-h-[85vh] overflow-hidden border border-gray-200 shadow-lg">
       <div className="p-4 border-b border-gray-100 flex items-center justify-between">
         <h3 className="text-base font-black text-gray-900">Member Details</h3>
         <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg">

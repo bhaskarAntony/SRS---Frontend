@@ -59,8 +59,8 @@ const AuthPage = () => {
     try {
       // Use your backend member login route
       const endpoint = isMemberLogin
-        ? 'http://localhost:5000/api/member/login'
-        : 'http://localhost:5000/api/auth/login';
+        ? 'https://srs-backend-7ch1.onrender.com/api/member/login'
+        : 'https://srs-backend-7ch1.onrender.com/api/auth/login';
 
       const res = await fetch(endpoint, {
         method: 'POST',
@@ -116,7 +116,7 @@ const AuthPage = () => {
         password: formData.password,
       };
 
-      const res = await fetch('http://localhost:5000/api/auth/register', {
+      const res = await fetch('https://srs-backend-7ch1.onrender.com/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),

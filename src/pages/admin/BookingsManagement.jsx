@@ -143,7 +143,7 @@ const BookingsManagement = () => {
       case 'cancelled':
         return 'bg-red-100 text-red-700';
       case 'completed':
-        return 'bg-blue-100 text-blue-700';
+        return 'bg-gray-100 text-gray-700';
       default:
         return 'bg-gray-100 text-gray-700';
     }
@@ -313,7 +313,7 @@ const BookingsManagement = () => {
                       </button>
                       <button
                         onClick={() => downloadReceipt(booking._id)}
-                        className="text-blue-600 hover:text-blue-800"
+                        className="text-gray-600 hover:text-gray-800"
                         aria-label="Download Receipt"
                         title="Download Receipt"
                       >
@@ -369,7 +369,7 @@ const BookingsManagement = () => {
                   </button>
                   <button
                     onClick={() => downloadReceipt(booking._id)}
-                    className="text-blue-600 hover:text-blue-800"
+                    className="text-gray-600 hover:text-gray-800"
                     aria-label="Download Receipt"
                   >
                     <DocumentArrowDownIcon className="w-5 h-5" />

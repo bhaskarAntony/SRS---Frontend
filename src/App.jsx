@@ -39,6 +39,7 @@ import SearchBooking from './pages/guest/SearchBooking';
 import OfflineCreatePage from './pages/admin/OfflineCreatePage';
 import OfflineListPage from './pages/admin/OfflineListPage';
 import EventCheckInPage from './pages/admin/EventCheckInPage';
+import Test from './pages/member/Test';
 
 // Protected Route (Only for logged-in users)
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -103,6 +104,7 @@ const App = () => {
           <Route path="/guest/book/:id" element={<GuestBookingPage />} />
           <Route path="/search" element={<SearchBooking />} />
           <Route path="/search/:id" element={<SearchBooking />} />
+          <Route path="/test" element={<Test />} />
         </Route>
 {/* q */}
         {}

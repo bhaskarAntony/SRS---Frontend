@@ -125,7 +125,7 @@ const EventsManagement = () => {
       case 'cancelled':
         return 'bg-error-100 text-error-700';
       case 'completed':
-        return 'bg-blue-100 text-blue-700';
+        return 'bg-gray-100 text-gray-700';
       default:
         return 'bg-gray-100 text-gray-700';
     }
@@ -301,7 +301,7 @@ const EventsManagement = () => {
                               setSelectedEvent(event);
                               setShowEditModal(true);
                             }}
-                            className="text-blue-600 hover:text-blue-700"
+                            className="text-gray-600 hover:text-gray-700"
                           >
                             <PencilIcon className="w-4 h-4" />
                           </button>
@@ -382,7 +382,7 @@ const EventsManagement = () => {
                         setSelectedEvent(event);
                         setShowEditModal(true);
                       }}
-                      className="flex items-center px-3 py-1 text-sm text-blue-600 hover:text-blue-700"
+                      className="flex items-center px-3 py-1 text-sm text-gray-600 hover:text-gray-700"
                     >
                       <PencilIcon className="w-4 h-4 mr-1" />
                       Edit
@@ -469,141 +469,141 @@ const EventsManagement = () => {
 
 // Event Form Modal Component (for Add/Edit)
 const EventFormModal = ({ title, event, onClose, onSubmit }) => {
-  // const [formData, setFormData] = useState({
-  //   title: event?.title || '',
-  //   description: event?.description || '',
-  //   longDescription: event?.longDescription || '',
-  //   category: event?.category || 'Conference',
-  //   tags: event?.tags?.join(', ') || '',
-  //   startDate: event?.startDate ? new Date(event.startDate).toISOString().slice(0, 16) : '',
-  //   endDate: event?.endDate ? new Date(event.endDate).toISOString().slice(0, 16) : '',
-  //   duration: event?.duration || '',
-  //   location: event?.location || '',
-  //   venue: event?.venue || '',
-  //   bannerImage: event?.bannerImage || '',
-  //   gallery: event?.gallery?.join('\n') || '',
-  //   userPrice: event?.userPrice || 0,
-  //   memberPrice: event?.memberPrice || 0,
-  //   guestPrice: event?.guestPrice || 0,
-  //   maxCapacity: event?.maxCapacity || 100,
-  //   maxTicketsPerUser: event?.maxTicketsPerUser || 5,
-  //   maxTicketsPerMember: event?.maxTicketsPerMember || 10,
-  //   maxTicketsPerGuest: event?.maxTicketsPerGuest || 3,
-  //   organizer: {
-  //     name: event?.organizer?.name || '',
-  //     email: event?.organizer?.email || '',
-  //     phone: event?.organizer?.phone || '',
-  //     website: event?.organizer?.website || '',
-  //     description: event?.organizer?.description || '',
-  //   },
-  //   highlights: event?.highlights?.join('\n') || '',
-  //   seatingType: event?.seatingType || 'Open',
-  //   ageRestriction: event?.ageRestriction || 'All Ages',
-  //   dresscode: event?.dresscode || '',
-  //   specialNotes: event?.specialNotes || '',
-  //   mapsUrl: event?.mapsUrl || '',
-  //   terms: event?.terms || '',
-  //   refundPolicy: event?.refundPolicy || 'No refunds available',
-  //   cancellationPolicy: event?.cancellationPolicy || '',
-  //   faqs: event?.faqs || [{ question: '', answer: '' }],
-  //   socialMedia: {
-  //     facebook: event?.socialMedia?.facebook || '',
-  //     twitter: event?.socialMedia?.twitter || '',
-  //     instagram: event?.socialMedia?.instagram || '',
-  //     linkedin: event?.socialMedia?.linkedin || '',
-  //   },
-  //   hasRefreshments: event?.hasRefreshments || false,
-  //   hasParking: event?.hasParking || false,
-  //   isWheelchairAccessible: event?.isWheelchairAccessible || false,
-  //   hasWifi: event?.hasWifi || false,
-  //   featured: event?.featured || false,
-  //   status: event?.status || 'draft',
-  // });
   const [formData, setFormData] = useState({
-  title: event?.title || 'Tech Summit India 2025',
-  description: event?.description || 'The largest technology conference in India bringing together 5000+ developers, startups, and industry leaders for 3 days of learning, networking, and innovation.',
-  longDescription: event?.longDescription || `Join us for Tech Summit India 2025 — the premier technology conference featuring world-class speakers from Google, Microsoft, AWS, and top Indian startups.
+    title: event?.title || '',
+    description: event?.description || '',
+    longDescription: event?.longDescription || '',
+    category: event?.category || 'Conference',
+    tags: event?.tags?.join(', ') || '',
+    startDate: event?.startDate ? new Date(event.startDate).toISOString().slice(0, 16) : '',
+    endDate: event?.endDate ? new Date(event.endDate).toISOString().slice(0, 16) : '',
+    duration: event?.duration || '',
+    location: event?.location || '',
+    venue: event?.venue || '',
+    bannerImage: event?.bannerImage || '',
+    gallery: event?.gallery?.join('\n') || '',
+    userPrice: event?.userPrice || 0,
+    memberPrice: event?.memberPrice || 0,
+    guestPrice: event?.guestPrice || 0,
+    maxCapacity: event?.maxCapacity || 100,
+    maxTicketsPerUser: event?.maxTicketsPerUser || 5,
+    maxTicketsPerMember: event?.maxTicketsPerMember || 10,
+    maxTicketsPerGuest: event?.maxTicketsPerGuest || 3,
+    organizer: {
+      name: event?.organizer?.name || '',
+      email: event?.organizer?.email || '',
+      phone: event?.organizer?.phone || '',
+      website: event?.organizer?.website || '',
+      description: event?.organizer?.description || '',
+    },
+    highlights: event?.highlights?.join('\n') || '',
+    seatingType: event?.seatingType || 'Open',
+    ageRestriction: event?.ageRestriction || 'All Ages',
+    dresscode: event?.dresscode || '',
+    specialNotes: event?.specialNotes || '',
+    mapsUrl: event?.mapsUrl || '',
+    terms: event?.terms || '',
+    refundPolicy: event?.refundPolicy || 'No refunds available',
+    cancellationPolicy: event?.cancellationPolicy || '',
+    faqs: event?.faqs || [{ question: '', answer: '' }],
+    socialMedia: {
+      facebook: event?.socialMedia?.facebook || '',
+      twitter: event?.socialMedia?.twitter || '',
+      instagram: event?.socialMedia?.instagram || '',
+      linkedin: event?.socialMedia?.linkedin || '',
+    },
+    hasRefreshments: event?.hasRefreshments || false,
+    hasParking: event?.hasParking || false,
+    isWheelchairAccessible: event?.isWheelchairAccessible || false,
+    hasWifi: event?.hasWifi || false,
+    featured: event?.featured || false,
+    status: event?.status || 'draft',
+  });
+//   const [formData, setFormData] = useState({
+//   title: event?.title || 'Tech Summit India 2025',
+//   description: event?.description || 'The largest technology conference in India bringing together 5000+ developers, startups, and industry leaders for 3 days of learning, networking, and innovation.',
+//   longDescription: event?.longDescription || `Join us for Tech Summit India 2025 — the premier technology conference featuring world-class speakers from Google, Microsoft, AWS, and top Indian startups.
 
-Experience 50+ technical sessions, hands-on workshops, product launches, and networking opportunities with industry pioneers.
+// Experience 50+ technical sessions, hands-on workshops, product launches, and networking opportunities with industry pioneers.
 
-Whether you're a developer, designer, entrepreneur, or tech enthusiast — this is the event you don't want to miss!`,
+// Whether you're a developer, designer, entrepreneur, or tech enthusiast — this is the event you don't want to miss!`,
 
-  category: event?.category || 'Conference',
-  tags: event?.tags?.join(', ') || 'technology, conference, AI, cloud, startups, networking, developers',
+//   category: event?.category || 'Conference',
+//   tags: event?.tags?.join(', ') || 'technology, conference, AI, cloud, startups, networking, developers',
 
-  startDate: event?.startDate ? new Date(event.startDate).toISOString().slice(0, 16) : '2025-06-20T09:00',
-  endDate: event?.endDate ? new Date(event.endDate).toISOString().slice(0, 16) : '2025-06-22T18:00',
-  duration: event?.duration || '3 Days',
+//   startDate: event?.startDate ? new Date(event.startDate).toISOString().slice(0, 16) : '2025-06-20T09:00',
+//   endDate: event?.endDate ? new Date(event.endDate).toISOString().slice(0, 16) : '2025-06-22T18:00',
+//   duration: event?.duration || '3 Days',
 
-  location: event?.location || 'Bengaluru, Karnataka',
-  venue: event?.venue || 'KTPO Convention Center, Whitefield',
-  mapsUrl: event?.mapsUrl || 'https://maps.google.com/?q=KTPO+Convention+Center+Bengaluru',
+//   location: event?.location || 'Bengaluru, Karnataka',
+//   venue: event?.venue || 'KTPO Convention Center, Whitefield',
+//   mapsUrl: event?.mapsUrl || 'https://maps.google.com/?q=KTPO+Convention+Center+Bengaluru',
 
-  bannerImage: event?.bannerImage || 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg',
-  gallery: event?.gallery?.join('\n') || [
-    'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg',
-    'https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg',
-    'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg',
-    'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg'
-  ].join('\n'),
+//   bannerImage: event?.bannerImage || 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg',
+//   gallery: event?.gallery?.join('\n') || [
+//     'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg',
+//     'https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg',
+//     'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg',
+//     'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg'
+//   ].join('\n'),
 
-  userPrice: event?.userPrice || 4999,
-  memberPrice: event?.memberPrice || 2999,
-  guestPrice: event?.guestPrice || 5999,
+//   userPrice: event?.userPrice || 4999,
+//   memberPrice: event?.memberPrice || 2999,
+//   guestPrice: event?.guestPrice || 5999,
 
-  maxCapacity: event?.maxCapacity || 5000,
-  maxTicketsPerUser: event?.maxTicketsPerUser || 5,
-  maxTicketsPerMember: event?.maxTicketsPerMember || 10,
-  maxTicketsPerGuest: event?.maxTicketsPerGuest || 3,
+//   maxCapacity: event?.maxCapacity || 5000,
+//   maxTicketsPerUser: event?.maxTicketsPerUser || 5,
+//   maxTicketsPerMember: event?.maxTicketsPerMember || 10,
+//   maxTicketsPerGuest: event?.maxTicketsPerGuest || 3,
 
-  organizer: {
-    name: event?.organizer?.name || 'Tech Events India Pvt Ltd',
-    email: event?.organizer?.email || 'hello@techsummit.in',
-    phone: event?.organizer?.phone || '+91 98765 43210',
-    website: event?.organizer?.website || 'https://techsummit.in',
-    description: event?.organizer?.description || 'Leading technology conference organizer in India since 2015. We bring together the brightest minds in tech for unforgettable experiences.'
-  },
+//   organizer: {
+//     name: event?.organizer?.name || 'Tech Events India Pvt Ltd',
+//     email: event?.organizer?.email || 'hello@techsummit.in',
+//     phone: event?.organizer?.phone || '+91 98765 43210',
+//     website: event?.organizer?.website || 'https://techsummit.in',
+//     description: event?.organizer?.description || 'Leading technology conference organizer in India since 2015. We bring together the brightest minds in tech for unforgettable experiences.'
+//   },
 
-  highlights: event?.highlights?.join('\n') || [
-    '50+ World-class speakers',
-    'Hands-on technical workshops',
-    'Startup pitch competition',
-    'Exclusive networking dinner',
-    'Free swag & merchandise',
-    'Certificate of participation',
-    'Access to speaker slides & recordings'
-  ].join('\n'),
+//   highlights: event?.highlights?.join('\n') || [
+//     '50+ World-class speakers',
+//     'Hands-on technical workshops',
+//     'Startup pitch competition',
+//     'Exclusive networking dinner',
+//     'Free swag & merchandise',
+//     'Certificate of participation',
+//     'Access to speaker slides & recordings'
+//   ].join('\n'),
 
-  seatingType: event?.seatingType || 'Reserved',
-  ageRestriction: event?.ageRestriction || '18+',
-  dresscode: event?.dresscode || 'Business Casual',
-  specialNotes: event?.specialNotes || '• Bring your laptop for workshops\n• Photo ID required for entry\n• Food & refreshments included',
+//   seatingType: event?.seatingType || 'Reserved',
+//   ageRestriction: event?.ageRestriction || '18+',
+//   dresscode: event?.dresscode || 'Business Casual',
+//   specialNotes: event?.specialNotes || '• Bring your laptop for workshops\n• Photo ID required for entry\n• Food & refreshments included',
 
-  terms: event?.terms || 'By registering, you agree to our terms and conditions and privacy policy.',
-  refundPolicy: event?.refundPolicy || 'Full refund if cancelled 30 days before event. 50% refund within 15 days. No refund after that.',
-  cancellationPolicy: event?.cancellationPolicy || 'Organizer reserves the right to cancel or postpone the event due to unforeseen circumstances.',
+//   terms: event?.terms || 'By registering, you agree to our terms and conditions and privacy policy.',
+//   refundPolicy: event?.refundPolicy || 'Full refund if cancelled 30 days before event. 50% refund within 15 days. No refund after that.',
+//   cancellationPolicy: event?.cancellationPolicy || 'Organizer reserves the right to cancel or postpone the event due to unforeseen circumstances.',
 
-  faqs: event?.faqs || [
-    { question: 'Is food included?', answer: 'Yes! Breakfast, lunch, and evening snacks are provided on all 3 days.' },
-    { question: 'Can I get a student discount?', answer: 'Yes, verified students get 40% off with valid ID.' },
-    { question: 'Will sessions be recorded?', answer: 'Yes, all main track sessions will be recorded and shared with attendees.' },
-    { question: 'Is there parking available?', answer: 'Yes, free parking is available at the venue.' }
-  ],
+//   faqs: event?.faqs || [
+//     { question: 'Is food included?', answer: 'Yes! Breakfast, lunch, and evening snacks are provided on all 3 days.' },
+//     { question: 'Can I get a student discount?', answer: 'Yes, verified students get 40% off with valid ID.' },
+//     { question: 'Will sessions be recorded?', answer: 'Yes, all main track sessions will be recorded and shared with attendees.' },
+//     { question: 'Is there parking available?', answer: 'Yes, free parking is available at the venue.' }
+//   ],
 
-  socialMedia: {
-    facebook: event?.socialMedia?.facebook || 'https://facebook.com/techsummitindia',
-    twitter: event?.socialMedia?.twitter || 'https://twitter.com/techsummit_in',
-    instagram: event?.socialMedia?.instagram || 'https://instagram.com/techsummitindia',
-    linkedin: event?.socialMedia?.linkedin || 'https://linkedin.com/company/techsummit-india'
-  },
+//   socialMedia: {
+//     facebook: event?.socialMedia?.facebook || 'https://facebook.com/techsummitindia',
+//     twitter: event?.socialMedia?.twitter || 'https://twitter.com/techsummit_in',
+//     instagram: event?.socialMedia?.instagram || 'https://instagram.com/techsummitindia',
+//     linkedin: event?.socialMedia?.linkedin || 'https://linkedin.com/company/techsummit-india'
+//   },
 
-  hasRefreshments: event?.hasRefreshments ?? true,
-  hasParking: event?.hasParking ?? true,
-  isWheelchairAccessible: event?.isWheelchairAccessible ?? true,
-  hasWifi: event?.hasWifi ?? true,
-  featured: event?.featured || true,
-  status: event?.status || 'published',
-});
+//   hasRefreshments: event?.hasRefreshments ?? true,
+//   hasParking: event?.hasParking ?? true,
+//   isWheelchairAccessible: event?.isWheelchairAccessible ?? true,
+//   hasWifi: event?.hasWifi ?? true,
+//   featured: event?.featured || true,
+//   status: event?.status || 'published',
+// });
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('basic');
 

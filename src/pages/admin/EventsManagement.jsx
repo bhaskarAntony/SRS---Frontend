@@ -13,6 +13,8 @@ import {
 import { eventService } from '../../services/eventService';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import toast from 'react-hot-toast';
+import { X, Calendar, CheckCircle, ChevronLeft } from "lucide-react";
+
 
 const EventsManagement = () => {
   const [events, setEvents] = useState([]);
@@ -467,150 +469,151 @@ const EventsManagement = () => {
   );
 };
 
-// Event Form Modal Component (for Add/Edit)
+
+
 const EventFormModal = ({ title, event, onClose, onSubmit }) => {
+  // const [formData, setFormData] = useState({
+  //   title: event?.title || "",
+  //   description: event?.description || "",
+  //   longDescription: event?.longDescription || "",
+  //   category: event?.category || "Conference",
+  //   tags: event?.tags?.join(", ") || "",
+  //   startDate: event?.startDate ? new Date(event.startDate).toISOString().slice(0, 16) : "",
+  //   endDate: event?.endDate ? new Date(event.endDate).toISOString().slice(0, 16) : "",
+  //   actualDateOfEvent: event?.actualDateOfEvent || "", // Added field
+  //   duration: event?.duration || "",
+  //   location: event?.location || "",
+  //   venue: event?.venue || "",
+  //   bannerImage: event?.bannerImage || "",
+  //   gallery: event?.gallery?.join("\n") || "",
+  //   userPrice: event?.userPrice || 0,
+  //   memberPrice: event?.memberPrice || 0,
+  //   guestPrice: event?.guestPrice || 0,
+  //   maxCapacity: event?.maxCapacity || 100,
+  //   maxTicketsPerUser: event?.maxTicketsPerUser || 5,
+  //   maxTicketsPerMember: event?.maxTicketsPerMember || 10,
+  //   maxTicketsPerGuest: event?.maxTicketsPerGuest || 3,
+  //   organizer: {
+  //     name: event?.organizer?.name || "",
+  //     email: event?.organizer?.email || "",
+  //     phone: event?.organizer?.phone || "",
+  //     website: event?.organizer?.website || "",
+  //     description: event?.organizer?.description || "",
+  //   },
+  //   highlights: event?.highlights?.join("\n") || "",
+  //   seatingType: event?.seatingType || "Open",
+  //   ageRestriction: event?.ageRestriction || "All Ages",
+  //   dresscode: event?.dresscode || "",
+  //   specialNotes: event?.specialNotes || "",
+  //   mapsUrl: event?.mapsUrl || "",
+  //   terms: event?.terms || "",
+  //   refundPolicy: event?.refundPolicy || "No refunds available",
+  //   cancellationPolicy: event?.cancellationPolicy || "",
+  //   faqs: event?.faqs || [{ question: "", answer: "" }],
+  //   socialMedia: {
+  //     facebook: event?.socialMedia?.facebook || "",
+  //     twitter: event?.socialMedia?.twitter || "",
+  //     instagram: event?.socialMedia?.instagram || "",
+  //     linkedin: event?.socialMedia?.linkedin || "",
+  //   },
+  //   hasRefreshments: event?.hasRefreshments || false,
+  //   hasParking: event?.hasParking || false,
+  //   isWheelchairAccessible: event?.isWheelchairAccessible || false,
+  //   hasWifi: event?.hasWifi || false,
+  //   featured: event?.featured || false,
+  //   status: event?.status || "draft",
+  // });
+
+
   const [formData, setFormData] = useState({
-    title: event?.title || '',
-    description: event?.description || '',
-    longDescription: event?.longDescription || '',
-    category: event?.category || 'Conference',
-    tags: event?.tags?.join(', ') || '',
-    startDate: event?.startDate ? new Date(event.startDate).toISOString().slice(0, 16) : '',
-    endDate: event?.endDate ? new Date(event.endDate).toISOString().slice(0, 16) : '',
-    duration: event?.duration || '',
-    location: event?.location || '',
-    venue: event?.venue || '',
-    bannerImage: event?.bannerImage || '',
-    gallery: event?.gallery?.join('\n') || '',
-    userPrice: event?.userPrice || 0,
-    memberPrice: event?.memberPrice || 0,
-    guestPrice: event?.guestPrice || 0,
-    maxCapacity: event?.maxCapacity || 100,
-    maxTicketsPerUser: event?.maxTicketsPerUser || 5,
-    maxTicketsPerMember: event?.maxTicketsPerMember || 10,
-    maxTicketsPerGuest: event?.maxTicketsPerGuest || 3,
-    organizer: {
-      name: event?.organizer?.name || '',
-      email: event?.organizer?.email || '',
-      phone: event?.organizer?.phone || '',
-      website: event?.organizer?.website || '',
-      description: event?.organizer?.description || '',
-    },
-    highlights: event?.highlights?.join('\n') || '',
-    seatingType: event?.seatingType || 'Open',
-    ageRestriction: event?.ageRestriction || 'All Ages',
-    dresscode: event?.dresscode || '',
-    specialNotes: event?.specialNotes || '',
-    mapsUrl: event?.mapsUrl || '',
-    terms: event?.terms || '',
-    refundPolicy: event?.refundPolicy || 'No refunds available',
-    cancellationPolicy: event?.cancellationPolicy || '',
-    faqs: event?.faqs || [{ question: '', answer: '' }],
-    socialMedia: {
-      facebook: event?.socialMedia?.facebook || '',
-      twitter: event?.socialMedia?.twitter || '',
-      instagram: event?.socialMedia?.instagram || '',
-      linkedin: event?.socialMedia?.linkedin || '',
-    },
-    hasRefreshments: event?.hasRefreshments || false,
-    hasParking: event?.hasParking || false,
-    isWheelchairAccessible: event?.isWheelchairAccessible || false,
-    hasWifi: event?.hasWifi || false,
-    featured: event?.featured || false,
-    status: event?.status || 'draft',
-  });
-//   const [formData, setFormData] = useState({
-//   title: event?.title || 'Tech Summit India 2025',
-//   description: event?.description || 'The largest technology conference in India bringing together 5000+ developers, startups, and industry leaders for 3 days of learning, networking, and innovation.',
-//   longDescription: event?.longDescription || `Join us for Tech Summit India 2025 — the premier technology conference featuring world-class speakers from Google, Microsoft, AWS, and top Indian startups.
+  title: event?.title || "International Tech Innovations Summit 2025",
+  description: event?.description || "A global summit bringing together innovators, entrepreneurs, researchers, and industry leaders.",
+  longDescription: event?.longDescription || 
+    "The International Tech Innovations Summit 2025 focuses on breakthrough technologies across AI, Robotics, Cybersecurity, Cloud Computing, and Biotechnology. The summit includes keynote speakers, workshops, panel discussions, and networking opportunities.",
 
-// Experience 50+ technical sessions, hands-on workshops, product launches, and networking opportunities with industry pioneers.
+  category: event?.category || "Conference",
+  tags: event?.tags?.join(", ") || "Technology, Innovation, AI, Summit",
 
-// Whether you're a developer, designer, entrepreneur, or tech enthusiast — this is the event you don't want to miss!`,
+  startDate: event?.startDate 
+    ? new Date(event.startDate).toISOString().slice(0, 16)
+    : "2025-03-10T09:00",
 
-//   category: event?.category || 'Conference',
-//   tags: event?.tags?.join(', ') || 'technology, conference, AI, cloud, startups, networking, developers',
+  endDate: event?.endDate
+    ? new Date(event.endDate).toISOString().slice(0, 16)
+    : "2025-03-12T18:00",
 
-//   startDate: event?.startDate ? new Date(event.startDate).toISOString().slice(0, 16) : '2025-06-20T09:00',
-//   endDate: event?.endDate ? new Date(event.endDate).toISOString().slice(0, 16) : '2025-06-22T18:00',
-//   duration: event?.duration || '3 Days',
+  actualDateOfEvent: event?.actualDateOfEvent || "2025-03-11",
+  duration: event?.duration || "3 Days",
 
-//   location: event?.location || 'Bengaluru, Karnataka',
-//   venue: event?.venue || 'KTPO Convention Center, Whitefield',
-//   mapsUrl: event?.mapsUrl || 'https://maps.google.com/?q=KTPO+Convention+Center+Bengaluru',
+  location: event?.location || "Bangalore International Exhibition Centre",
+  venue: event?.venue || "Hall A – Conference Auditorium",
 
-//   bannerImage: event?.bannerImage || 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg',
-//   gallery: event?.gallery?.join('\n') || [
-//     'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg',
-//     'https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg',
-//     'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg',
-//     'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg'
-//   ].join('\n'),
+  bannerImage: event?.bannerImage || "https://example.com/images/techsummit-banner.jpg",
 
-//   userPrice: event?.userPrice || 4999,
-//   memberPrice: event?.memberPrice || 2999,
-//   guestPrice: event?.guestPrice || 5999,
+  gallery: event?.gallery?.join("\n") ||
+    "https://example.com/images/gallery1.jpg\nhttps://example.com/images/gallery2.jpg",
 
-//   maxCapacity: event?.maxCapacity || 5000,
-//   maxTicketsPerUser: event?.maxTicketsPerUser || 5,
-//   maxTicketsPerMember: event?.maxTicketsPerMember || 10,
-//   maxTicketsPerGuest: event?.maxTicketsPerGuest || 3,
+  userPrice: event?.userPrice || 1500,
+  memberPrice: event?.memberPrice || 1200,
+  guestPrice: event?.guestPrice || 1800,
 
-//   organizer: {
-//     name: event?.organizer?.name || 'Tech Events India Pvt Ltd',
-//     email: event?.organizer?.email || 'hello@techsummit.in',
-//     phone: event?.organizer?.phone || '+91 98765 43210',
-//     website: event?.organizer?.website || 'https://techsummit.in',
-//     description: event?.organizer?.description || 'Leading technology conference organizer in India since 2015. We bring together the brightest minds in tech for unforgettable experiences.'
-//   },
+  maxCapacity: event?.maxCapacity || 500,
+  maxTicketsPerUser: event?.maxTicketsPerUser || 5,
+  maxTicketsPerMember: event?.maxTicketsPerMember || 10,
+  maxTicketsPerGuest: event?.maxTicketsPerGuest || 3,
 
-//   highlights: event?.highlights?.join('\n') || [
-//     '50+ World-class speakers',
-//     'Hands-on technical workshops',
-//     'Startup pitch competition',
-//     'Exclusive networking dinner',
-//     'Free swag & merchandise',
-//     'Certificate of participation',
-//     'Access to speaker slides & recordings'
-//   ].join('\n'),
+  organizer: {
+    name: event?.organizer?.name || "Tech Global Foundation",
+    email: event?.organizer?.email || "contact@techglobal.org",
+    phone: event?.organizer?.phone || "+91 9876543210",
+    website: event?.organizer?.website || "https://techglobal.org",
+    description: event?.organizer?.description || 
+      "Tech Global Foundation is a non-profit organization dedicated to promoting cutting-edge technology innovations and global collaboration.",
+  },
 
-//   seatingType: event?.seatingType || 'Reserved',
-//   ageRestriction: event?.ageRestriction || '18+',
-//   dresscode: event?.dresscode || 'Business Casual',
-//   specialNotes: event?.specialNotes || '• Bring your laptop for workshops\n• Photo ID required for entry\n• Food & refreshments included',
+  highlights: event?.highlights?.join("\n") ||
+    "Keynote by World-renowned AI Scientist\nLive Robotics Demo\nStartup Pitch Battle\nNetworking Dinner",
 
-//   terms: event?.terms || 'By registering, you agree to our terms and conditions and privacy policy.',
-//   refundPolicy: event?.refundPolicy || 'Full refund if cancelled 30 days before event. 50% refund within 15 days. No refund after that.',
-//   cancellationPolicy: event?.cancellationPolicy || 'Organizer reserves the right to cancel or postpone the event due to unforeseen circumstances.',
+  seatingType: event?.seatingType || "Open",
+  ageRestriction: event?.ageRestriction || "All Ages",
+  dresscode: event?.dresscode || "Smart Casual",
+  specialNotes: event?.specialNotes || "Bring your registration QR code for entry.",
+  mapsUrl: event?.mapsUrl || "https://maps.google.com/?q=BIEC+Bangalore",
 
-//   faqs: event?.faqs || [
-//     { question: 'Is food included?', answer: 'Yes! Breakfast, lunch, and evening snacks are provided on all 3 days.' },
-//     { question: 'Can I get a student discount?', answer: 'Yes, verified students get 40% off with valid ID.' },
-//     { question: 'Will sessions be recorded?', answer: 'Yes, all main track sessions will be recorded and shared with attendees.' },
-//     { question: 'Is there parking available?', answer: 'Yes, free parking is available at the venue.' }
-//   ],
+  terms: event?.terms || "All attendees must carry a valid ID proof. Photography is permitted.",
+  refundPolicy: event?.refundPolicy || "Refunds available only if cancelled 7 days prior to event.",
+  cancellationPolicy: event?.cancellationPolicy || 
+    "Organizer reserves the right to reschedule or cancel the event due to unavoidable circumstances.",
 
-//   socialMedia: {
-//     facebook: event?.socialMedia?.facebook || 'https://facebook.com/techsummitindia',
-//     twitter: event?.socialMedia?.twitter || 'https://twitter.com/techsummit_in',
-//     instagram: event?.socialMedia?.instagram || 'https://instagram.com/techsummitindia',
-//     linkedin: event?.socialMedia?.linkedin || 'https://linkedin.com/company/techsummit-india'
-//   },
+  faqs: event?.faqs || [
+    { question: "Is lunch provided?", answer: "Yes, lunch and refreshments will be provided." },
+    { question: "Can I transfer my ticket?", answer: "Yes, ticket transfer is allowed before 3 days of event." }
+  ],
 
-//   hasRefreshments: event?.hasRefreshments ?? true,
-//   hasParking: event?.hasParking ?? true,
-//   isWheelchairAccessible: event?.isWheelchairAccessible ?? true,
-//   hasWifi: event?.hasWifi ?? true,
-//   featured: event?.featured || true,
-//   status: event?.status || 'published',
-// });
+  socialMedia: {
+    facebook: event?.socialMedia?.facebook || "https://facebook.com/techsummit",
+    twitter: event?.socialMedia?.twitter || "https://twitter.com/techsummit",
+    instagram: event?.socialMedia?.instagram || "https://instagram.com/techsummit",
+    linkedin: event?.socialMedia?.linkedin || "https://linkedin.com/company/techsummit",
+  },
+
+  hasRefreshments: event?.hasRefreshments || true,
+  hasParking: event?.hasParking || true,
+  isWheelchairAccessible: event?.isWheelchairAccessible || true,
+  hasWifi: event?.hasWifi || true,
+
+  featured: event?.featured || true,
+  status: event?.status || "draft",
+});
+
+
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('basic');
+  const [activeTab, setActiveTab] = useState("basic");
 
-  const categories = ['Conference', 'Workshop', 'Seminar', 'Concert', 'Sports', 'Exhibition', 'Other'];
-  const seatingTypes = ['Open', 'Reserved', 'Mixed'];
-  const ageRestrictions = ['All Ages', '18+', '21+', 'Kids Only'];
-  const statuses = ['draft', 'published', 'cancelled', 'completed'];
+  const categories = ["Conference", "Workshop", "Seminar", "Concert", "Sports", "Exhibition", "Other"];
+  const seatingTypes = ["Open", "Reserved", "Mixed"];
+  const ageRestrictions = ["All Ages", "18+", "21+", "Kids Only"];
+  const statuses = ["draft", "published", "cancelled", "completed"];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -618,10 +621,10 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
     try {
       const eventData = {
         ...formData,
-        tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-        gallery: formData.gallery.split('\n').map(url => url.trim()).filter(url => url),
-        highlights: formData.highlights.split('\n').map(highlight => highlight.trim()).filter(highlight => highlight),
-        faqs: formData.faqs.filter(faq => faq.question && faq.answer),
+        tags: formData.tags.split(",").map((tag) => tag.trim()).filter((tag) => tag),
+        gallery: formData.gallery.split("\n").map((url) => url.trim()).filter((url) => url),
+        highlights: formData.highlights.split("\n").map((highlight) => highlight.trim()).filter((highlight) => highlight),
+        faqs: formData.faqs.filter((faq) => faq.question && faq.answer),
       };
       await onSubmit(eventData);
     } finally {
@@ -632,51 +635,61 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
   const addFAQ = () => {
     setFormData({
       ...formData,
-      faqs: [...formData.faqs, { question: '', answer: '' }]
+      faqs: [...formData.faqs, { question: "", answer: "" }],
     });
   };
 
   const removeFAQ = (index) => {
     setFormData({
       ...formData,
-      faqs: formData.faqs.filter((_, i) => i !== index)
+      faqs: formData.faqs.filter((_, i) => i !== index),
     });
   };
 
   const updateFAQ = (index, field, value) => {
-    const updatedFAQs = formData.faqs.map((faq, i) => 
-      i === index ? { ...faq, [field]: value } : faq
-    );
+    const updatedFAQs = formData.faqs.map((faq, i) => (i === index ? { ...faq, [field]: value } : faq));
     setFormData({ ...formData, faqs: updatedFAQs });
   };
 
   const tabs = [
-    { id: 'basic', name: 'Basic Info' },
-    { id: 'details', name: 'Details' },
-    { id: 'pricing', name: 'Pricing' },
-    { id: 'organizer', name: 'Organizer' },
-    { id: 'policies', name: 'Policies' },
-    { id: 'features', name: 'Features' },
+    { id: "basic", name: "Basic Info" },
+    { id: "details", name: "Details" },
+    { id: "pricing", name: "Pricing" },
+    { id: "organizer", name: "Organizer" },
+    { id: "policies", name: "Policies" },
+    { id: "features", name: "Features" },
   ];
 
   return (
-   <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-6xl max-h-[95vh] flex flex-col overflow-scroll">
-        <div className="p-6 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm">
+      <div className="bg-white w-full max-w-4xl sm:max-w-6xl h-[95vh] sm:h-auto flex flex-col rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-gray-200 max-h-screen">
+        {/* Mobile Header */}
+        <div className="sm:hidden flex items-center justify-between p-4 border-b border-gray-200 bg-white">
+          <button onClick={onClose} className="p-1 rounded-lg hover:bg-gray-100">
+            <ChevronLeft className="w-6 h-6 text-gray-600" />
+          </button>
+          <h3 className="text-lg font-bold text-gray-900 truncate">{title}</h3>
+          <div className="w-6 h-6" />
         </div>
 
-        {}
-        <div className="border-b border-gray-200">
-          <nav className="flex space-x-8 px-6">
+        {/* Desktop Header */}
+        <div className="hidden sm:flex items-center justify-between p-6 border-b border-gray-200 bg-white">
+          <div>
+            <h3 className="text-2xl font-bold text-gray-900">{title}</h3>
+          </div>
+        </div>
+
+        {/* Tabs - Sticky */}
+        <div className="border-b border-gray-200 bg-white/95 backdrop-blur-sm sticky top-0 z-10 sm:px-6">
+          <nav className="flex sm:space-x-8 overflow-x-auto pb-2 sm:pb-4 scrollbar-hide">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                className={`flex items-center gap-2 whitespace-nowrap py-3 px-4 sm:px-6 border-b-2 font-semibold text-sm transition-all ${
                   activeTab === tab.id
-                    ? 'border-primary-500 text-primary-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? "border-black text-black shadow-sm"
+                    : "border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300"
                 }`}
               >
                 {tab.name}
@@ -685,8 +698,9 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
           </nav>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col h-full">
-          <div className="flex-1 overflow-y-auto p-6">
+        {/* Form Content */}
+         <form onSubmit={handleSubmit} className="flex-1 flex overflow-hidden">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 sm:pb-4 space-y-4 sm:space-y-6">
             {}
             {activeTab === 'basic' && (
               <div className="space-y-4">
@@ -699,7 +713,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
                 
@@ -712,7 +726,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     rows={3}
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
                 
@@ -724,7 +738,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     rows={5}
                     value={formData.longDescription}
                     onChange={(e) => setFormData({ ...formData, longDescription: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
                 
@@ -737,7 +751,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                       required
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
                       {categories.map(category => (
                         <option key={category} value={category}>{category}</option>
@@ -752,7 +766,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     <select
                       value={formData.status}
                       onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
                       {statuses.map(status => (
                         <option key={status} value={status}>
@@ -771,7 +785,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     type="text"
                     value={formData.tags}
                     onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     placeholder="technology, conference, networking"
                   />
                 </div>
@@ -785,7 +799,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     required
                     value={formData.bannerImage}
                     onChange={(e) => setFormData({ ...formData, bannerImage: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
                 
@@ -797,7 +811,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     rows={4}
                     value={formData.gallery}
                     onChange={(e) => setFormData({ ...formData, gallery: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
                   />
                 </div>
@@ -830,7 +844,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                       required
                       value={formData.startDate}
                       onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                   
@@ -843,12 +857,13 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                       required
                       value={formData.endDate}
                       onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                 </div>
                 
-                <div>
+               <div className="grid grid-cols-2 gap-4">
+                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Duration *
                   </label>
@@ -857,11 +872,23 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     required
                     value={formData.duration}
                     onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     placeholder="2 hours"
                   />
                 </div>
-                
+                 <div>
+                  <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-gray-500" />
+                    Actual Event Date
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.actualDateOfEvent}
+                    onChange={(e) => setFormData({ ...formData, actualDateOfEvent: e.target.value })}
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
+                </div>
+               </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -872,7 +899,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                       required
                       value={formData.location}
                       onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                   
@@ -884,7 +911,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                       type="text"
                       value={formData.venue}
                       onChange={(e) => setFormData({ ...formData, venue: e.target.value })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                 </div>
@@ -897,7 +924,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     type="url"
                     value={formData.mapsUrl}
                     onChange={(e) => setFormData({ ...formData, mapsUrl: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
                 
@@ -909,7 +936,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     <select
                       value={formData.seatingType}
                       onChange={(e) => setFormData({ ...formData, seatingType: e.target.value })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
                       {seatingTypes.map(type => (
                         <option key={type} value={type}>{type}</option>
@@ -924,7 +951,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     <select
                       value={formData.ageRestriction}
                       onChange={(e) => setFormData({ ...formData, ageRestriction: e.target.value })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
                       {ageRestrictions.map(restriction => (
                         <option key={restriction} value={restriction}>{restriction}</option>
@@ -942,7 +969,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                       min="1"
                       value={formData.maxCapacity}
                       onChange={(e) => setFormData({ ...formData, maxCapacity: parseInt(e.target.value) })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                 </div>
@@ -955,7 +982,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     type="text"
                     value={formData.dresscode}
                     onChange={(e) => setFormData({ ...formData, dresscode: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
                 
@@ -967,7 +994,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     rows={3}
                     value={formData.specialNotes}
                     onChange={(e) => setFormData({ ...formData, specialNotes: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
                 
@@ -979,7 +1006,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     rows={4}
                     value={formData.highlights}
                     onChange={(e) => setFormData({ ...formData, highlights: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     placeholder="Expert speakers&#10;Networking opportunities&#10;Free refreshments"
                   />
                 </div>
@@ -1000,7 +1027,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                       min="0"
                       value={formData.userPrice}
                       onChange={(e) => setFormData({ ...formData, userPrice: parseFloat(e.target.value) })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                   
@@ -1014,7 +1041,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                       min="0"
                       value={formData.memberPrice}
                       onChange={(e) => setFormData({ ...formData, memberPrice: parseFloat(e.target.value) })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                   
@@ -1028,7 +1055,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                       min="0"
                       value={formData.guestPrice}
                       onChange={(e) => setFormData({ ...formData, guestPrice: parseFloat(e.target.value) })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                 </div>
@@ -1043,7 +1070,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                       min="1"
                       value={formData.maxTicketsPerUser}
                       onChange={(e) => setFormData({ ...formData, maxTicketsPerUser: parseInt(e.target.value) })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                   
@@ -1056,7 +1083,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                       min="1"
                       value={formData.maxTicketsPerMember}
                       onChange={(e) => setFormData({ ...formData, maxTicketsPerMember: parseInt(e.target.value) })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                   
@@ -1069,7 +1096,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                       min="1"
                       value={formData.maxTicketsPerGuest}
                       onChange={(e) => setFormData({ ...formData, maxTicketsPerGuest: parseInt(e.target.value) })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                 </div>
@@ -1092,7 +1119,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                         ...formData, 
                         organizer: { ...formData.organizer, name: e.target.value }
                       })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                   
@@ -1108,7 +1135,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                         ...formData, 
                         organizer: { ...formData.organizer, email: e.target.value }
                       })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                 </div>
@@ -1125,7 +1152,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                         ...formData, 
                         organizer: { ...formData.organizer, phone: e.target.value }
                       })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                   
@@ -1140,7 +1167,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                         ...formData, 
                         organizer: { ...formData.organizer, website: e.target.value }
                       })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                 </div>
@@ -1156,7 +1183,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                       ...formData, 
                       organizer: { ...formData.organizer, description: e.target.value }
                     })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
                 
@@ -1172,7 +1199,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                         ...formData, 
                         socialMedia: { ...formData.socialMedia, facebook: e.target.value }
                       })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                   
@@ -1187,7 +1214,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                         ...formData, 
                         socialMedia: { ...formData.socialMedia, twitter: e.target.value }
                       })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                 </div>
@@ -1204,7 +1231,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                         ...formData, 
                         socialMedia: { ...formData.socialMedia, instagram: e.target.value }
                       })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                   
@@ -1219,7 +1246,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                         ...formData, 
                         socialMedia: { ...formData.socialMedia, linkedin: e.target.value }
                       })}
-                      className="input-field"
+                      className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     />
                   </div>
                 </div>
@@ -1237,7 +1264,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     rows={4}
                     value={formData.terms}
                     onChange={(e) => setFormData({ ...formData, terms: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
                 
@@ -1249,7 +1276,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     rows={3}
                     value={formData.refundPolicy}
                     onChange={(e) => setFormData({ ...formData, refundPolicy: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
                 
@@ -1261,7 +1288,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                     rows={3}
                     value={formData.cancellationPolicy}
                     onChange={(e) => setFormData({ ...formData, cancellationPolicy: e.target.value })}
-                    className="input-field"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
                 
@@ -1298,14 +1325,14 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
                           placeholder="Question"
                           value={faq.question}
                           onChange={(e) => updateFAQ(index, 'question', e.target.value)}
-                          className="input-field"
+                          className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                         <textarea
                           rows={2}
                           placeholder="Answer"
                           value={faq.answer}
                           onChange={(e) => updateFAQ(index, 'answer', e.target.value)}
-                          className="input-field"
+                          className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                       </div>
                     </div>
@@ -1375,7 +1402,7 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
           </div>
 
           {}
-          <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end space-x-3">
+          {/* <div className="border-t border-gray-200 px-6 py-4 flex items-center justify-end space-x-3">
             <button
               type="button"
               onClick={onClose}
@@ -1391,12 +1418,38 @@ const EventFormModal = ({ title, event, onClose, onSubmit }) => {
               {loading && <LoadingSpinner size="small" className="mr-2" />}
               {event ? 'Update Event' : 'Create Event'}
             </button>
-          </div>
+          </div> */}
         </form>
+
+        {/* Sticky Footer */}
+        <div className="border-t border-gray-200 bg-white/95 backdrop-blur-sm p-4 sm:px-6 sticky bottom-0 z-10 flex items-center gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 sm:flex-none px-6 py-3 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-xl transition-all"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={loading}
+            className="flex-1 sm:flex-none px-8 py-3 bg-black hover:bg-gray-900 text-white font-bold text-sm rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+          >
+            {loading ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <CheckCircle className="w-5 h-5" />
+            )}
+            {event ? "Update" : "Create"}
+          </button>
+        </div>
       </div>
     </div>
   );
 };
+
+
 
 // View Event Modal Component
 const ViewEventModal = ({ event, onClose }) => {

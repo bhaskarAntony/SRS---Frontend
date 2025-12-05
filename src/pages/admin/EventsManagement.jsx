@@ -472,139 +472,139 @@ const EventsManagement = () => {
 
 
 const EventFormModal = ({ title, event, onClose, onSubmit }) => {
-  // const [formData, setFormData] = useState({
-  //   title: event?.title || "",
-  //   description: event?.description || "",
-  //   longDescription: event?.longDescription || "",
-  //   category: event?.category || "Conference",
-  //   tags: event?.tags?.join(", ") || "",
-  //   startDate: event?.startDate ? new Date(event.startDate).toISOString().slice(0, 16) : "",
-  //   endDate: event?.endDate ? new Date(event.endDate).toISOString().slice(0, 16) : "",
-  //   actualDateOfEvent: event?.actualDateOfEvent || "", // Added field
-  //   duration: event?.duration || "",
-  //   location: event?.location || "",
-  //   venue: event?.venue || "",
-  //   bannerImage: event?.bannerImage || "",
-  //   gallery: event?.gallery?.join("\n") || "",
-  //   userPrice: event?.userPrice || 0,
-  //   memberPrice: event?.memberPrice || 0,
-  //   guestPrice: event?.guestPrice || 0,
-  //   maxCapacity: event?.maxCapacity || 100,
-  //   maxTicketsPerUser: event?.maxTicketsPerUser || 5,
-  //   maxTicketsPerMember: event?.maxTicketsPerMember || 10,
-  //   maxTicketsPerGuest: event?.maxTicketsPerGuest || 3,
-  //   organizer: {
-  //     name: event?.organizer?.name || "",
-  //     email: event?.organizer?.email || "",
-  //     phone: event?.organizer?.phone || "",
-  //     website: event?.organizer?.website || "",
-  //     description: event?.organizer?.description || "",
-  //   },
-  //   highlights: event?.highlights?.join("\n") || "",
-  //   seatingType: event?.seatingType || "Open",
-  //   ageRestriction: event?.ageRestriction || "All Ages",
-  //   dresscode: event?.dresscode || "",
-  //   specialNotes: event?.specialNotes || "",
-  //   mapsUrl: event?.mapsUrl || "",
-  //   terms: event?.terms || "",
-  //   refundPolicy: event?.refundPolicy || "No refunds available",
-  //   cancellationPolicy: event?.cancellationPolicy || "",
-  //   faqs: event?.faqs || [{ question: "", answer: "" }],
-  //   socialMedia: {
-  //     facebook: event?.socialMedia?.facebook || "",
-  //     twitter: event?.socialMedia?.twitter || "",
-  //     instagram: event?.socialMedia?.instagram || "",
-  //     linkedin: event?.socialMedia?.linkedin || "",
-  //   },
-  //   hasRefreshments: event?.hasRefreshments || false,
-  //   hasParking: event?.hasParking || false,
-  //   isWheelchairAccessible: event?.isWheelchairAccessible || false,
-  //   hasWifi: event?.hasWifi || false,
-  //   featured: event?.featured || false,
-  //   status: event?.status || "draft",
-  // });
-
-
   const [formData, setFormData] = useState({
-  title: event?.title || "International Tech Innovations Summit 2025",
-  description: event?.description || "A global summit bringing together innovators, entrepreneurs, researchers, and industry leaders.",
-  longDescription: event?.longDescription || 
-    "The International Tech Innovations Summit 2025 focuses on breakthrough technologies across AI, Robotics, Cybersecurity, Cloud Computing, and Biotechnology. The summit includes keynote speakers, workshops, panel discussions, and networking opportunities.",
+    title: event?.title || "",
+    description: event?.description || "",
+    longDescription: event?.longDescription || "",
+    category: event?.category || "Conference",
+    tags: event?.tags?.join(", ") || "",
+    startDate: event?.startDate ? new Date(event.startDate).toISOString().slice(0, 16) : "",
+    endDate: event?.endDate ? new Date(event.endDate).toISOString().slice(0, 16) : "",
+    actualDateOfEvent: event?.actualDateOfEvent || "", // Added field
+    duration: event?.duration || "",
+    location: event?.location || "",
+    venue: event?.venue || "",
+    bannerImage: event?.bannerImage || "",
+    gallery: event?.gallery?.join("\n") || "",
+    userPrice: event?.userPrice || 0,
+    memberPrice: event?.memberPrice || 0,
+    guestPrice: event?.guestPrice || 0,
+    maxCapacity: event?.maxCapacity || 100,
+    maxTicketsPerUser: event?.maxTicketsPerUser || 5,
+    maxTicketsPerMember: event?.maxTicketsPerMember || 10,
+    maxTicketsPerGuest: event?.maxTicketsPerGuest || 3,
+    organizer: {
+      name: event?.organizer?.name || "",
+      email: event?.organizer?.email || "",
+      phone: event?.organizer?.phone || "",
+      website: event?.organizer?.website || "",
+      description: event?.organizer?.description || "",
+    },
+    highlights: event?.highlights?.join("\n") || "",
+    seatingType: event?.seatingType || "Open",
+    ageRestriction: event?.ageRestriction || "All Ages",
+    dresscode: event?.dresscode || "",
+    specialNotes: event?.specialNotes || "",
+    mapsUrl: event?.mapsUrl || "",
+    terms: event?.terms || "",
+    refundPolicy: event?.refundPolicy || "No refunds available",
+    cancellationPolicy: event?.cancellationPolicy || "",
+    faqs: event?.faqs || [{ question: "", answer: "" }],
+    socialMedia: {
+      facebook: event?.socialMedia?.facebook || "",
+      twitter: event?.socialMedia?.twitter || "",
+      instagram: event?.socialMedia?.instagram || "",
+      linkedin: event?.socialMedia?.linkedin || "",
+    },
+    hasRefreshments: event?.hasRefreshments || false,
+    hasParking: event?.hasParking || false,
+    isWheelchairAccessible: event?.isWheelchairAccessible || false,
+    hasWifi: event?.hasWifi || false,
+    featured: event?.featured || false,
+    status: event?.status || "draft",
+  });
 
-  category: event?.category || "Conference",
-  tags: event?.tags?.join(", ") || "Technology, Innovation, AI, Summit",
 
-  startDate: event?.startDate 
-    ? new Date(event.startDate).toISOString().slice(0, 16)
-    : "2025-03-10T09:00",
+//   const [formData, setFormData] = useState({
+//   title: event?.title || "International Tech Innovations Summit 2025",
+//   description: event?.description || "A global summit bringing together innovators, entrepreneurs, researchers, and industry leaders.",
+//   longDescription: event?.longDescription || 
+//     "The International Tech Innovations Summit 2025 focuses on breakthrough technologies across AI, Robotics, Cybersecurity, Cloud Computing, and Biotechnology. The summit includes keynote speakers, workshops, panel discussions, and networking opportunities.",
 
-  endDate: event?.endDate
-    ? new Date(event.endDate).toISOString().slice(0, 16)
-    : "2025-03-12T18:00",
+//   category: event?.category || "Conference",
+//   tags: event?.tags?.join(", ") || "Technology, Innovation, AI, Summit",
 
-  actualDateOfEvent: event?.actualDateOfEvent || "2025-03-11",
-  duration: event?.duration || "3 Days",
+//   startDate: event?.startDate 
+//     ? new Date(event.startDate).toISOString().slice(0, 16)
+//     : "2025-03-10T09:00",
 
-  location: event?.location || "Bangalore International Exhibition Centre",
-  venue: event?.venue || "Hall A – Conference Auditorium",
+//   endDate: event?.endDate
+//     ? new Date(event.endDate).toISOString().slice(0, 16)
+//     : "2025-03-12T18:00",
 
-  bannerImage: event?.bannerImage || "https://example.com/images/techsummit-banner.jpg",
+//   actualDateOfEvent: event?.actualDateOfEvent || "2025-03-11",
+//   duration: event?.duration || "3 Days",
 
-  gallery: event?.gallery?.join("\n") ||
-    "https://example.com/images/gallery1.jpg\nhttps://example.com/images/gallery2.jpg",
+//   location: event?.location || "Bangalore International Exhibition Centre",
+//   venue: event?.venue || "Hall A – Conference Auditorium",
 
-  userPrice: event?.userPrice || 1500,
-  memberPrice: event?.memberPrice || 1200,
-  guestPrice: event?.guestPrice || 1800,
+//   bannerImage: event?.bannerImage || "https://example.com/images/techsummit-banner.jpg",
 
-  maxCapacity: event?.maxCapacity || 500,
-  maxTicketsPerUser: event?.maxTicketsPerUser || 5,
-  maxTicketsPerMember: event?.maxTicketsPerMember || 10,
-  maxTicketsPerGuest: event?.maxTicketsPerGuest || 3,
+//   gallery: event?.gallery?.join("\n") ||
+//     "https://example.com/images/gallery1.jpg\nhttps://example.com/images/gallery2.jpg",
 
-  organizer: {
-    name: event?.organizer?.name || "Tech Global Foundation",
-    email: event?.organizer?.email || "contact@techglobal.org",
-    phone: event?.organizer?.phone || "+91 9876543210",
-    website: event?.organizer?.website || "https://techglobal.org",
-    description: event?.organizer?.description || 
-      "Tech Global Foundation is a non-profit organization dedicated to promoting cutting-edge technology innovations and global collaboration.",
-  },
+//   userPrice: event?.userPrice || 1500,
+//   memberPrice: event?.memberPrice || 1200,
+//   guestPrice: event?.guestPrice || 1800,
 
-  highlights: event?.highlights?.join("\n") ||
-    "Keynote by World-renowned AI Scientist\nLive Robotics Demo\nStartup Pitch Battle\nNetworking Dinner",
+//   maxCapacity: event?.maxCapacity || 500,
+//   maxTicketsPerUser: event?.maxTicketsPerUser || 5,
+//   maxTicketsPerMember: event?.maxTicketsPerMember || 10,
+//   maxTicketsPerGuest: event?.maxTicketsPerGuest || 3,
 
-  seatingType: event?.seatingType || "Open",
-  ageRestriction: event?.ageRestriction || "All Ages",
-  dresscode: event?.dresscode || "Smart Casual",
-  specialNotes: event?.specialNotes || "Bring your registration QR code for entry.",
-  mapsUrl: event?.mapsUrl || "https://maps.google.com/?q=BIEC+Bangalore",
+//   organizer: {
+//     name: event?.organizer?.name || "Tech Global Foundation",
+//     email: event?.organizer?.email || "contact@techglobal.org",
+//     phone: event?.organizer?.phone || "+91 9876543210",
+//     website: event?.organizer?.website || "https://techglobal.org",
+//     description: event?.organizer?.description || 
+//       "Tech Global Foundation is a non-profit organization dedicated to promoting cutting-edge technology innovations and global collaboration.",
+//   },
 
-  terms: event?.terms || "All attendees must carry a valid ID proof. Photography is permitted.",
-  refundPolicy: event?.refundPolicy || "Refunds available only if cancelled 7 days prior to event.",
-  cancellationPolicy: event?.cancellationPolicy || 
-    "Organizer reserves the right to reschedule or cancel the event due to unavoidable circumstances.",
+//   highlights: event?.highlights?.join("\n") ||
+//     "Keynote by World-renowned AI Scientist\nLive Robotics Demo\nStartup Pitch Battle\nNetworking Dinner",
 
-  faqs: event?.faqs || [
-    { question: "Is lunch provided?", answer: "Yes, lunch and refreshments will be provided." },
-    { question: "Can I transfer my ticket?", answer: "Yes, ticket transfer is allowed before 3 days of event." }
-  ],
+//   seatingType: event?.seatingType || "Open",
+//   ageRestriction: event?.ageRestriction || "All Ages",
+//   dresscode: event?.dresscode || "Smart Casual",
+//   specialNotes: event?.specialNotes || "Bring your registration QR code for entry.",
+//   mapsUrl: event?.mapsUrl || "https://maps.google.com/?q=BIEC+Bangalore",
 
-  socialMedia: {
-    facebook: event?.socialMedia?.facebook || "https://facebook.com/techsummit",
-    twitter: event?.socialMedia?.twitter || "https://twitter.com/techsummit",
-    instagram: event?.socialMedia?.instagram || "https://instagram.com/techsummit",
-    linkedin: event?.socialMedia?.linkedin || "https://linkedin.com/company/techsummit",
-  },
+//   terms: event?.terms || "All attendees must carry a valid ID proof. Photography is permitted.",
+//   refundPolicy: event?.refundPolicy || "Refunds available only if cancelled 7 days prior to event.",
+//   cancellationPolicy: event?.cancellationPolicy || 
+//     "Organizer reserves the right to reschedule or cancel the event due to unavoidable circumstances.",
 
-  hasRefreshments: event?.hasRefreshments || true,
-  hasParking: event?.hasParking || true,
-  isWheelchairAccessible: event?.isWheelchairAccessible || true,
-  hasWifi: event?.hasWifi || true,
+//   faqs: event?.faqs || [
+//     { question: "Is lunch provided?", answer: "Yes, lunch and refreshments will be provided." },
+//     { question: "Can I transfer my ticket?", answer: "Yes, ticket transfer is allowed before 3 days of event." }
+//   ],
 
-  featured: event?.featured || true,
-  status: event?.status || "draft",
-});
+//   socialMedia: {
+//     facebook: event?.socialMedia?.facebook || "https://facebook.com/techsummit",
+//     twitter: event?.socialMedia?.twitter || "https://twitter.com/techsummit",
+//     instagram: event?.socialMedia?.instagram || "https://instagram.com/techsummit",
+//     linkedin: event?.socialMedia?.linkedin || "https://linkedin.com/company/techsummit",
+//   },
+
+//   hasRefreshments: event?.hasRefreshments || true,
+//   hasParking: event?.hasParking || true,
+//   isWheelchairAccessible: event?.isWheelchairAccessible || true,
+//   hasWifi: event?.hasWifi || true,
+
+//   featured: event?.featured || true,
+//   status: event?.status || "draft",
+// });
 
 
   const [loading, setLoading] = useState(false);

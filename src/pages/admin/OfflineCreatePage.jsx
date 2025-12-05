@@ -10,20 +10,18 @@ import {
   DocumentArrowDownIcon,
   XMarkIcon,
   TicketIcon,
+  ArrowLeftIcon,
 } from "@heroicons/react/24/outline";
 import QRCode from "qrcode.react";
-import { Download, Smartphone, X } from "lucide-react";
+import { Download, Smartphone, X, ArrowLeft } from "lucide-react";
 
 const SuccessModal = ({ booking, onClose }) => {
-
-    console.log(booking);
   if (!booking) return null;
 
-  const qrImageSrc = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${booking.qrCode}`;
-
+  const qrImageSrc = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${booking.qrCode}`;
   const message = `*Your Event Booking:* https://thesrsevents.com/events/${booking.event} \n\n Hello *${booking.memberName}*!\n\n✅ Your SRS Events ticket is confirmed!\n\n🔢 *Booking ID:* #${booking.bookingId}\n👤 *Member:* ${booking.memberName} (${booking.memberIdInput})\n🎪 *Event:* ${booking.eventName || 'N/A'}\n🎫 *Tickets:* M:${booking.memberTicketCount} G:${booking.guestTicketCount} K:${booking.kidTicketCount}\n🍽️ *Meals:* Veg:${booking.memberVegCount + booking.guestVegCount + booking.kidVegCount} | Non-Veg:${booking.memberNonVegCount + booking.guestNonVegCount + booking.kidNonVegCount}\n💰 *Amount:* ₹${booking.finalAmount}\n📊 *Status:* ${booking.paymentStatus.toUpperCase()}\n🆔 *UTR:* ${booking.utrNumber || booking.paymentDetails?.utrNumber || 'Pending'}\n\n📱 *Show this QR at entrance*\n\nSRS Events Team 🚀`;
 
-   const sendViaWhatsApp = () => {
+  const sendViaWhatsApp = () => {
     const raw = booking.contactNumber?.replace(/[^0-9]/g, '') || '';
     const phoneWithCountry = raw.startsWith('91') ? raw : `91${raw || '9606729320'}`;
     const whatsappUrl = `https://wa.me/${phoneWithCountry}?text=${encodeURIComponent(
@@ -42,53 +40,38 @@ const SuccessModal = ({ booking, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[85vh] overflow-auto p-6">
-        {}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Ticket #{booking.bookingId}</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-red-600 transition">
-            <X className="w-6 h-6" />
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999] p-2">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm max-h-[90vh] overflow-auto p-3 border border-gray-200">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-sm font-bold text-gray-800">Ticket #{booking.bookingId}</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-red-500 p-1">
+            <X className="w-4 h-4" />
           </button>
         </div>
-
-        {}
-        <div className="flex justify-center mb-4">
-          <img src={qrImageSrc} alt="Ticket QR" className="w-48 h-48 rounded-lg shadow-md object-contain" />
+        <div className="flex justify-center mb-3">
+          <img src={qrImageSrc} alt="Ticket QR" className="w-32 h-32 rounded shadow-sm object-contain" />
         </div>
-
-        {}
-        <div className="space-y-2 text-gray-700 text-sm">
-          <p><strong>Member:</strong> {booking.memberName} ({booking.memberIdInput})</p>
-          <p><strong>Event:</strong> {booking.eventName || 'N/A'}</p>
-          <p><strong>Tickets:</strong> M:{booking.memberTicketCount} | G:{booking.guestTicketCount} | K:{booking.kidTicketCount}</p>
-          <p><strong>Meals:</strong> Veg: {booking.memberVegCount + booking.guestVegCount + booking.kidVegCount} | Non-Veg: {booking.memberNonVegCount + booking.guestNonVegCount + booking.kidNonVegCount}</p>
-          <p><strong>Amount Paid:</strong> ₹{booking.finalAmount}</p>
-          <p><strong>Payment Status:</strong> <span className={`font-bold ${booking.paymentStatus === 'completed' ? 'text-green-600' : 'text-orange-600'}`}>{booking.paymentStatus.toUpperCase()}</span></p>
-          <p><strong>UTR:</strong> {booking.utrNumber || booking.paymentDetails?.utrNumber || 'Pending'}</p>
+        <div className="space-y-1 text-xs text-gray-700 leading-tight">
+          <p><span className="font-bold">Member:</span> {booking.memberName} ({booking.memberIdInput})</p>
+          <p><span className="font-bold">Event:</span> {booking.eventName || 'N/A'}</p>
+          <p><span className="font-bold">Tickets:</span> M:{booking.memberTicketCount} G:{booking.guestTicketCount} K:{booking.kidTicketCount}</p>
+          <p><span className="font-bold">Meals:</span> Veg:{booking.memberVegCount + booking.guestVegCount + booking.kidVegCount} Non:{booking.memberNonVegCount + booking.guestNonVegCount + booking.kidNonVegCount}</p>
+          <p><span className="font-bold">Amount:</span> ₹{booking.finalAmount}</p>
+          <p><span className="font-bold">Status:</span> <span className={`font-bold ${booking.paymentStatus === 'completed' ? 'text-green-600' : 'text-orange-600'}`}>{booking.paymentStatus.toUpperCase()}</span></p>
+          <p><span className="font-bold">UTR:</span> {booking.utrNumber || booking.paymentDetails?.utrNumber || 'Pending'}</p>
         </div>
-
-        {}
-        <div className="flex gap-4 mt-6">
-          <button onClick={sendViaWhatsApp} className="flex-1 bg-black text-white rounded-xl py-3 font-semibold hover:bg-gray-800 transition">
-            <Smartphone className="inline w-5 h-5 mr-2" /> Send WhatsApp
+        <div className="flex gap-2 mt-4 pt-2 border-t">
+          <button onClick={sendViaWhatsApp} className="flex-1 bg-black text-white text-xs rounded-lg py-2 px-3 font-medium hover:bg-gray-800 flex items-center justify-center gap-1">
+            <Smartphone className="w-3 h-3" /> WhatsApp
           </button>
-          <button onClick={downloadQR} className="flex-1 bg-black text-white rounded-xl py-3 font-semibold hover:bg-gray-800 transition">
-            <Download className="inline w-5 h-5 mr-2" /> Download QR
+          <button onClick={downloadQR} className="flex-1 bg-black text-white text-xs rounded-lg py-2 px-3 font-medium hover:bg-gray-800 flex items-center justify-center gap-1">
+            <Download className="w-3 h-3" /> QR
           </button>
         </div>
       </div>
     </div>
   );
 };
-
-
-
-
-
-
-
-
 
 const OfflineCreatePage = () => {
   const [events, setEvents] = useState([]);
@@ -189,7 +172,7 @@ const OfflineCreatePage = () => {
 
     const memberPrice = 1500;
     const guestPrice = 2100;
-    const kidPrice =  850;
+    const kidPrice = 850;
 
     const gross =
       memberTicketCount * memberPrice +
@@ -270,170 +253,183 @@ const OfflineCreatePage = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 flex justify-center">
-      <div className="w-full max-w-3xl bg-white rounded-3xl shadow-lg p-8 space-y-10 overflow-auto">
-        <h1 className="text-3xl font-semibold text-center text-gray-900 mb-8">Offline Booking</h1>
+  const goBack = () => {
+    window.history.back();
+  };
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          {}
-          <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="md:col-span-3">
-              <label className="block text-xs font-semibold mb-1 flex items-center gap-1 text-gray-700">
-                <CalendarIcon className="w-4 h-4" /> Select Event
+  return (
+    <div className="min-h-screen">
+      <div className="w-full mx-auto">
+        {/* Header with Back Button */}
+        <div className="flex items-center gap-3 mb-4 p-3 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border">
+          <button 
+            onClick={goBack}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-all flex items-center gap-1 text-xs font-medium text-gray-700"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </button>
+          <h1 className="text-lg font-bold text-gray-900 flex-1 text-center">Offline Booking</h1>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg p-4 border border-gray-200">
+          
+          {/* Basic Info - Full Width Compact */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div>
+              <label className="block text-xs font-semibold mb-1 flex items-center gap-1 text-gray-600">
+                <CalendarIcon className="w-3 h-3" /> Event
               </label>
-              <select {...register("eventId", { required: true })} className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                <option value="">-- Select Event --</option>
+              <select {...register("eventId", { required: true })} className="w-full text-xs p-2 border border-gray-200 rounded focus:ring-1 focus:ring-indigo-400 bg-white">
+                <option value="">Select Event</option>
                 {events.map((e) => (
                   <option key={e._id} value={e._id}>{e.title}</option>
                 ))}
               </select>
-              {errors.eventId && <p className="text-xs text-red-600 mt-1">Event is required.</p>}
             </div>
-
             <div>
-              <label className="block text-xs font-semibold mb-1 flex items-center gap-1 text-gray-700">
-                <UserIcon className="w-4 h-4" /> Member ID
+              <label className="block text-xs font-semibold mb-1 flex items-center gap-1 text-gray-600">
+                <UserIcon className="w-3 h-3" /> Member ID
               </label>
-              <input type="text" {...register("memberId", { required: true })} onBlur={(e) => fetchMember(e.target.value)} placeholder="Enter Member ID" className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-              {errors.memberId && <p className="text-xs text-red-600 mt-1">Member ID is required.</p>}
+              <input 
+                type="text" 
+                {...register("memberId", { required: true })} 
+                onBlur={(e) => fetchMember(e.target.value)} 
+                className="w-full text-xs p-2 border border-gray-200 rounded focus:ring-1 focus:ring-indigo-400" 
+              />
             </div>
-
             <div>
-              <label className="block text-xs font-semibold mb-1 flex items-center gap-1 text-gray-700">
-                <UserIcon className="w-4 h-4" /> Member Name
+              <label className="block text-xs font-semibold mb-1 flex items-center gap-1 text-gray-600">
+                <UserIcon className="w-3 h-3" /> Name
               </label>
-              <input type="text" {...register("memberName")} readOnly placeholder="Auto-filled Member Name" className="w-full border border-gray-200 bg-gray-100 rounded-lg p-3 text-sm" />
+              <input type="text" {...register("memberName")} readOnly className="w-full text-xs p-2 border border-gray-200 bg-gray-50 rounded" />
             </div>
-
             <div>
-              <label className="block text-xs font-semibold mb-1 flex items-center gap-1 text-gray-700">
-                <PhoneIcon className="w-4 h-4" /> Contact Number
+              <label className="block text-xs font-semibold mb-1 flex items-center gap-1 text-gray-600">
+                <PhoneIcon className="w-3 h-3" /> Phone
               </label>
-              <input type="tel" {...register("contactNumber")} placeholder="Contact Number" className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+              <input type="tel" {...register("contactNumber")} className="w-full text-xs p-2 border border-gray-200 rounded focus:ring-1 focus:ring-indigo-400" />
             </div>
+          </div>
 
-            <div className="md:col-span-2">
-              <label className="block text-xs font-semibold mb-1 flex items-center gap-1 text-gray-700">
-                <UserIcon className="w-4 h-4" /> Notes (optional)
-              </label>
-              <textarea {...register("notes")} rows={3} placeholder="Additional notes" className="w-full border border-gray-300 rounded-lg p-3 text-sm resize-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
-            </div>
-          </section>
-
-          {}
-          <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {}
-            <div className="bg-indigo-50 rounded-2xl p-6 space-y-4">
-              <h3 className="text-indigo-700 font-bold text-lg flex items-center gap-2"><UserIcon className="w-5 h-5" /> Member Tickets (₹1500)</h3>
-              <input type="number" min={0} max={4} {...register("memberTicketCount", { valueAsNumber: true })} className="w-full p-2 border border-indigo-300 rounded-md focus:ring-2 focus:ring-indigo-400" />
-              <div className="grid grid-cols-2 gap-4">
-                <input type="number" min={0} {...register("memberVegCount", { valueAsNumber: true })} placeholder="Veg" className="p-2 border border-indigo-300 rounded-md focus:ring-2 focus:ring-indigo-400" />
-                <input type="number" min={0} {...register("memberNonVegCount", { valueAsNumber: true })} placeholder="Non-Veg" className="p-2 border border-indigo-300 rounded-md focus:ring-2 focus:ring-indigo-400" />
-              </div>
-              {fields.slice(0, memberTicketCount).map((field, index) => (
-                <input key={field.id} {...register(`attendeeNamesJson.${index}.name`)} placeholder={`Member ${index + 1} Name (optional)`} className="w-full p-2 border border-indigo-200 rounded-md focus:ring-2 focus:ring-indigo-400 mt-1" />
-              ))}
-            </div>
-
-            {}
-            <div className="bg-green-50 rounded-2xl p-6 space-y-4">
-              <h3 className="text-green-700 font-bold text-lg flex items-center gap-2"><TicketIcon className="w-5 h-5" /> Guest Tickets (₹2100)</h3>
-              <input type="number" min={0} max={10} {...register("guestTicketCount", { valueAsNumber: true })} className="w-full p-2 border border-green-300 rounded-md focus:ring-2 focus:ring-green-400" />
-              <div className="grid grid-cols-2 gap-4">
-                <input type="number" min={0} {...register("guestVegCount", { valueAsNumber: true })} placeholder="Veg" className="p-2 border border-green-300 rounded-md focus:ring-2 focus:ring-green-400" />
-                <input type="number" min={0} {...register("guestNonVegCount", { valueAsNumber: true })} placeholder="Non-Veg" className="p-2 border border-green-300 rounded-md focus:ring-2 focus:ring-green-400" />
-              </div>
-              {fields.slice(memberTicketCount, memberTicketCount + guestTicketCount).map((field, index) => (
-                <input key={field.id} {...register(`attendeeNamesJson.${memberTicketCount + index}.name`)} placeholder={`Guest ${index + 1} Name (optional)`} className="w-full p-2 border border-green-200 rounded-md focus:ring-2 focus:ring-green-400 mt-1" />
-              ))}
-            </div>
-
-            {}
-            <div className="bg-purple-50 rounded-2xl p-6 space-y-4">
-              <h3 className="text-purple-700 font-bold text-lg flex items-center gap-2"><UserIcon className="w-5 h-5" /> Kid Tickets (₹850)</h3>
-              <input type="number" min={0} {...register("kidTicketCount", { valueAsNumber: true })} className="w-full p-2 border border-purple-300 rounded-md focus:ring-2 focus:ring-purple-400" />
-              <div className="grid grid-cols-2 gap-4">
-                <input type="number" min={0} {...register("kidVegCount", { valueAsNumber: true })} placeholder="Veg" className="p-2 border border-purple-300 rounded-md focus:ring-2 focus:ring-purple-400" />
-                <input type="number" min={0} {...register("kidNonVegCount", { valueAsNumber: true })} placeholder="Non-Veg" className="p-2 border border-purple-300 rounded-md focus:ring-2 focus:ring-purple-400" />
+          {/* Tickets - Compact Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="bg-indigo-50/80 p-3 rounded-lg border border-indigo-100">
+              <h3 className="text-indigo-700 text-xs font-bold mb-2 flex items-center gap-1">
+                <UserIcon className="w-3 h-3" /> Member (₹1500)
+              </h3>
+              <input type="number" min={0} max={4} {...register("memberTicketCount", { valueAsNumber: true })} className="w-full text-xs p-1.5 border border-indigo-200 rounded mb-2" />
+              <div className="grid grid-cols-2 gap-1 text-xs">
+                <input type="number" min={0} {...register("memberVegCount", { valueAsNumber: true })} placeholder="V" className="text-xs p-1 border border-indigo-200 rounded" />
+                <input type="number" min={0} {...register("memberNonVegCount", { valueAsNumber: true })} placeholder="NV" className="text-xs p-1 border border-indigo-200 rounded" />
               </div>
             </div>
-          </section>
 
-          {}
-          <section className="bg-yellow-50 rounded-3xl p-6 border border-yellow-300 mt-8 space-y-4">
-            <h2 className="text-yellow-800 text-2xl font-bold">Pricing & Discount</h2>
-            <input
-              {...register("discountCode")}
-              placeholder="Enter discount code (e.g., Discount152026)"
-              className="block mx-auto w-full max-w-sm text-center rounded-lg border border-yellow-400 p-3 font-mono font-semibold focus:outline-none focus:ring-4 focus:ring-yellow-300"
-            />
-            <div className="bg-yellow-100 rounded-3xl p-6 text-center font-black text-3xl tracking-wide">
-              <p>Gross Amount: ₹{gross.toLocaleString()}</p>
-              <p className="text-red-600 my-2">Discount ({discountPercent}%): -₹{discount.toLocaleString()}</p>
-              <p className="text-green-700 text-4xl mt-4">Final Amount: ₹{finalAmount.toLocaleString()}</p>
+            <div className="bg-green-50/80 p-3 rounded-lg border border-green-100">
+              <h3 className="text-green-700 text-xs font-bold mb-2 flex items-center gap-1">
+                <TicketIcon className="w-3 h-3" /> Guest (₹2100)
+              </h3>
+              <input type="number" min={0} max={10} {...register("guestTicketCount", { valueAsNumber: true })} className="w-full text-xs p-1.5 border border-green-200 rounded mb-2" />
+              <div className="grid grid-cols-2 gap-1 text-xs">
+                <input type="number" min={0} {...register("guestVegCount", { valueAsNumber: true })} placeholder="V" className="text-xs p-1 border border-green-200 rounded" />
+                <input type="number" min={0} {...register("guestNonVegCount", { valueAsNumber: true })} placeholder="NV" className="text-xs p-1 border border-green-200 rounded" />
+              </div>
             </div>
-          </section>
 
-          {}
-          <section className="bg-purple-50 rounded-3xl p-6 border border-purple-300 mt-8 space-y-4">
-            <h2 className="text-purple-800 text-2xl font-bold">Payment Details</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <select {...register("paymentStatus")} className="rounded-lg border border-purple-300 p-3 text-lg focus:outline-none focus:ring-4 focus:ring-purple-300">
+            <div className="bg-purple-50/80 p-3 rounded-lg border border-purple-100">
+              <h3 className="text-purple-700 text-xs font-bold mb-2 flex items-center gap-1">
+                <UserIcon className="w-3 h-3" /> Kid (₹850)
+              </h3>
+              <input type="number" min={0} {...register("kidTicketCount", { valueAsNumber: true })} className="w-full text-xs p-1.5 border border-purple-200 rounded mb-2" />
+              <div className="grid grid-cols-2 gap-1 text-xs">
+                <input type="number" min={0} {...register("kidVegCount", { valueAsNumber: true })} placeholder="V" className="text-xs p-1 border border-purple-200 rounded" />
+                <input type="number" min={0} {...register("kidNonVegCount", { valueAsNumber: true })} placeholder="NV" className="text-xs p-1 border border-purple-200 rounded" />
+              </div>
+            </div>
+          </div>
+
+          {/* Attendee Names - Compact */}
+          <div className="space-y-1 max-h-20 overflow-auto bg-gray-50 p-2 rounded border">
+            {fields.slice(0, memberTicketCount + guestTicketCount).map((field, index) => (
+              <input 
+                key={field.id} 
+                {...register(`attendeeNamesJson.${index}.name`)} 
+                placeholder={`Attendee ${index + 1}`} 
+                className="w-full text-xs p-1.5 border border-gray-200 rounded text-xs" 
+              />
+            ))}
+          </div>
+
+          {/* Pricing - Compact */}
+          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-3 rounded-lg border">
+            <div className="flex gap-2 mb-2">
+              <input
+                {...register("discountCode")}
+                placeholder="Discount Code"
+                className="flex-1 text-xs p-2 border border-yellow-200 rounded font-mono bg-yellow-100 focus:ring-1"
+              />
+            </div>
+            <div className="text-xs space-y-1 bg-white p-2 rounded text-center">
+              <p>Gross: ₹{gross.toLocaleString()}</p>
+              <p className="text-red-600">Disc {discountPercent}%: -₹{discount.toLocaleString()}</p>
+              <p className="font-bold text-green-700 text-sm">Final: ₹{finalAmount.toLocaleString()}</p>
+            </div>
+          </div>
+
+          {/* Payment - Compact Grid */}
+          <div className="grid grid-cols-2 gap-2 bg-gradient-to-r from-purple-50 to-pink-50 p-3 rounded-lg border">
+            <div>
+              <label className="text-xs font-semibold mb-1 block text-gray-600">Status</label>
+              <select {...register("paymentStatus")} className="w-full text-xs p-2 border border-purple-200 rounded">
                 <option value="paid">Paid</option>
                 <option value="pending">Pending</option>
               </select>
-              <input
-                type="number"
-                {...register("amountPaid")}
-                readOnly={watch("paymentStatus") === "paid"}
-                placeholder="Amount Paid (auto-filled)"
-                className="rounded-lg border border-purple-300 p-3 text-lg text-right bg-purple-100 focus:outline-none focus:ring-4 focus:ring-purple-300"
-              />
-              <input
-                {...register("utrNumber")}
-                placeholder="UTR / Reference Number *"
-                className="rounded-lg border border-purple-300 p-3 text-lg focus:outline-none focus:ring-4 focus:ring-purple-300"
-              />
-              <select {...register("paymentMode")} className="rounded-lg border border-purple-300 p-3 text-lg focus:outline-none focus:ring-4 focus:ring-purple-300">
+            </div>
+            <div>
+              <label className="text-xs font-semibold mb-1 block text-gray-600">Amount</label>
+              <input type="number" {...register("amountPaid")} readOnly={watch("paymentStatus") === "paid"} className="w-full text-xs p-2 border border-purple-200 rounded bg-purple-50" />
+            </div>
+            <div>
+              <label className="text-xs font-semibold mb-1 block text-gray-600">UTR *</label>
+              <input {...register("utrNumber")} className="w-full text-xs p-2 border border-purple-200 rounded" />
+            </div>
+            <div>
+              <label className="text-xs font-semibold mb-1 block text-gray-600">Mode</label>
+              <select {...register("paymentMode")} className="w-full text-xs p-2 border border-purple-200 rounded">
                 <option value="upi">UPI</option>
-                <option value="bank_transfer">Bank Transfer</option>
+                <option value="bank_transfer">Bank</option>
                 <option value="cash">Cash</option>
-                <option value="other">Other</option>
               </select>
             </div>
-          </section>
+          </div>
 
-          {}
-          <div className="flex justify-between items-center mt-10">
-            <div className="text-2xl font-bold">
-              Total Seats: <span className="text-green-600">{totalTickets}</span>
+          {/* Notes */}
+          <div>
+            <label className="text-xs font-semibold mb-1 block text-gray-600 flex items-center gap-1">
+              <UserIcon className="w-3 h-3" /> Notes
+            </label>
+            <textarea {...register("notes")} rows={2} className="w-full text-xs p-2 border border-gray-200 rounded resize-none" />
+          </div>
+
+          {/* Submit */}
+          <div className="flex items-center gap-4 pt-2 border-t">
+            <div className="text-sm font-bold text-gray-700">
+              Total: <span className="text-green-600 font-black">{totalTickets}</span> seats
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="bg-black hover:bg-gray-900 text-white rounded-3xl shadow-lg px-10 py-4 flex items-center gap-4 font-extrabold text-2xl disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="ml-auto bg-gradient-to-r from-black to-gray-900 hover:from-gray-900 hover:to-black text-white px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg flex items-center gap-2 transition-all disabled:opacity-50 whitespace-nowrap"
             >
               {loading ? (
-                <svg className="animate-spin w-8 h-8 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v8z"
-                  />
+                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
               ) : (
-                <CheckCircleIcon className="w-8 h-8" />
+                <CheckCircleIcon className="w-4 h-4" />
               )}
-              <span>Complete Booking</span>
+              Complete
             </button>
           </div>
         </form>

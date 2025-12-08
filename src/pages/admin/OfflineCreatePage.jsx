@@ -16,19 +16,45 @@ import QRCode from "qrcode.react";
 import { Download, Smartphone, X, ArrowLeft } from "lucide-react";
 
 const SuccessModal = ({ booking, onClose }) => {
-  if (!booking) return null;
+ if (!booking) return null;
+ console.log(booking)
+const qrImageSrc = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${booking.qrCode}`;
+  const vegTotal = booking.memberVegCount + booking.guestVegCount + booking.kidVegCount;
+  const nonVegTotal = booking.memberNonVegCount + booking.guestNonVegCount + booking.kidNonVegCount;
 
-  const qrImageSrc = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${booking.qrCode}`;
-  const message = `*Your Event Booking:* https://thesrsevents.com/events/${booking.event} \n\n Hello *${booking.memberName}*!\n\n✅ Your SRS Events ticket is confirmed!\n\n🔢 *Booking ID:* #${booking.bookingId}\n👤 *Member:* ${booking.memberName} (${booking.memberIdInput})\n🎪 *Event:* ${booking.eventName || 'N/A'}\n🎫 *Tickets:* M:${booking.memberTicketCount} G:${booking.guestTicketCount} K:${booking.kidTicketCount}\n🍽️ *Meals:* Veg:${booking.memberVegCount + booking.guestVegCount + booking.kidVegCount} | Non-Veg:${booking.memberNonVegCount + booking.guestNonVegCount + booking.kidNonVegCount}\n💰 *Amount:* ₹${booking.finalAmount}\n📊 *Status:* ${booking.paymentStatus.toUpperCase()}\n🆔 *UTR:* ${booking.utrNumber || booking.paymentDetails?.utrNumber || 'Pending'}\n\n📱 *Show this QR at entrance*\n\nSRS Events Team 🚀`;
+  const ticketUrl = `https://thesrsevents.com/ticket?bid=${booking.bookingId}&qr=${booking.qrCode}&name=${encodeURIComponent(booking.memberName)}&mid=${booking.memberIdInput}&event=${encodeURIComponent(booking.eventName || 'Event')}&m=${booking.memberTicketCount}&g=${booking.guestTicketCount}&k=${booking.kidTicketCount}&veg=${vegTotal}&nonveg=${nonVegTotal}&amt=${booking.finalAmount}&status=${booking.paymentStatus.toUpperCase()}&utr=${encodeURIComponent(booking.utrNumber || 'Pending')}`;
+
+  const message = `Hello ${booking.memberName}!
+
+✅ Booking Confirmed! You are all set for ${booking.eventName || 'the event'}.
+
+🔢 Booking ID: #${booking.bookingId}
+👤 Member: ${booking.memberName}
+🎪 Event: ${booking.eventName || 'N/A'}
+🎫 Tickets: M:${booking.memberTicketCount} G:${booking.guestTicketCount} K:${booking.kidTicketCount}
+🍽  Meals: Veg:${vegTotal} | Non-Veg:${nonVegTotal}
+💰 Amount: ₹${booking.finalAmount}
+📊 Payment Status: ${booking.paymentStatus.toUpperCase()}
+
+📍 Location: ${booking.location}
+Date: 31st Dec | Time: 7:30 PM Onwards
+
+👇 Please show this QR code at the entrance:
+
+${ticketUrl}
+
+See you there!  
+Team golden eventz 🥂
+
+
+📞 Need help? COntact us or Visit: http://www.goldeneventz.co.in`;
 
   const sendViaWhatsApp = () => {
-    const raw = booking.contactNumber?.replace(/[^0-9]/g, '') || '';
-    const phoneWithCountry = raw.startsWith('91') ? raw : `91${raw || '9606729320'}`;
-    const whatsappUrl = `https://wa.me/${phoneWithCountry}?text=${encodeURIComponent(
-      message + `\n\n🖼️ QR Ticket:\n${qrImageSrc}`
-    )}`;
-    window.open(whatsappUrl, '_blank');
-    toast.success('WhatsApp opened with QR link.');
+   const phone = booking.contactNumber?.replace(/\D/g, '');
+    const num = phone.startsWith("91") ? phone : `91${phone || "9606729320"}`;
+    const waUrl = `https://wa.me/${num}?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, "_blank");
+    toast.success("WhatsApp opened!");
   };
 
   const downloadQR = () => {
@@ -236,21 +262,32 @@ const OfflineCreatePage = () => {
       payment_datetime: new Date().toISOString(),
     };
 
-    try {
+   try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const res = await axios.post("https://srs-backend-7ch1.onrender.com/api/admin/offline-bookings", payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setNewBooking(res.data.data);
-      toast.success("Booking created successfully!");
+      const res = await axios.post(
+        "https://srs-backend-7ch1.onrender.com/api/admin/offline-bookings",
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      const booking = res.data.data;
+      // Add event name for display
+      const event = events.find(e => e._id === data.eventId);
+      booking.eventName = event?.title || "Event";
+      booking.location = event?.mapsUrl || "not location"
+booking.memberIdInput = 
+      setNewBooking(booking);
       setShowSuccessModal(true);
+      toast.success("Booking created & ticket ready!");
       reset();
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to create booking");
+      toast.error(err.response?.data?.message || "Failed");
     } finally {
       setLoading(false);
     }
+
+    
   };
 
   const goBack = () => {
@@ -260,7 +297,7 @@ const OfflineCreatePage = () => {
   return (
     <div className="min-h-screen">
       <div className="w-full mx-auto">
-        {/* Header with Back Button */}
+        {}
         <div className="flex items-center gap-3 mb-4 p-3 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border">
           <button 
             onClick={goBack}
@@ -274,7 +311,7 @@ const OfflineCreatePage = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg p-4 border border-gray-200">
           
-          {/* Basic Info - Full Width Compact */}
+          {}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <div>
               <label className="block text-xs font-semibold mb-1 flex items-center gap-1 text-gray-600">
@@ -312,7 +349,7 @@ const OfflineCreatePage = () => {
             </div>
           </div>
 
-          {/* Tickets - Compact Cards */}
+          {}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="bg-indigo-50/80 p-3 rounded-lg border border-indigo-100">
               <h3 className="text-indigo-700 text-xs font-bold mb-2 flex items-center gap-1">
@@ -348,7 +385,7 @@ const OfflineCreatePage = () => {
             </div>
           </div>
 
-          {/* Attendee Names - Compact */}
+          {}
           <div className="space-y-1 max-h-20 overflow-auto bg-gray-50 p-2 rounded border">
             {fields.slice(0, memberTicketCount + guestTicketCount).map((field, index) => (
               <input 
@@ -360,7 +397,7 @@ const OfflineCreatePage = () => {
             ))}
           </div>
 
-          {/* Pricing - Compact */}
+          {}
           <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-3 rounded-lg border">
             <div className="flex gap-2 mb-2">
               <input
@@ -376,7 +413,7 @@ const OfflineCreatePage = () => {
             </div>
           </div>
 
-          {/* Payment - Compact Grid */}
+          {}
           <div className="grid grid-cols-2 gap-2 bg-gradient-to-r from-purple-50 to-pink-50 p-3 rounded-lg border">
             <div>
               <label className="text-xs font-semibold mb-1 block text-gray-600">Status</label>
@@ -403,7 +440,7 @@ const OfflineCreatePage = () => {
             </div>
           </div>
 
-          {/* Notes */}
+          {}
           <div>
             <label className="text-xs font-semibold mb-1 block text-gray-600 flex items-center gap-1">
               <UserIcon className="w-3 h-3" /> Notes
@@ -411,7 +448,7 @@ const OfflineCreatePage = () => {
             <textarea {...register("notes")} rows={2} className="w-full text-xs p-2 border border-gray-200 rounded resize-none" />
           </div>
 
-          {/* Submit */}
+          {}
           <div className="flex items-center gap-4 pt-2 border-t">
             <div className="text-sm font-bold text-gray-700">
               Total: <span className="text-green-600 font-black">{totalTickets}</span> seats

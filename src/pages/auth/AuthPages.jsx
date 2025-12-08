@@ -167,7 +167,7 @@ const AuthPage = () => {
             >
               Sign In
             </button>
-            <button
+            {/* <button
               onClick={() => setCurrentTab('member')}
               className={`flex-1 py-3 px-4 rounded-xl font-semibold text-sm transition-all ${
                 isMemberTab
@@ -176,7 +176,7 @@ const AuthPage = () => {
               }`}
             >
               Member ID
-            </button>
+            </button> */}
             <button
               onClick={() => setCurrentTab('register')}
               className={`flex-1 py-3 px-4 rounded-xl font-semibold text-sm transition-all ${

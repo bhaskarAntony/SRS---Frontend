@@ -325,7 +325,7 @@ const OfflineListPage = () => {
                     <th className="border border-gray-300 p-2.5 text-right font-semibold text-gray-700">Gross</th>
                     <th className="border border-gray-300 p-2.5 text-right font-semibold text-gray-700">Final</th>
                     <th className="border border-gray-300 p-2.5 text-center font-semibold text-gray-700">Status</th>
-                    <th className="border border-gray-300 p-2.5 text-center font-semibold text-gray-700">UTR</th>
+                    {/* <th className="border border-gray-300 p-2.5 text-center font-semibold text-gray-700">UTR</th> */}
                     <th className="border border-gray-300 p-2.5 text-center font-semibold text-gray-700">Action</th>
                   </tr>
                 </thead>
@@ -337,7 +337,9 @@ const OfflineListPage = () => {
                   ) : (
                     bookings.map(b => (
                       <tr key={b._id} className="border-b border-gray-100 hover:bg-gray-50 transition">
-                        <td className="border border-gray-300 p-2 font-mono text-xs">{`#${b.bookingId}`}</td>
+                       <td className="border border-gray-300 p-2 font-mono text-xs break-words">
+  {`#${b.bookingId}`}
+</td>
                         <td className="border border-gray-300 p-2 max-w-[160px]">
                           <div className="font-semibold text-xs truncate">{b.memberName}</div>
                           <div className="text-xs text-gray-500 font-mono truncate">{b.memberIdInput}</div>
@@ -351,7 +353,7 @@ const OfflineListPage = () => {
                             {b.paymentStatus.toUpperCase()}
                           </span>
                         </td>
-                        <td className="border border-gray-300 p-2 font-mono text-xs text-center">{b.utrNumber || '-'}</td>
+                        {/* <td className="border border-gray-300 p-2 font-mono text-xs text-center">{b.utrNumber || '-'}</td> */}
                         <td className="border border-gray-300 p-2 text-center">
                           <button
                             onClick={() => openQRModal(b)}

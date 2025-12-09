@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { 
-  Filter, Download, X, QrCode, Smartphone, ChevronDown, ArrowLeft 
+  Filter, Download, X, QrCode, Smartphone, ChevronDown, ArrowLeft, 
+  Delete,
+  Trash
 } from 'lucide-react';
 
 const QRModal = ({ booking, onClose }) => {
@@ -63,7 +65,7 @@ const QRModal = ({ booking, onClose }) => {
   );
 };
 
-const BookingCard = ({ booking, onQRClick, events }) => {
+const BookingCard = ({ booking, onQRClick, events, deleteBooking }) => {
   const event = events.find(e => e._id === booking.event);
   
   return (
@@ -109,6 +111,13 @@ const BookingCard = ({ booking, onQRClick, events }) => {
           <QrCode className="w-3 h-3" />
           Send QR
         </button>
+
+        <button
+      onClick={() => deleteBooking(booking._id)}
+      className="bg-red-800 text-white px-4 py-1.5 rounded-lg font-medium text-xs hover:bg-gray-800 transition flex items-center gap-1 whitespace-nowrap"
+    >
+      Delete
+    </button>
       </div>
     </div>
   );
@@ -187,6 +196,23 @@ const OfflineListPage = () => {
     }
   };
 
+  const deleteBooking = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this booking?")) return;
+
+  try {
+    const res = await axios.delete(
+      `https://srs-backend-7ch1.onrender.com/api/admin/offline-bookings/${id}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    toast.success("Booking deleted successfully");
+
+    fetchBookings();
+
+  } catch (err) {
+    toast.error("Failed to delete booking");
+  }
+};
   const openQRModal = (booking) => {
     setSelectedBooking(booking);
     setShowQRModal(true);
@@ -196,10 +222,13 @@ const OfflineListPage = () => {
     window.history.back();
   };
 
+  
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50 p-2 sm:p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 p-3 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border">
           <button 
             onClick={goBack}
@@ -227,7 +256,7 @@ const OfflineListPage = () => {
           </div>
         </div>
 
-        {/* Filter Popup - Mobile App Style */}
+        {}
         {showFilterPopup && (
           <div className="fixed inset-0 bg-black/50 z-[999] flex items-end sm:items-center justify-center p-2 sm:p-6">
             <div className="bg-white rounded-2xl sm:rounded-xl w-full max-w-md max-h-[85vh] overflow-auto shadow-2xl border">
@@ -289,10 +318,10 @@ const OfflineListPage = () => {
           </div>
         )}
 
-        {/* Content: Cards on Mobile, Table on Desktop */}
+        {}
         <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border p-2 sm:p-4">
           {isMobile || window.innerWidth < 768 ? (
-            /* Mobile Cards */
+            
             <div className="space-y-3">
               {bookings.length === 0 ? (
                 <div className="text-center py-12 text-gray-500">
@@ -308,12 +337,13 @@ const OfflineListPage = () => {
                     booking={booking}
                     onQRClick={openQRModal}
                     events={events}
+                    deleteBooking={deleteBooking}
                   />
                 ))
               )}
             </div>
           ) : (
-            /* Desktop Table */
+            
             <div className="overflow-x-auto">
               <table className="w-full table-fixed border-collapse border border-gray-200 text-xs">
                 <thead>
@@ -325,7 +355,7 @@ const OfflineListPage = () => {
                     <th className="border border-gray-300 p-2.5 text-right font-semibold text-gray-700">Gross</th>
                     <th className="border border-gray-300 p-2.5 text-right font-semibold text-gray-700">Final</th>
                     <th className="border border-gray-300 p-2.5 text-center font-semibold text-gray-700">Status</th>
-                    {/* <th className="border border-gray-300 p-2.5 text-center font-semibold text-gray-700">UTR</th> */}
+                    {}
                     <th className="border border-gray-300 p-2.5 text-center font-semibold text-gray-700">Action</th>
                   </tr>
                 </thead>
@@ -353,15 +383,22 @@ const OfflineListPage = () => {
                             {b.paymentStatus.toUpperCase()}
                           </span>
                         </td>
-                        {/* <td className="border border-gray-300 p-2 font-mono text-xs text-center">{b.utrNumber || '-'}</td> */}
-                        <td className="border border-gray-300 p-2 text-center">
+                        {}
+                        <td className="border border-gray-300 p-2 text-center flex space2">
                           <button
                             onClick={() => openQRModal(b)}
                             className="bg-black text-white px-3 py-1.5 rounded-lg font-medium text-xs hover:bg-gray-800 transition flex items-center gap-1 mx-auto"
                           >
                             <QrCode className="w-3 h-3" />
-                            QR
+                            
                           </button>
+
+                          <button
+      onClick={() => deleteBooking(b._id)}
+      className="bg-red-600 text-white px-3 py-1.5 rounded-lg font-medium text-xs hover:bg-red-700 transition whitespace-nowrap mx-2"
+    >
+      <Trash className="w-3 h-3"/>
+    </button>
                         </td>
                       </tr>
                     ))

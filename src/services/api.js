@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  // baseURL: 'http://localhost:5000/api',
+  // baseURL: 'https://srs-backend-7ch1.onrender.com/api',
   baseURL: 'https://srs-backend-7ch1.onrender.com/api',
   timeout: 15000,
 });

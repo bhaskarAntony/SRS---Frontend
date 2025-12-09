@@ -97,7 +97,7 @@ const MembersManagement = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Header without sticky */}
+      {}
       <div className="bg-white/95 backdrop-blur-xl border-b border-slate-200/50 shadow-sm">
         <div className="">
           <div className="flex items-center justify-between">
@@ -142,7 +142,7 @@ const MembersManagement = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
-        {/* Search & Filters */}
+        {}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-6">
           <div className="relative flex-1 max-w-md">
             <MagnifyingGlassIcon className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -172,7 +172,7 @@ const MembersManagement = () => {
           </div>
         )}
 
-        {/* Large screens table */}
+        {}
         {!loading && filteredMembers.length > 0 && (
           <div className="hidden md:block rounded-xl border border-slate-200 bg-white/80 backdrop-blur-sm shadow-lg">
             <table className="w-full text-xs">
@@ -210,7 +210,7 @@ const MembersManagement = () => {
           </div>
         )}
 
-        {/* No members fallback */}
+        {}
         {!loading && filteredMembers.length === 0 && (
           <div className="text-center py-20">
             <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -227,7 +227,7 @@ const MembersManagement = () => {
           </div>
         )}
 
-        {/* Small screens show cards */}
+        {}
         {!loading && filteredMembers.length > 0 && (
           <div className="md:hidden space-y-4">
             {filteredMembers.map(member => (
@@ -244,7 +244,7 @@ const MembersManagement = () => {
         )}
       </div>
 
-      {/* Modals */}
+      {}
       {showAddModal && <AddMemberModal onClose={() => setShowAddModal(false)} onSubmit={handleAddMember} />}
       {showImportModal && <ImportModal onClose={() => setShowImportModal(false)} onImport={handleImportMembers} />}
       {showViewModal && selectedMember && <ViewMemberModal member={selectedMember} onClose={() => setShowViewModal(false)} />}

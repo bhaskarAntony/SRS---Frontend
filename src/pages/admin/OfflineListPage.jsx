@@ -11,16 +11,40 @@ const QRModal = ({ booking, onClose }) => {
   if (!booking) return null;
 
   const qrImageSrc = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${booking.qrCode}`;
-  const message = `*Your Event Booking:* https://thesrsevents.com/events/${booking.event} \n\n Hello *${booking.memberName}*!\n\n✅ Your SRS Events ticket is confirmed!\n\n🔢 *Booking ID:* #${booking.bookingId}\n👤 *Member:* ${booking.memberName} \n🎪 *Event:* ${booking.eventName || 'N/A'}\n🎫 *Tickets:* M:${booking.memberTicketCount} G:${booking.guestTicketCount} K:${booking.kidTicketCount}\n🍽️ *Meals:* Veg:${booking.memberVegCount + booking.guestVegCount + booking.kidVegCount} | Non-Veg:${booking.memberNonVegCount + booking.guestNonVegCount + booking.kidNonVegCount}\n💰 *Amount:* ₹${booking.finalAmount}\n📊 *Status:* ${booking.paymentStatus.toUpperCase()}\n🆔 *UTR:* ${booking.utrNumber || booking.paymentDetails?.utrNumber || 'Pending'}\n\n📱 *Show this QR at entrance*\n\nSRS Events Team 🚀`;
+  const vegTotal = booking.memberVegCount + booking.guestVegCount + booking.kidVegCount;
+  const nonVegTotal = booking.memberNonVegCount + booking.guestNonVegCount + booking.kidNonVegCount;
+
+  const ticketUrl = `https://thesrsevents.com/ticket?bid=${booking.bookingId}&qr=${booking.qrCode}&name=${encodeURIComponent(booking.memberName)}&mid=${booking.memberIdInput}&event=${encodeURIComponent(booking.eventName || 'Event')}&m=${booking.memberTicketCount}&g=${booking.guestTicketCount}&k=${booking.kidTicketCount}&veg=${vegTotal}&nonveg=${nonVegTotal}&amt=${booking.finalAmount}&status=${booking.paymentStatus.toUpperCase()}&utr=${encodeURIComponent(booking.utrNumber || 'Pending')}`;
+
+  const message = `Hello ${booking.memberName}!
+
+Booking Confirmed! You are all set for ${booking.eventName || 'the event'}.
+
+Booking ID: #${booking.bookingId}
+Member: ${booking.memberName}
+Event: ${booking.eventName || 'N/A'}
+Tickets: M:${booking.memberTicketCount} G:${booking.guestTicketCount} K:${booking.kidTicketCount}
+Meals: Veg:${vegTotal} | Non-Veg:${nonVegTotal}
+Amount: ₹${booking.finalAmount}
+Payment Status: ${booking.paymentStatus.toUpperCase()}
+
+Location: ${booking.location || 'Venue'}
+Date: 31st Dec | Time: 7:30 PM Onwards
+
+Please show this QR code at the entrance:
+${ticketUrl}
+
+See you there!
+Team golden eventz
+
+Need help? Contact us or Visit: http://www.goldeneventz.co.in`;
 
   const sendViaWhatsApp = () => {
-    const raw = booking.contactNumber?.replace(/[^0-9]/g, '') || '';
-    const phoneWithCountry = raw.startsWith('91') ? raw : `91${raw || '9606729320'}`;
-    const whatsappUrl = `https://wa.me/${phoneWithCountry}?text=${encodeURIComponent(
-      message + `\n\n🖼️ QR Ticket:\n${qrImageSrc}`
-    )}`;
-    window.open(whatsappUrl, '_blank');
-    toast.success('WhatsApp opened with QR link.');
+    const phone = booking.contactNumber?.replace(/\D/g, '') || "9606729320";
+    const num = phone.startsWith("91") ? phone : `91${phone}`;
+    const waUrl = `https://wa.me/${num}?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, "_blank");
+    toast.success("WhatsApp opened!");
   };
 
   const downloadQR = () => {
@@ -155,7 +179,7 @@ const OfflineListPage = () => {
 
   const fetchEvents = async () => {
     try {
-      const res = await axios.get('https://srs-backend-7ch1.onrender.com/api/events', { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.get('http://localhost:5000/api/events', { headers: { Authorization: `Bearer ${token}` } });
       setEvents(res.data.data || []);
     } catch {
       toast.error('Failed to load events');
@@ -165,7 +189,7 @@ const OfflineListPage = () => {
   const fetchBookings = async () => {
     if (!token) return;
     try {
-      const res = await axios.get('https://srs-backend-7ch1.onrender.com/api/admin/offline-bookings', {
+      const res = await axios.get('http://localhost:5000/api/admin/offline-bookings', {
         params: filter,
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -181,7 +205,7 @@ const OfflineListPage = () => {
 
   const handleExport = async () => {
     try {
-      const res = await axios.get('https://srs-backend-7ch1.onrender.com/api/admin/offline-bookings/export', {
+      const res = await axios.get('http://localhost:5000/api/admin/offline-bookings/export', {
         responseType: 'blob',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -201,7 +225,7 @@ const OfflineListPage = () => {
 
   try {
     const res = await axios.delete(
-      `https://srs-backend-7ch1.onrender.com/api/admin/offline-bookings/${id}`,
+      `http://localhost:5000/api/admin/offline-bookings/${id}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
 

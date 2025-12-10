@@ -22,7 +22,7 @@ const MemberDashboard = () => {
 
   const fetchRequests = async () => {
     try {
-      const res = await axios.get('https://srs-backend-7ch1.onrender.com/api/bookings/member-requests', {
+      const res = await axios.get('http://localhost:5000/api/bookings/member-requests', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setRequests(res.data.data || []);
@@ -39,7 +39,7 @@ const MemberDashboard = () => {
 
   const handleApprove = async (id) => {
     try {
-      await axios.post(`https://srs-backend-7ch1.onrender.com/api/bookings/approve-request/${id}`, {}, {
+      await axios.post(`http://localhost:5000/api/bookings/approve-request/${id}`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       toast.success('✅ Request Approved!');
@@ -51,7 +51,7 @@ const MemberDashboard = () => {
 
   const handleReject = async (id) => {
     try {
-      await axios.post(`https://srs-backend-7ch1.onrender.com/api/bookings/reject-request/${id}`, { reason: 'Not available' }, {
+      await axios.post(`http://localhost:5000/api/bookings/reject-request/${id}`, { reason: 'Not available' }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       toast.success('❌ Request Rejected');

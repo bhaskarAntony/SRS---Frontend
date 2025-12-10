@@ -122,7 +122,6 @@ const App = () => {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/booking-success" element={<BookingSuccessPage />} />
           <Route path="/booking/:id" element={<BookingDetailPage />} />
-          <Route path="/scan" element={<QrScanPage />} />
           <Route path="/member/requests" element={<MemberDashboard />} />
 
         </Route>
@@ -138,6 +137,8 @@ const App = () => {
           <Route path="/admin/offline-booking/create" element={<OfflineCreatePage />} />
           <Route path="/admin/offline-bookings" element={<OfflineListPage />} />
           <Route path="/admin/events/:id/checkin" element={<EventCheckInPage />} />
+          <Route path="admin/scan" element={<QrScanPage />} />
+
         </Route>
 
         {}

@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {
-  UsersIcon,
-  CalendarDaysIcon,
-  TicketIcon,
-  CurrencyRupeeIcon,
-  // Home,
-  EyeIcon,
-} from '@heroicons/react/24/outline';
+
+ import { UsersIcon, CalendarDaysIcon, TicketIcon, CurrencyRupeeIcon, QrCodeIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+
 import { adminService } from '../../services/adminService';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import toast from 'react-hot-toast';
@@ -70,43 +65,64 @@ const AdminDashboard = () => {
     );
   }
 
-  const statCards = [
-    {
-      title: 'Total Users',
-      value: stats?.stats.totalUsers || 0,
-      icon: UsersIcon,
-      color: 'bg-blue-500',
-      change: '+12%',
-    },
-    {
-      title: 'Total Members',
-      value: stats?.stats.totalMembers || 0,
-      icon: UsersIcon,
-      color: 'bg-green-500',
-      change: '+8%',
-    },
-    {
-      title: 'Total Events',
-      value: stats?.stats.totalEvents || 0,
-      icon: CalendarDaysIcon,
-      color: 'bg-purple-500',
-      change: '+15%',
-    },
-    {
-      title: 'Total Bookings',
-      value: stats?.stats.totalBookings || 0,
-      icon: TicketIcon,
-      color: 'bg-orange-500',
-      change: '+23%',
-    },
-    {
-      title: 'Total Revenue',
-      value: formatCurrency(stats?.stats.totalRevenue || 0),
-      icon: CurrencyRupeeIcon,
-      color: 'bg-emerald-500',
-      change: '+18%',
-    },
-  ];
+
+const statCards = [
+  {
+    title: 'Total Users',
+    value: stats?.stats.totalUsers || 0,
+    icon: UsersIcon,
+    color: 'bg-blue-500',
+    change: '+12%',
+  },
+  {
+    title: 'Total Members',
+    value: stats?.stats.totalMembers || 0,
+    icon: UsersIcon,
+    color: 'bg-green-500',
+    change: '+8%',
+  },
+  {
+    title: 'Active Events',
+    value: stats?.stats.totalEvents || 0,
+    icon: CalendarDaysIcon,
+    color: 'bg-purple-500',
+    change: '+15%',
+  },
+  {
+    title: 'Total Bookings',
+    value: stats?.stats.totalBookings || 0,
+    subtitle: `${stats?.stats.totalTicketsBooked || 0} Tickets Booked`,
+    icon: TicketIcon,
+    color: 'bg-orange-500',
+    change: '+23%',
+  },
+  {
+    title: 'Total Revenue',
+    value: formatCurrency(stats?.stats.totalRevenue || 0),
+    subtitle: `Collected: ${formatCurrency(stats?.stats.amountCollected || 0)}`,
+    icon: CurrencyRupeeIcon,
+    color: 'bg-emerald-500',
+    change: '+18%',
+  },
+  {
+    title: 'Meal Preferences',
+    value: `${stats?.stats.mealSummary?.veg || 0} Veg`,
+    subtitle: `${stats?.stats.mealSummary?.nonVeg || 0} Non-Veg`,
+    icon: () => (
+      <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+        <span className="text-orange-600 font-bold text-lg">M</span>
+      </div>
+    ),
+    color: 'bg-orange-500',
+  },
+  // NEW: QR Scan Progress Card
+  {
+    title: 'QR Scan Status',
+    icon: QrCodeIcon,
+    color: 'bg-indigo-500',
+    custom: true, // We'll render this differently
+  },
+];
 
   return (
     <div className="space-y-8">
@@ -117,26 +133,113 @@ const AdminDashboard = () => {
       </div>
 
       {}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {statCards.map((stat, index) => (
-          <div key={index} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                <p className="text-2xl font-bold text-gray-900 mt-2">{stat.value}</p>
-              </div>
-              <div className={`p-3 rounded-full ${stat.color}`}>
-                <stat.icon className="w-6 h-6 text-white" />
-              </div>
+     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {statCards.map((stat, index) => {
+    // Special handling for QR Scan Status card
+    if (stat.custom) {
+      const totalTickets = stats?.stats.totalTicketsBooked || 0;
+      const scanned = stats?.stats.totalTicketsScanned || 0;
+      const remaining = Math.max(0, totalTickets - scanned);
+      const progress = totalTickets > 0 ? (scanned / totalTickets) * 100 : 0;
+
+      return (
+        <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 relative overflow-hidden">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <p className="text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                QR Scan Status
+              </p>
             </div>
-            <div className="flex items-center mt-4">
-              <EyeIcon className="w-4 h-4 text-green-500 mr-1" />
-              <span className="text-sm text-green-600 font-medium">{stat.change}</span>
-              <span className="text-sm text-gray-500 ml-1">from last month</span>
+            <div className="p-3 rounded-full bg-indigo-500">
+              <QrCodeIcon className="w-6 h-6 text-white" />
             </div>
           </div>
-        ))}
+
+          {/* Progress Circle */}
+          <div className="flex flex-col items-center my-6">
+            <div className="relative w-32 h-32">
+              <svg className="w-32 h-32 transform -rotate-90">
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="56"
+                  stroke="#e5e7eb"
+                  strokeWidth="12"
+                  fill="none"
+                />
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="56"
+                  stroke="#6366f1"
+                  strokeWidth="12"
+                  fill="none"
+                  strokeDasharray={`${2 * Math.PI * 56}`}
+                  strokeDashoffset={`${2 * Math.PI * 56 * (1 - progress / 100)}`}
+                  className="transition-all duration-1000 ease-out"
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-3xl font-bold text-gray-900">
+                  {Math.round(progress)}%
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats below circle */}
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div>
+              <p className="text-2xl font-bold text-indigo-600">{scanned}</p>
+              <p className="text-xs text-gray-500 mt-1">Scanned</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900">{totalTickets}</p>
+              <p className="text-xs text-gray-500 mt-1">Total</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-orange-600">{remaining}</p>
+              <p className="text-xs text-gray-500 mt-1">Pending</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Regular stat cards
+    return (
+      <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-gray-600">{stat.title}</p>
+            <p className="text-3xl font-bold text-gray-900 mt-3">
+              {stat.value}
+            </p>
+            {stat.subtitle && (
+              <p className="text-sm text-gray-500 mt-2">{stat.subtitle}</p>
+            )}
+          </div>
+          <div className={`p-3 rounded-full ${stat.color}`}>
+            {typeof stat.icon === 'function' ? (
+              <stat.icon />
+            ) : (
+              <stat.icon className="w-7 h-7 text-white" />
+            )}
+          </div>
+        </div>
+
+
+        {stat.change && (
+          <div className="flex items-center mt-5">
+            <CheckCircleIcon className="w-5 h-5 text-green-500 mr-1" />
+            <span className="text-sm font-semibold text-green-600">{stat.change}</span>
+            <span className="text-sm text-gray-500 ml-1">vs last month</span>
+          </div>
+        )}
       </div>
+    );
+  })}
+</div>
 
       {}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">

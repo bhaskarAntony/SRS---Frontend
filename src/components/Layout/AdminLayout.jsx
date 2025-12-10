@@ -159,7 +159,7 @@ const AdminLayout = ({ children }) => {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-auto bg-gradient-to-br from-gray-50 to-white p-2 md:p-8 lg:p-10">
+        <main className="flex-1 overflow-auto bg-gradient-to-br from-gray-50 to-white p-4 md:p-8 lg:p-10">
           <div className="max-w-7xl mx-auto">
             {children}
           </div>

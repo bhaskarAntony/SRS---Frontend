@@ -64,7 +64,7 @@ Need help? Contact us or Visit: http://www.goldeneventz.co.in`;
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999] p-4">
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto p-4 border border-gray-200">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-bold text-gray-800">Ticket #{booking.bookingId}</h2>

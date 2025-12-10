@@ -167,7 +167,7 @@ const OfflineCreatePage = () => {
     const fetchEvents = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/events", {
+        const res = await axios.get("https://srs-backend-7ch1.onrender.com/api/events", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setEvents(res.data.data || []);
@@ -191,14 +191,14 @@ const OfflineCreatePage = () => {
       const token = localStorage.getItem("token");
 
       // Fetch member details
-      const memberRes = await axios.get(`http://localhost:5000/api/admin/members/${memberId.trim()}`, {
+      const memberRes = await axios.get(`https://srs-backend-7ch1.onrender.com/api/admin/members/${memberId.trim()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setValue("memberName", memberRes.data.data.fullName || "Member");
       toast.success("Member found!");
 
       // Fetch previous bookings by memberIdInput
-      const bookingsRes = await axios.get(`http://localhost:5000/api/bookings/member/${memberId.trim()}`, {
+      const bookingsRes = await axios.get(`https://srs-backend-7ch1.onrender.com/api/bookings/member/${memberId.trim()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -281,7 +281,7 @@ const OfflineCreatePage = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const res = await axios.post("http://localhost:5000/api/admin/offline-bookings", payload, {
+      const res = await axios.post("https://srs-backend-7ch1.onrender.com/api/admin/offline-bookings", payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

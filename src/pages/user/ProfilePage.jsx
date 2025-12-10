@@ -21,7 +21,7 @@ import useCartStore from '../../store/cartStore';
 
 // axios client with token from localStorage
 const apiClient = axios.create({
-  baseURL: 'http://localhost:5000/api', // change to your backend URL
+  baseURL: 'https://srs-backend-7ch1.onrender.com/api', // change to your backend URL
 });
 
 apiClient.interceptors.request.use(

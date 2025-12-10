@@ -40,7 +40,7 @@ const GuestBookingPage = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/events/${id}`);
+        const res = await axios.get(`https://srs-backend-7ch1.onrender.com/api/events/${id}`);
         setEvent(res.data.data);
       } catch (err) {
         toast.error('Event not found');
@@ -63,7 +63,7 @@ const GuestBookingPage = () => {
   }
   
   try {
-    const res = await axios.post('http://localhost:5000/api/bookings/guest-request', {
+    const res = await axios.post('https://srs-backend-7ch1.onrender.com/api/bookings/guest-request', {
       eventId: id,
       seatCount: +form.seatCount,
       guestDetails: {

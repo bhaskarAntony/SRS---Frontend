@@ -9,7 +9,7 @@ const EventCheckInPage = ({ eventId }) => {
   const handleScan = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/bookings/scan-qr', { qrCode }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+      const res = await axios.post('https://srs-backend-7ch1.onrender.com/api/bookings/scan-qr', { qrCode }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
       setBooking(res.data.data.booking);
       toast.success('Scanned! Pending: ' + res.data.data.booking.remainingScans);
     } catch (err) {

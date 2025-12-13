@@ -39,7 +39,7 @@ const MembersManagement = () => {
 
   const handleAddMember = async (memberData) => {
     try {
-      await api.post('/members/add', {
+      await api.post('/members', {
         firstName: memberData.firstName,
         lastName: memberData.lastName || '',
         memberId: memberData.memberId.toUpperCase(),

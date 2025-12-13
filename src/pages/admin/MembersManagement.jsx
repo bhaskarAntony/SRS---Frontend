@@ -59,7 +59,7 @@ const MembersManagement = () => {
     const formData = new FormData();
     formData.append('file', file);
     try {
-      await api.post('https://srs-backend-7ch1.onrender.com/api/member/import-members', formData, {
+      await api.post('http://localhost:5000/api/member/import-members', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       toast.success('Members imported successfully!');

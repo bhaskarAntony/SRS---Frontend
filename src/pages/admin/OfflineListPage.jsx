@@ -179,7 +179,7 @@ const OfflineListPage = () => {
 
   const fetchEvents = async () => {
     try {
-      const res = await axios.get('https://srs-backend-7ch1.onrender.com/api/events', { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.get('http://localhost:5000/api/events', { headers: { Authorization: `Bearer ${token}` } });
       setEvents(res.data.data || []);
     } catch {
       toast.error('Failed to load events');
@@ -189,7 +189,7 @@ const OfflineListPage = () => {
   const fetchBookings = async () => {
     if (!token) return;
     try {
-      const res = await axios.get('https://srs-backend-7ch1.onrender.com/api/admin/offline-bookings', {
+      const res = await axios.get('http://localhost:5000/api/admin/offline-bookings', {
         params: filter,
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -205,7 +205,7 @@ const OfflineListPage = () => {
 
   const handleExport = async () => {
     try {
-      const res = await axios.get('https://srs-backend-7ch1.onrender.com/api/admin/offline-bookings/export', {
+      const res = await axios.get('http://localhost:5000/api/admin/offline-bookings/export', {
         responseType: 'blob',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -225,7 +225,7 @@ const OfflineListPage = () => {
 
   try {
     const res = await axios.delete(
-      `https://srs-backend-7ch1.onrender.com/api/admin/offline-bookings/${id}`,
+      `http://localhost:5000/api/admin/offline-bookings/${id}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
 

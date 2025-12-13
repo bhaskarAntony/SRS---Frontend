@@ -382,7 +382,7 @@ const OfflineCreatePage = () => {
 
             {}
             <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-              <h3 className="font-bold text-green-800 mb-3">Guest (₹2100)</h3>
+              <h3 className="font-bold text-green-800 mb-3">Guest (₹2000)</h3>
               <input type="number" min="0" max="10" {...register("guestTicketCount", { valueAsNumber: true })} className="w-full mb-2 px-3 py-2 border rounded" />
               <div className="grid grid-cols-2 gap-2">
                 <input type="number" min="0" {...register("guestVegCount", { valueAsNumber: true })} placeholder="Veg" className="px-3 py-2 border rounded text-center" />

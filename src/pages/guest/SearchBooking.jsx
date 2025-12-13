@@ -30,7 +30,7 @@ const SearchBooking = () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/bookings/guest-status/${idToSearch.trim().toUpperCase()}`
+        `https://srs-backend-7ch1.onrender.com/api/bookings/guest-status/${idToSearch.trim().toUpperCase()}`
       );
       setBooking(res.data.data);
       navigate(`/search/${idToSearch.trim().toUpperCase()}`, { replace: true });

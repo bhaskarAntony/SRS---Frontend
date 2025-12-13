@@ -375,6 +375,10 @@ const OfflineCreatePage = () => {
               <h3 className="font-bold text-indigo-800 mb-3">Member (₹1500)</h3>
               <input type="number" min="0" max="4" {...register("memberTicketCount", { valueAsNumber: true })} className="w-full mb-2 px-3 py-2 border rounded" />
               <div className="grid grid-cols-2 gap-2">
+                <div className="col-span-2 flex items-center justify-between text-xs font-semibold text-gray-700">
+                  <span className="px-2 py-1 rounded bg-green-100 text-green-800 border border-green-200">Veg</span>
+                  <span className="px-2 py-1 rounded bg-red-100 text-red-800 border border-red-200">Non-Veg</span>
+                </div>
                 <input type="number" min="0" {...register("memberVegCount", { valueAsNumber: true })} placeholder="Veg" className="px-3 py-2 border rounded text-center" />
                 <input type="number" min="0" {...register("memberNonVegCount", { valueAsNumber: true })} placeholder="Non-Veg" className="px-3 py-2 border rounded text-center" />
               </div>
@@ -385,6 +389,10 @@ const OfflineCreatePage = () => {
               <h3 className="font-bold text-green-800 mb-3">Guest (₹2000)</h3>
               <input type="number" min="0" max="10" {...register("guestTicketCount", { valueAsNumber: true })} className="w-full mb-2 px-3 py-2 border rounded" />
               <div className="grid grid-cols-2 gap-2">
+                <div className="col-span-2 flex items-center justify-between text-xs font-semibold text-gray-700">
+                  <span className="px-2 py-1 rounded bg-green-100 text-green-800 border border-green-200">Veg</span>
+                  <span className="px-2 py-1 rounded bg-red-100 text-red-800 border border-red-200">Non-Veg</span>
+                </div>
                 <input type="number" min="0" {...register("guestVegCount", { valueAsNumber: true })} placeholder="Veg" className="px-3 py-2 border rounded text-center" />
                 <input type="number" min="0" {...register("guestNonVegCount", { valueAsNumber: true })} placeholder="Non-Veg" className="px-3 py-2 border rounded text-center" />
               </div>
@@ -395,6 +403,10 @@ const OfflineCreatePage = () => {
               <h3 className="font-bold text-purple-800 mb-3">Kid (₹850)</h3>
               <input type="number" min="0" {...register("kidTicketCount", { valueAsNumber: true })} className="w-full mb-2 px-3 py-2 border rounded" />
               <div className="grid grid-cols-2 gap-2">
+                <div className="col-span-2 flex items-center justify-between text-xs font-semibold text-gray-700">
+                  <span className="px-2 py-1 rounded bg-green-100 text-green-800 border border-green-200">Veg</span>
+                  <span className="px-2 py-1 rounded bg-red-100 text-red-800 border border-red-200">Non-Veg</span>
+                </div>
                 <input type="number" min="0" {...register("kidVegCount", { valueAsNumber: true })} placeholder="Veg" className="px-3 py-2 border rounded text-center" />
                 <input type="number" min="0" {...register("kidNonVegCount", { valueAsNumber: true })} placeholder="Non-Veg" className="px-3 py-2 border rounded text-center" />
               </div>

@@ -35,7 +35,7 @@ Please show this QR code at the entrance:
 ${ticketUrl}
 
 See you there!
-Team golden eventz
+Team Golden Eventz
 
 Need help? Contact us or Visit: http://www.goldeneventz.co.in`;
 
